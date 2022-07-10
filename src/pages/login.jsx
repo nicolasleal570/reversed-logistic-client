@@ -1,18 +1,36 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
+import { useCookies } from 'react-cookie';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
+import { fetchLogin } from '@api/methods';
 
 export default function LoginPage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [cookie, setCookie] = useCookies(['token']);
 
-  const onSubmit = (data) => console.log({ data });
+  const onSubmit = async (data) => {
+    try {
+      const res = await fetchLogin(data);
+
+      setCookie('token', res.data.token, {
+        path: '/',
+        maxAge: 3600,
+        sameSite: true,
+      });
+      router.push('/');
+    } catch (error) {
+      console.log({ error });
+    }
+  };
 
   return (
     <main className="w-full bg-red-400 flex justify-between">
