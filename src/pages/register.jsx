@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
@@ -10,7 +9,6 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -19,7 +17,7 @@ export default function RegisterPage() {
   return (
     <main className="w-full bg-red-400 flex justify-between">
       <section className="flex items-center flex-col flex-1 pt-20 px-8 md:px-24  lg:px-48 lg:max-w-[722px] lg:pt-40 h-screen bg-white">
-        <h1 className="text-3xl leading-9 font-semibold text-center text-gray-900">
+        <h1 className="text-3xl leading-9 font-medium text-center text-gray-900">
           Regístrate
         </h1>
         <p className="text-sm md:text-base leading-6 font-normal text-center text-gray-500 lg:w-80 my-3">
