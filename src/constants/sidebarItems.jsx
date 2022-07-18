@@ -11,6 +11,7 @@ import {
   CashIcon,
   ClipboardCheckIcon,
 } from '@heroicons/react/outline';
+import Router from 'next/router';
 
 const iconStyles = 'w-5 h-5 mr-3 text-gray-500';
 
@@ -80,7 +81,7 @@ export const items = [
   },
   {
     header: 'Usuarios',
-    headerAction: () => console.log('HOLA MUNDO'),
+    headerAction: () => Router.push('/users/create'),
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
       {

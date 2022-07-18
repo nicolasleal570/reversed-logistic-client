@@ -3,12 +3,14 @@ import { Sidebar } from '@components/Sidebar/Sidebar';
 import LayoutContextProvider from '@contexts/LayoutContext/LayoutContext';
 import { useLayout } from '@hooks/useLayout';
 
-function LayoutContainer({ children, title, description }) {
+function LayoutContainer({ children, title, description, customSubSidebar }) {
   const { setIsSidebarOpen } = useLayout();
 
   return (
     <div className="min-h-screen bg-white flex">
       <Sidebar />
+
+      {customSubSidebar}
 
       <main className="w-full flex-1 border-l border-gray-200">
         <nav className="block md:hidden p-4 md:py-8 border-b border-gray-200 flex justify-between items-center">

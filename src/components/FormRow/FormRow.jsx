@@ -1,3 +1,9 @@
-export function FormRow({ children }) {
-  return <section className="block w-full mb-4">{children}</section>;
+import classNames from 'classnames';
+
+export function FormRow({ children, className }) {
+  return (
+    <section className={classNames('block w-full mb-4', className)}>
+      {children}
+    </section>
+  );
 }

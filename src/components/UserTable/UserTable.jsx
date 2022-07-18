@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Table from '@components/Table/Table';
-import { PlusSmIcon, PencilIcon } from '@heroicons/react/outline';
+import { PlusIcon, PencilIcon, UploadIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 
 function UserTable({ users }) {
@@ -71,7 +71,7 @@ function UserTable({ users }) {
                   type="button"
                   className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
                 >
-                  <PlusSmIcon className="w-5 mr-1" />
+                  <PlusIcon className="w-5 mr-1" />
                   <span>Nuevo usuario</span>
                 </a>
               </Link>
@@ -80,8 +80,8 @@ function UserTable({ users }) {
                 type="button"
                 className="ml-3 bg-white border border-gray-300 flex items-center px-4 py-2.5 rounded-lg text-gray-700"
               >
-                <PlusSmIcon className="w-5 mr-1" />
-                <span>Nuevo usuario</span>
+                <UploadIcon className="w-5 mr-1" />
+                <span>Importar</span>
               </button>
             </div>
           </>

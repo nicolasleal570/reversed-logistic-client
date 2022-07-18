@@ -25,7 +25,7 @@ export function Sidebar() {
         }
       )}
     >
-      <aside className="w-64 h-full overflow-y-scroll lg:overflow-y-auto bg-white flex flex-col">
+      <aside className="fixed w-64 h-full overflow-y-scroll lg:overflow-y-auto bg-white flex flex-col">
         <button
           className="block md:hidden absolute right-2 top-2 rounded bg-red-400 text-white p-1"
           onClick={() => setIsSidebarOpen(false)}

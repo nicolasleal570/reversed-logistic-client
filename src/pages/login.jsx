@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
 import { useCookies } from 'react-cookie';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { fetchLogin } from '@api/methods';
+import { Button } from '@components/Button/Button';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -94,46 +94,5 @@ export default function LoginPage() {
         style={{ background: "url('/dragon-scales.svg')" }}
       />
     </main>
-  );
-}
-
-export const DEFAULT_KIND = 'default';
-export const DEFAULT_SM_KIND = 'default_sm';
-
-const validKindOfBtn = new Set([DEFAULT_KIND, DEFAULT_SM_KIND]);
-
-export const NORMAL_SIZE = 'normal';
-export const SM_SIZE = 'small';
-
-const validSizeOfBtn = new Set([NORMAL_SIZE, SM_SIZE]);
-
-export function Button({
-  children,
-  kind = DEFAULT_KIND,
-  size = NORMAL_SIZE,
-  fullWidth = true,
-  className,
-  ...props
-}) {
-  const validKind = validKindOfBtn.has(kind) ? kind : DEFAULT_KIND;
-  const validSize = validSizeOfBtn.has(size) ? size : NORMAL_SIZE;
-
-  return (
-    <button
-      type="submit"
-      className={classNames(
-        {
-          'w-full': fullWidth,
-          'bg-indigo-600 text-sm leading-5 font-medium text-white rounded-lg':
-            validKind === DEFAULT_KIND,
-          'py-4 px-8': validSize === NORMAL_SIZE,
-          'py-2 px-4 text-xs': validSize === SM_SIZE,
-        },
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </button>
   );
 }

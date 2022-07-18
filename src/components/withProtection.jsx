@@ -1,4 +1,4 @@
-import { Router, useRouter } from 'next/router';
+import Router from 'next/router';
 import { useEffect } from 'react';
 import { parseCookies } from '@utils/parseCookies';
 import { fetchCurrentUser } from '@api/methods';

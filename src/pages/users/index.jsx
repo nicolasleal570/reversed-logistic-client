@@ -29,7 +29,7 @@ UsersPage.getInitialProps = async ({ req }) => {
   }
 
   return {
-    users,
+    users: users ?? [],
   };
 };
 
