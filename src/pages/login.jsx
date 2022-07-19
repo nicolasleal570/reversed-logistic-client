@@ -23,7 +23,7 @@ export default function LoginPage() {
 
       setCookie('token', res.data.token, {
         path: '/',
-        maxAge: 3600,
+        //maxAge: 3600,
         sameSite: true,
       });
       router.push('/');
