@@ -78,7 +78,7 @@ export default function LoginPage() {
             </a>
           </Link>
 
-          <Button type="submit">Crear cuenta</Button>
+          <Button type="submit">Iniciar sesión</Button>
 
           <p className="mt-5 text-sm leading-5 font-normal text-center text-gray-500">
             Aún no eres miembro?{' '}

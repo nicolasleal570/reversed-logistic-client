@@ -8,6 +8,7 @@ import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { fetchCustomerLocationsByCustomer } from '@api/customers/methods';
 import { useOrders } from '@hooks/useOrders';
+import { useRouter } from 'next/router';
 
 export function formatCustomerLocationName(customer, location) {
   return `${customer.companyName}, ${location.line1}, ${location.state}`;
@@ -24,6 +25,7 @@ function OrderForm({
   casesContent,
   token,
 }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -63,7 +65,9 @@ function OrderForm({
     }
   };
 
-  const handleOnFinishUpdate = () => {};
+  const handleOnFinishUpdate = () => {
+    router.push('/orders');
+  };
 
   const onSubmit = async (data) => {
     if (!isEdit) {

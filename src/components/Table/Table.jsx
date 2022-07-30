@@ -7,6 +7,7 @@ import {
   useSortBy,
   useGlobalFilter,
 } from 'react-table';
+import { Pagination } from '@components/Pagination/Pagination';
 import { GlobalFilter } from './GlobalFilter';
 import { NoData } from './NoData';
 //import Pagination from './Pagination';
@@ -184,7 +185,6 @@ function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
           </tbody>
         </table>
       </div>
-      {/*
       <Pagination
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
@@ -194,7 +194,6 @@ function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
         pageCount={pageCount}
         pageOptions={pageOptions}
       />
-        */}
     </>
   );
 }

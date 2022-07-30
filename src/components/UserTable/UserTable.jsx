@@ -39,7 +39,7 @@ function UserTable({ users }) {
         id,
         action() {
           return (
-            <Link href="/app/users/[_id]" as={`/app/users/${id}`}>
+            <Link href="/app/users/[id]" as={`/app/users/${id}`}>
               <a className="text-gray-900 p-1 float-right">
                 <PencilIcon className="w-5" />
                 <span className="sr-only">Editar</span>

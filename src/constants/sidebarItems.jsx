@@ -37,7 +37,7 @@ export const items = [
   },
   {
     header: 'Cases',
-    headerAction: () => {},
+    headerAction: () => Router.push('/cases/create'),
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
       {

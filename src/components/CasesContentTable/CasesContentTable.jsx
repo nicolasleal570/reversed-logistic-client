@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Table from '@components/Table/Table';
-import { PlusIcon, PencilIcon, UploadIcon } from '@heroicons/react/outline';
+import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
+import { Badge } from '@components/Badge/Badge';
 
 const header = [
   {
@@ -10,18 +11,18 @@ const header = [
     accessor: 'id',
   },
   {
-    Header: 'Total',
-    accessor: 'total',
+    Header: 'Name',
+    accessor: 'name',
   },
   {
-    Header: 'Creador por',
-    accessor: 'creator',
-    Cell: ({ row: { index }, data: _data }) => _data[index].creator(),
+    Header: 'Descripción',
+    accessor: 'description',
+    Cell: ({ row: { index }, data: _data }) => _data[index].description(),
   },
   {
-    Header: 'Estatus',
-    accessor: 'status',
-    Cell: ({ row: { index }, data: _data }) => _data[index].status(),
+    Header: 'Precio x Litro',
+    accessor: 'price',
+    Cell: ({ row: { index }, data: _data }) => _data[index].price(),
   },
   {
     Header: 'Acciones',
@@ -32,28 +33,23 @@ const header = [
   },
 ];
 
-export function OrdersTable({ orders }) {
+export function CasesContentTable({ casesContent }) {
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
     setData(
-      orders.map(({ id, total, createdBy, orderStatus }) => ({
+      casesContent.map(({ id, name, description, price }) => ({
         id,
-        total,
-        creator() {
-          return createdBy.fullName;
+        name,
+        price() {
+          return <>Bs. {price}</>;
         },
-        status() {
-          return (
-            <p className="inline-flex items-center bg-indigo-50 px-2 py-0.5 rounded-full text-indigo-600">
-              <span className="block bg-indigo-600 w-1.5 h-1.5 rounded-full mr-2" />
-              {orderStatus.name}
-            </p>
-          );
+        description() {
+          return <>{description ?? '-'}</>;
         },
         action() {
           return (
-            <Link href="/orders/[id]" as={`/orders/${id}`}>
+            <Link href="/flavors/[id]" as={`/flavors/${id}`}>
               <a className="text-gray-900 p-1 float-right">
                 <PencilIcon className="w-5" />
                 <span className="sr-only">Editar</span>
@@ -63,40 +59,32 @@ export function OrdersTable({ orders }) {
         },
       }))
     );
-  }, [orders]);
+  }, [casesContent]);
 
   return (
     <Card>
       <Table
         headers={header}
         content={data}
-        href="/orders/create"
-        as="/orders/create"
-        text="Órdenes"
+        href="/flavors/create"
+        as="/flavors/create"
+        text="Sabores de cerveza"
         tableHeader={
           <>
             <div className="flex flex-row flex-wrap w-full p-6">
               <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
-                Todas las órdenes
+                Todos los sabores
               </h2>
 
-              <Link href="/orders/create">
+              <Link href="/flavors/create">
                 <a
                   type="button"
                   className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
                 >
                   <PlusIcon className="w-5 mr-1" />
-                  <span>Nueva orden</span>
+                  <span>Nuevo sabor</span>
                 </a>
               </Link>
-
-              <button
-                type="button"
-                className="ml-3 bg-white border border-gray-300 flex items-center px-4 py-2.5 rounded-lg text-gray-700"
-              >
-                <UploadIcon className="w-5 mr-1" />
-                <span>Importar</span>
-              </button>
             </div>
           </>
         }

@@ -5,7 +5,6 @@ import { withProtection } from '@components/withProtection';
 import { parseCookies } from '@utils/parseCookies';
 
 function OrdersPage({ orders }) {
-  console.log(orders);
   return (
     <Layout
       title="Lista de órdenes"
