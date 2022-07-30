@@ -41,7 +41,7 @@ function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
   );
 
   if (content.length === 0 && href && as && text) {
-    return <NoData />;
+    return <NoData href={href} as={as} />;
   }
 
   return (

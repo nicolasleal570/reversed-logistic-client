@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
-import { fetchLogin } from '@api/methods';
+import { fetchLogin } from '@api/auth/methods';
 import { Button } from '@components/Button/Button';
 
 export default function LoginPage() {
@@ -15,7 +15,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [cookie, setCookie] = useCookies(['token']);
+  const [, setCookie] = useCookies(['token']);
 
   const onSubmit = async (data) => {
     try {

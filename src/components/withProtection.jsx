@@ -1,7 +1,7 @@
 import Router from 'next/router';
 import { useEffect } from 'react';
 import { parseCookies } from '@utils/parseCookies';
-import { fetchCurrentUser } from '@api/methods';
+import { fetchCurrentUser } from '@api/auth/methods';
 import { useUser } from '@hooks/useUser';
 
 const redirectUrl = '/login?redirected=true';

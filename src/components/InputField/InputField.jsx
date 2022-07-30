@@ -6,14 +6,16 @@ export function InputField({
   value,
   onChange,
   id,
-  type,
+  type = 'text',
+  disabled,
   highlight,
+  error: customError,
   errors,
   inputProps,
   highlightMsgProps,
   errorMsgProps,
 }) {
-  const error = errors[name];
+  const error = (errors && errors[name]) ?? customError;
 
   return (
     <>
@@ -24,6 +26,7 @@ export function InputField({
         onChange={onChange}
         placeholder={placeholder}
         id={id}
+        disabled={disabled}
         className={classNames(
           'w-full',
           { 'border border-gray-300 text-gray-900': !error },

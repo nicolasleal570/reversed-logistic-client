@@ -33,7 +33,7 @@ function LayoutContainer({ children, title, description, customSubSidebar }) {
           )}
 
           {description && (
-            <p className="text-sm md:text-base leading-6 font-normal text-gray-500 w-full lg:w-[763px] mb-14">
+            <p className="text-sm md:text-base leading-6 font-normal text-gray-500 w-full mb-8 block border-b border-gray-200 pb-5">
               {description}
             </p>
           )}

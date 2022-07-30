@@ -1,4 +1,4 @@
-import { fetchUsers } from '@api/methods';
+import { fetchUsers } from '@api/users/methods';
 import { Layout } from '@components/Layout/Layout';
 import UserTable from '@components/UserTable/UserTable';
 import { withProtection } from '@components/withProtection';

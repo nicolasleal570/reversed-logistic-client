@@ -59,7 +59,7 @@ export const items = [
   },
   {
     header: 'Órdenes',
-    headerAction: () => console.log('HOLA MUNDO'),
+    headerAction: () => Router.push('/orders/create'),
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
       {

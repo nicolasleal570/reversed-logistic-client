@@ -7,7 +7,7 @@ import { AssignRole } from '@components/CreateUser/AssignRole';
 import { AssignPermissions } from '@components/CreateUser/AssignPermissions/AssignPermissions';
 import { CreateUserSummary } from '@components/CreateUser/CreateUserSummary/CreateUserSummary';
 import CreateUserFormContextProvider from '@contexts/CreateUserForm/CreateUserFormContext';
-import { fetchRoles } from '@api/methods';
+import { fetchRoles } from '@api/roles/methods';
 import { parseCookies } from '@utils/parseCookies';
 
 const steps = [

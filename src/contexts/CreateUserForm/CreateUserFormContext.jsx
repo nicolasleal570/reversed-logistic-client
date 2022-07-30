@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { INITIAL_PERMISSIONS } from './initialPermissionsValue';
 import { parseCookies } from '@utils/parseCookies';
-import { createUser } from '@api/methods';
+import { createUser } from '@api/users/methods';
 
 export const CreateUserFormContext = React.createContext({
   personalInformation: undefined,
