@@ -169,7 +169,7 @@ function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
                     <td
                       key={Math.random().toString(36).substring(2, 15)}
                       className={classNames(
-                        'p-3 align-top border-t border-gray-200 text-sm leading-5 font-normal',
+                        'p-3 align-top border-t border-gray-200 text-sm leading-5 font-normal max-w-[200px]',
                         {
                           'pl-6': idx === 0,
                         }

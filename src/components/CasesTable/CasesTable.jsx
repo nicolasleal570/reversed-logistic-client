@@ -31,8 +31,8 @@ const header = [
   },
   {
     Header: 'Estatus',
-    accessor: 'status',
-    Cell: ({ row: { index }, data: _data }) => _data[index].status(),
+    accessor: 'state',
+    Cell: ({ row: { index }, data: _data }) => _data[index].state(),
   },
   {
     Header: 'Acciones',
@@ -43,12 +43,27 @@ const header = [
   },
 ];
 
+const availableCasesState = {
+  AVAILABLE: {
+    title: 'Disponible',
+    color: 'green',
+  },
+  IN_USE: {
+    title: 'En uso',
+    color: 'red',
+  },
+  IN_PROCESS: {
+    title: 'En proceso de limpieza',
+    color: 'orange',
+  },
+};
+
 export function CasesTable({ cases }) {
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
     setData(
-      cases.map(({ id, name, description, volume, weight }) => ({
+      cases.map(({ id, name, description, volume, weight, state }) => ({
         id,
         name,
         description() {
@@ -60,8 +75,9 @@ export function CasesTable({ cases }) {
         weight() {
           return <>{weight ?? '-'}</>;
         },
-        status() {
-          return <Badge title="Epale" color="blue" />;
+        state() {
+          const item = availableCasesState[state];
+          return <Badge title={item.title} color={item.color} />;
         },
         action() {
           return (
