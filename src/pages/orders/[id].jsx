@@ -13,8 +13,6 @@ import { OrderSummary } from '@components/OrderSummary/OrderSummary';
 function EditOrderPage({ order, customers, cases, casesContent, token }) {
   const [isEdit, setIsEdit] = useState(false);
 
-  console.log(order);
-
   return (
     <Layout
       title={`Orden #OR${order.id}`}

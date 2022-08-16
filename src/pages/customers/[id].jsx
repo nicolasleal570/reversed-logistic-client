@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
-import { fetchCase } from '@api/cases/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
-import { CaseSummary } from '@components/CaseSummary/CaseSummary';
-import CaseForm from '@components/CaseForm/CaseForm';
+import { fetchCustomer } from '@api/customers/methods';
+import { CustomerSummary } from '@components/CustomerSummary/CustomerSummary';
+import CustomerForm from '@components/CustomerForm/CustomerForm';
 
-function EditCasePage({ case: caseInfo, token }) {
+function EditCustomerPage({ customer, token }) {
   const [isEdit, setIsEdit] = useState(false);
 
   return (
     <Layout
-      title={`${caseInfo.name}`}
-      description="Información detallada de un case"
+      title={`${customer.companyName}`}
+      description="Información detallada del cliente/empresa"
     >
       <div className="mb-8 border-b border-gray-200 pb-8">
         <Switch.Group>
@@ -46,28 +46,28 @@ function EditCasePage({ case: caseInfo, token }) {
       </div>
 
       {isEdit ? (
-        <CaseForm
-          case={caseInfo}
+        <CustomerForm
+          customer={customer}
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}
         />
       ) : (
-        <CaseSummary case={caseInfo} />
+        <CustomerSummary customer={customer} />
       )}
     </Layout>
   );
 }
 
-EditCasePage.getInitialProps = async ({ req, query }) => {
+EditCustomerPage.getInitialProps = async ({ req, query }) => {
   const data = parseCookies(req);
 
-  let caseItem = {};
+  let customer = {};
   if (data.token) {
     try {
-      const res = await fetchCase(query.id, data.token);
+      const res = await fetchCustomer(query.id, data.token);
 
-      caseItem = res.data;
+      customer = res.data;
     } catch (error) {
       console.log({ error });
     }
@@ -75,8 +75,8 @@ EditCasePage.getInitialProps = async ({ req, query }) => {
 
   return {
     token: data?.token ?? '',
-    case: caseItem ?? {},
+    customer: customer ?? {},
   };
 };
 
-export default withProtection(EditCasePage);
+export default withProtection(EditCustomerPage);
