@@ -35,7 +35,10 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
         Informacion personal
       </h2>
 
-      <DataSection label="Nombre y apellido" value={personalInformation.fullName} />
+      <DataSection
+        label="Nombre y apellido"
+        value={personalInformation.fullName}
+      />
       <DataSection
         label="Correo electrónico"
         value={personalInformation.email}

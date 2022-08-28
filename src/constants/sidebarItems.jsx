@@ -50,11 +50,6 @@ export const items = [
         icon: <CollectionIcon className={iconStyles} />,
         url: '/flavors',
       },
-      {
-        title: 'Proceso de limpieza',
-        icon: <BeakerIcon className={iconStyles} />,
-        url: '/cases-clean-process',
-      },
     ],
   },
   {
@@ -76,6 +71,23 @@ export const items = [
         title: 'Transporte',
         icon: <TruckIcon className={iconStyles} />,
         url: '/trucks',
+      },
+    ],
+  },
+  {
+    header: 'Limpieza para los cases',
+    headerAction: () => Router.push('/clean-process/create'),
+    headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
+    slots: [
+      {
+        title: 'Órdenes de limpieza',
+        icon: <DatabaseIcon className={iconStyles} />,
+        url: '/clean-process',
+      },
+      {
+        title: 'Pasos de limpieza',
+        icon: <BeakerIcon className={iconStyles} />,
+        url: '/clean-process/steps',
       },
     ],
   },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { PlusSmIcon, TrashIcon } from '@heroicons/react/outline';
 import { SelectField } from '@components/SelectField/SelectField';
@@ -46,7 +46,7 @@ function OrderForm({
   });
   const { createOrder, updateOrder } = useOrders();
 
-  const handleFetchCustomerLocations = async () => {
+  const handleFetchCustomerLocations = useCallback(async () => {
     const { data } = await fetchCustomerLocationsByCustomer(customerId, token);
 
     if (data && data.customer && data.locations) {
@@ -56,7 +56,7 @@ function OrderForm({
         locations,
       });
     }
-  };
+  }, [customerId, token]);
 
   const handleRemoveCase = (idx) => () => {
     const items = getValues('items');
@@ -81,7 +81,7 @@ function OrderForm({
     if (customerId) {
       handleFetchCustomerLocations();
     }
-  }, [customerId]);
+  }, [customerId, handleFetchCustomerLocations]);
 
   useEffect(() => {
     if (order) {
@@ -96,13 +96,13 @@ function OrderForm({
         }))
       );
     }
-  }, [order]);
+  }, [order, setValue]);
 
   useEffect(() => {
     if (order && customerLocations?.locations?.length > 0) {
       setValue('customerLocationId', String(order.customerLocationId));
     }
-  }, [order, customerLocations]);
+  }, [order, customerLocations, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">
