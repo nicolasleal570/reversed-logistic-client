@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
-import { CustomSidebar } from '@components/CreateUser/CustomSidebar';
+import { CustomSidebar } from '@components/CustomSidebar/CustomSidebar';
 import { PersonalInformation } from '@components/CreateUser/PersonalInformation';
 import { AssignRole } from '@components/CreateUser/AssignRole';
 import { AssignPermissions } from '@components/CreateUser/AssignPermissions/AssignPermissions';
@@ -9,6 +8,7 @@ import { CreateUserSummary } from '@components/CreateUser/CreateUserSummary/Crea
 import CreateUserFormContextProvider from '@contexts/CreateUserForm/CreateUserFormContext';
 import { fetchRoles } from '@api/roles/methods';
 import { parseCookies } from '@utils/parseCookies';
+import { useFormStepper } from '@hooks/useFormStepper';
 
 const steps = [
   {
@@ -32,14 +32,7 @@ const steps = [
 ];
 
 function CreateUserPage({ roles }) {
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const onChangeStep = (step) => {
-    const nextStep = step ?? currentStep + 1;
-    if (steps[nextStep]) {
-      setCurrentStep(nextStep);
-    }
-  };
+  const { currentStep, onChangeStep } = useFormStepper(steps);
 
   return (
     <CreateUserFormContextProvider>
@@ -47,7 +40,7 @@ function CreateUserPage({ roles }) {
         title={steps[currentStep].title}
         description={steps[currentStep].description}
         customSubSidebar={
-          <CustomSidebar currentStep={currentStep} steps={steps} />
+          <CustomSidebar currentStep={currentStep} steps={steps} title="Crea un usuario" />
         }
       >
         {currentStep === 0 && (

@@ -1,10 +1,10 @@
 import { StepperSection } from '@components/StepperSection/StepperSection';
 
-export function CustomSidebar({ currentStep, steps }) {
+export function CustomSidebar({ currentStep, steps, title }) {
   return (
     <div className="w-80 p-8 bg-gray-800 hidden lg:block flex flex-col">
       <h2 className="text-white text-3xl leading-9 font-medium mb-8">
-        Crea un usuario
+        {title}
       </h2>
 
       {steps.map((step, idx) => (

@@ -31,7 +31,7 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
 
   return (
     <div className="">
-      <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200">
+      <h2 className="block w-full text-lg leading-7 font-semibold mb-8">
         Informacion personal
       </h2>
 
