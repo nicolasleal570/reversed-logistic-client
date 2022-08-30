@@ -5,7 +5,6 @@ import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
-import { useCases } from '@hooks/useCases';
 import { useCasesContent } from '@hooks/useCasesContent';
 
 export function CaseContentForm({

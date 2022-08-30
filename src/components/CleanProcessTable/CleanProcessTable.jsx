@@ -35,7 +35,7 @@ const header = [
   },
 ];
 
-export function CleanProcessTable({ cleanProcessOrders }) {
+export function CteanProcessTable({ cleanProcessOrders }) {
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
