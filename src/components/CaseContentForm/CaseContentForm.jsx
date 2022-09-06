@@ -39,7 +39,7 @@ export function CaseContentForm({
       setValue('description', caseContent.description);
       setValue('price', caseContent.price);
     }
-  }, [caseContent]);
+  }, [caseContent, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">

@@ -13,6 +13,7 @@ export function Sidebar() {
 
   useEffect(() => {
     setIsSidebarOpen(isMediumSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMediumSize]);
 
   return (

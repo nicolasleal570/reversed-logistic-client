@@ -35,7 +35,7 @@ function CaseForm({ isEdit = false, onlyRead = false, case: caseInfo, token }) {
       setValue('volume', Number.parseInt(caseInfo.volume));
       setValue('weight', Number.parseInt(caseInfo.weight));
     }
-  }, [caseInfo]);
+  }, [caseInfo, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">

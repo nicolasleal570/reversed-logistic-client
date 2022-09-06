@@ -12,6 +12,7 @@ export function withUser(WrappedComponent) {
 
     useEffect(() => {
       setUser(authUser?.user ?? null);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser]);
 
     return <WrappedComponent user={authUser?.user ?? null} {...props} />;
