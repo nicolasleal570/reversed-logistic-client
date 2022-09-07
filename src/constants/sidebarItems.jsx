@@ -53,12 +53,12 @@ export const items = [
     ],
   },
   {
-    header: 'Órdenes',
+    header: 'Órdenes de venta',
     headerAction: () => Router.push('/orders/create'),
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
       {
-        title: 'Órdenes',
+        title: 'Órdenes de venta',
         icon: <CashIcon className={iconStyles} />,
         url: '/orders',
       },
@@ -102,7 +102,7 @@ export const items = [
         url: '/users',
       },
       {
-        title: 'Clientes',
+        title: 'Clientes y sucursales',
         icon: <UserGroupIcon className={iconStyles} />,
         url: '/customers',
       },
