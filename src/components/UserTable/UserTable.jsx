@@ -75,14 +75,6 @@ function UserTable({ users }) {
                   <span>Nuevo usuario</span>
                 </a>
               </Link>
-
-              <button
-                type="button"
-                className="ml-3 bg-white border border-gray-300 flex items-center px-4 py-2.5 rounded-lg text-gray-700"
-              >
-                <UploadIcon className="w-5 mr-1" />
-                <span>Importar</span>
-              </button>
             </div>
           </>
         }

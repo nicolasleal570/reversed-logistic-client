@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon, UploadIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
+import { formatPrice } from '@utils/formatPrice';
 
 const header = [
   {
@@ -16,7 +17,6 @@ const header = [
   {
     Header: 'Creador por',
     accessor: 'creator',
-    Cell: ({ row: { index }, data: _data }) => _data[index].creator(),
   },
   {
     Header: 'Estatus',
@@ -39,10 +39,8 @@ export function OrdersTable({ orders }) {
     setData(
       orders.map(({ id, total, createdBy, orderStatus }) => ({
         id,
-        total,
-        creator() {
-          return createdBy.fullName;
-        },
+        total: formatPrice(total),
+        creator: createdBy.fullName,
         status() {
           return (
             <p className="inline-flex items-center bg-indigo-50 px-2 py-0.5 rounded-full text-indigo-600">
@@ -89,14 +87,6 @@ export function OrdersTable({ orders }) {
                   <span>Nueva orden</span>
                 </a>
               </Link>
-
-              <button
-                type="button"
-                className="ml-3 bg-white border border-gray-300 flex items-center px-4 py-2.5 rounded-lg text-gray-700"
-              >
-                <UploadIcon className="w-5 mr-1" />
-                <span>Importar</span>
-              </button>
             </div>
           </>
         }

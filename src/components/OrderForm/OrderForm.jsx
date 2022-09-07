@@ -40,6 +40,7 @@ function OrderForm({
   });
   const { fields, append, remove } = useFieldArray({ control, name: 'items' });
   const customerId = useWatch({ control, name: 'customerId' });
+  const casesInfo = useWatch({ control, name: 'items' });
   const [customerLocations, setCustomerLocations] = useState({
     customer: {},
     locations: [],
@@ -92,7 +93,7 @@ function OrderForm({
           id: item.id,
           caseId: String(item.caseId),
           caseContentId: String(item.caseContentId),
-          contentQuantity: 20,
+          contentQuantity: item.quantity,
         }))
       );
     }
@@ -155,95 +156,121 @@ function OrderForm({
 
       <h2 className="w-full text-lg leading-7 font-medium mb-8">Cases</h2>
 
-      {fields.map((field, idx) => (
-        <div
-          key={field.id}
-          className="bg-white border border-gray-200 shadow-sm p-4 rounded-lg mb-4"
-        >
-          <div className="flex justify-between items-center">
-            <p className="flex-1 text-base leading-6 font-medium text-gray-700 mb-4">
-              Case {idx + 1}
-            </p>
+      {fields.map((field, idx) => {
+        const selectedCase =
+          cases.find((item) => String(item.id) === casesInfo[idx]?.caseId) ??
+          {};
 
-            {idx > 0 && !onlyRead && (
-              <button
-                type="button"
-                className="text-gray-600"
-                onClick={handleRemoveCase(idx)}
-              >
-                <TrashIcon className="w-5" />
-              </button>
+        return (
+          <div
+            key={field.id}
+            className="bg-white border border-gray-200 shadow-sm p-4 rounded-lg mb-4"
+          >
+            <div className="flex justify-between items-center">
+              <p className="flex-1 text-base leading-6 font-medium text-gray-700 mb-4">
+                Case {idx + 1}
+              </p>
+
+              {idx > 0 && !onlyRead && (
+                <button
+                  type="button"
+                  className="text-gray-600"
+                  onClick={handleRemoveCase(idx)}
+                >
+                  <TrashIcon className="w-5" />
+                </button>
+              )}
+            </div>
+
+            {isEdit && (
+              <input
+                type="hidden"
+                name="id"
+                {...register(`items.${idx}.id`, {
+                  required: '',
+                })}
+              />
             )}
+
+            <FormRow>
+              <InputLabel title="Selecciona el case" inputId="caseId" />
+              <SelectField
+                id="caseId"
+                name="caseId"
+                errors={errors?.items?.[idx]}
+                placeholder="Selecciona un case"
+                disabled={onlyRead}
+                inputProps={{
+                  ...register(`items.${idx}.caseId`, {
+                    required: 'Debes seleccionar un case',
+                  }),
+                }}
+                options={cases.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                }))}
+              />
+            </FormRow>
+
+            <FormRow>
+              <InputLabel title="Tipo de cerveza" inputId="caseContentId" />
+              <SelectField
+                id="caseContentId"
+                name="caseContentId"
+                errors={errors?.items?.[idx]}
+                placeholder="Selecciona el sabor de la cerveza"
+                disabled={onlyRead}
+                inputProps={{
+                  ...register(`items.${idx}.caseContentId`, {
+                    required: 'Debes seleccionar un sabor',
+                  }),
+                }}
+                options={casesContent.map((item) => ({
+                  label: item.name,
+                  value: item.id,
+                }))}
+              />
+            </FormRow>
+
+            <FormRow>
+              <InputLabel
+                title="Cantidad de litros (L)"
+                inputId="contentQuantity"
+              />
+              <InputField
+                type="text"
+                placeholder="20"
+                id="contentQuantity"
+                name="contentQuantity"
+                disabled={onlyRead}
+                inputProps={{
+                  ...register(`items.${idx}.contentQuantity`, {
+                    required: 'Debes ingresar la cantidad de litros',
+                    pattern: {
+                      value: /^\d+$/,
+                      message: 'Solo puedes introducir números',
+                    },
+                    min: {
+                      value: 1,
+                      message: `La cantidad mínima soportada es de 5 Litros`,
+                    },
+                    max: {
+                      value: selectedCase.volume,
+                      message: `La cantidad máxima que soporta este case es de ${selectedCase.volume} Litros`,
+                    },
+                  }),
+                }}
+                errors={errors?.items?.[idx]}
+                highlight={
+                  selectedCase?.volume
+                    ? `La capacidad máxima del Case es de ${selectedCase?.volume} litros.`
+                    : ''
+                }
+              />
+            </FormRow>
           </div>
-
-          {isEdit && (
-            <input
-              type="hidden"
-              name="id"
-              {...register(`items.${idx}.id`, {
-                required: '',
-              })}
-            />
-          )}
-
-          <FormRow>
-            <InputLabel title="Selecciona el case" inputId="caseId" />
-            <SelectField
-              id="caseId"
-              name="caseId"
-              errors={errors?.items?.[idx]}
-              placeholder="Selecciona un case"
-              disabled={onlyRead}
-              inputProps={{
-                ...register(`items.${idx}.caseId`, {
-                  required: 'Debes seleccionar un case',
-                }),
-              }}
-              options={cases.map((item) => ({
-                label: item.name,
-                value: item.id,
-              }))}
-            />
-          </FormRow>
-
-          <FormRow>
-            <InputLabel title="Tipo de cerveza" inputId="caseContentId" />
-            <SelectField
-              id="caseContentId"
-              name="caseContentId"
-              errors={errors?.items?.[idx]}
-              placeholder="Selecciona el sabor de la cerveza"
-              disabled={onlyRead}
-              inputProps={{
-                ...register(`items.${idx}.caseContentId`, {
-                  required: 'Debes seleccionar un sabor',
-                }),
-              }}
-              options={casesContent.map((item) => ({
-                label: item.name,
-                value: item.id,
-              }))}
-            />
-          </FormRow>
-
-          <FormRow>
-            <InputLabel title="Cantidad de litros" inputId="contentQuantity" />
-            <InputField
-              type="text"
-              placeholder="20"
-              id="contentQuantity"
-              name="contentQuantity"
-              disabled={onlyRead}
-              inputProps={{
-                ...register(`items.${idx}.contentQuantity`, {
-                  required: 'Debes ingresar la cantidad de contenido',
-                }),
-              }}
-              errors={errors?.items?.[idx]}
-            />
-          </FormRow>
-        </div>
-      ))}
+        );
+      })}
 
       {!onlyRead && (
         <>
