@@ -3,12 +3,18 @@ import { Sidebar } from '@components/Sidebar/Sidebar';
 import LayoutContextProvider from '@contexts/LayoutContext/LayoutContext';
 import { useLayout } from '@hooks/useLayout';
 
-function LayoutContainer({ children, title, description, customSubSidebar }) {
+function LayoutContainer({
+  children,
+  title,
+  description,
+  customSubSidebar,
+  token,
+}) {
   const { setIsSidebarOpen } = useLayout();
 
   return (
     <div className="min-h-screen bg-white flex">
-      <Sidebar />
+      <Sidebar token={token} />
 
       {customSubSidebar}
 
