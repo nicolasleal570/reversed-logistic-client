@@ -1,4 +1,5 @@
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
+import { availableCasesState } from '@constants/availableCasesState';
 
 export function CaseSummary({ case: caseInfo }) {
   return (
@@ -10,6 +11,11 @@ export function CaseSummary({ case: caseInfo }) {
       <DataSection label="Identificador" value={caseInfo.name} />
 
       <DataSection label="Descripción" value={caseInfo.description ?? '-'} />
+
+      <DataSection
+        label="Estatus"
+        value={availableCasesState[caseInfo.state]?.title ?? '-'}
+      />
 
       <DataSection label="Volumen" value={caseInfo.volume ?? '-'} />
 

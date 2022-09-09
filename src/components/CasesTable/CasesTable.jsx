@@ -4,6 +4,7 @@ import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
+import { availableCasesState } from '@constants/availableCasesState';
 
 const header = [
   {
@@ -42,21 +43,6 @@ const header = [
     disableSortBy: true,
   },
 ];
-
-const availableCasesState = {
-  AVAILABLE: {
-    title: 'Disponible',
-    color: 'green',
-  },
-  IN_USE: {
-    title: 'En uso',
-    color: 'red',
-  },
-  IN_PROCESS: {
-    title: 'En proceso de limpieza',
-    color: 'orange',
-  },
-};
 
 export function CasesTable({ cases }) {
   const [data, setData] = React.useState([]);

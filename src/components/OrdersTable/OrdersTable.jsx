@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Table from '@components/Table/Table';
-import { PlusIcon, PencilIcon, UploadIcon } from '@heroicons/react/outline';
+import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { formatPrice } from '@utils/formatPrice';
 
@@ -45,7 +45,7 @@ export function OrdersTable({ orders }) {
           return (
             <p className="inline-flex items-center bg-indigo-50 px-2 py-0.5 rounded-full text-indigo-600">
               <span className="block bg-indigo-600 w-1.5 h-1.5 rounded-full mr-2" />
-              {orderStatus.name}
+              {orderStatus?.name ?? '-'}
             </p>
           );
         },
