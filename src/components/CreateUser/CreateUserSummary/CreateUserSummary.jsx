@@ -21,7 +21,11 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
       .filter(({ 1: value }) => Boolean(value))
       .filter(({ 0: objectKey }) => objectKey.startsWith(key));
 
-    return keys.map(({ 0: objectKey }) => translation[objectKey.split('_')[1]]);
+    return keys.map(({ 0: objectKey }) => {
+      const arr = objectKey.split('_');
+
+      return translation[arr[arr.length - 1]];
+    });
   };
 
   const role =
@@ -55,8 +59,8 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
       </h2>
 
       <DataSection
-        label="Permisos - Módulo de productos"
-        tags={transformPermissionsInformation('products')}
+        label="Permisos - Módulo de cases"
+        tags={transformPermissionsInformation('cases')}
       />
 
       <DataSection
@@ -65,12 +69,7 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
       />
 
       <DataSection
-        label="Permisos - Módulo de limpieza"
-        tags={transformPermissionsInformation('process')}
-      />
-
-      <DataSection
-        label="Permisos - Módulo de órdenes"
+        label="Permisos - Módulo de órdenes de venta"
         tags={transformPermissionsInformation('orders')}
       />
 
@@ -82,6 +81,16 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
       <DataSection
         label="Permisos - Módulo de transporte"
         tags={transformPermissionsInformation('trucks')}
+      />
+
+      <DataSection
+        label="Permisos - Módulo de órdenes de limpieza"
+        tags={transformPermissionsInformation('clean_process')}
+      />
+
+      <DataSection
+        label="Permisos - Módulo de pasos de limpieza"
+        tags={transformPermissionsInformation('clean_steps')}
       />
 
       <DataSection

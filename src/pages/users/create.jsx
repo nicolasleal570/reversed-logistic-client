@@ -9,6 +9,7 @@ import CreateUserFormContextProvider from '@contexts/CreateUserForm/CreateUserFo
 import { fetchRoles } from '@api/roles/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { useFormStepper } from '@hooks/useFormStepper';
+import { fetchPermissions } from '@api/permissions/methods';
 
 const steps = [
   {
@@ -31,7 +32,7 @@ const steps = [
   },
 ];
 
-function CreateUserPage({ roles }) {
+function CreateUserPage({ roles, permissions }) {
   const { currentStep, onChangeStep } = useFormStepper(steps);
 
   return (
@@ -40,7 +41,11 @@ function CreateUserPage({ roles }) {
         title={steps[currentStep].title}
         description={steps[currentStep].description}
         customSubSidebar={
-          <CustomSidebar currentStep={currentStep} steps={steps} title="Crea un usuario" />
+          <CustomSidebar
+            currentStep={currentStep}
+            steps={steps}
+            title="Crea un usuario"
+          />
         }
       >
         {currentStep === 0 && (
@@ -60,6 +65,7 @@ function CreateUserPage({ roles }) {
           <AssignPermissions
             currentStep={currentStep}
             onChangeStep={onChangeStep}
+            permissions={permissions}
           />
         )}
         {currentStep === 3 && (
@@ -78,10 +84,13 @@ CreateUserPage.getInitialProps = async ({ req }) => {
   const data = parseCookies(req);
 
   let roles = [];
+  let permissions = [];
   if (data.token) {
     try {
       const res = await fetchRoles(data.token);
+      const { data: permissionsData } = await fetchPermissions(data.token);
       roles = res.data;
+      permissions = permissionsData;
     } catch (error) {
       console.log({ error });
     }
@@ -89,6 +98,7 @@ CreateUserPage.getInitialProps = async ({ req }) => {
 
   return {
     roles: roles ?? [],
+    permissions: permissions ?? [],
   };
 };
 

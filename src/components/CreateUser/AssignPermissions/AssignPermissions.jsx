@@ -4,7 +4,7 @@ import { useCreateUserForm } from '@hooks/useCreateUserForm';
 import { PermissionSectionUserForm } from '@components/PermissionSectionUserForm/PermissionSectionUserForm';
 import { listOfModules } from './checkboxesGroupFields';
 
-export function AssignPermissions({ onChangeStep, currentStep }) {
+export function AssignPermissions({ onChangeStep, currentStep, permissions }) {
   const { permisionsInformation, setPermissionsInformation } =
     useCreateUserForm();
   const { handleSubmit, control } = useForm({
@@ -21,7 +21,7 @@ export function AssignPermissions({ onChangeStep, currentStep }) {
       onSubmit={handleSubmit(onSubmit)}
       className="lg:max-w-3xl grid grid-cols-1 gap-3"
     >
-      {listOfModules.map((section) => (
+      {listOfModules(permissions).map((section) => (
         <PermissionSectionUserForm
           key={section.title}
           control={control}

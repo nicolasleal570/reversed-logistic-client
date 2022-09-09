@@ -22,9 +22,12 @@ export default function CreateUserFormContextProvider({ children }) {
     try {
       const data = {
         ...personalInformation,
-        password: Math.random().toString(36).slice(2),
+        //password: Math.random().toString(36).slice(2),
+        password: 'password',
         roleId: Number.parseInt(roleInformation.role, 10),
-        //...permissionsInformation,
+        permissions: Object.entries(permissionsInformation).filter(
+          ([, item]) => item === true
+        ),
       };
 
       const { token } = parseCookies() ?? {};
