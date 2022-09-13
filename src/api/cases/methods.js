@@ -6,8 +6,8 @@ import {
   CASE_CONTENT_URL,
 } from './endpoints';
 
-export const fetchCases = (token) =>
-  axios.get(CASES_URL, { headers: bearerToken(token) });
+export const fetchCases = (token, params = {}) =>
+  axios.get(CASES_URL, { params, headers: bearerToken(token) });
 
 export const createCase = (data, token) =>
   axios.post(CASES_URL, data, { headers: bearerToken(token) });

@@ -1,10 +1,17 @@
+import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import * as ordersAPI from '@api/orders/methods';
 
-const { createOrder: createOrderAPI, updateOrder: updateOrderAPI } = ordersAPI;
+const {
+  createOrder: createOrderAPI,
+  updateOrder: updateOrderAPI,
+  takeOrder: takeOrderAPI,
+  markOrderAsReady: markOrderAsReadyAPI,
+} = ordersAPI;
 
 export function useOrders() {
   const router = useRouter();
+  const [cookies] = useCookies(['token']);
 
   const createOrder = async (data, token) => {
     const { items, customerLocationId } = data;
@@ -32,20 +39,16 @@ export function useOrders() {
     const { items, customerLocationId } = data;
 
     try {
-      const res = await updateOrderAPI(
+      await updateOrderAPI(
         orderId,
         {
           customerLocationId,
-          items: items.map((info) => {
-            console.log({ info });
-
-            return {
-              id: info.id,
-              caseId: Number.parseInt(info.caseId, 10),
-              caseContentId: Number.parseInt(info.caseContentId, 10),
-              quantity: Number.parseInt(info.contentQuantity, 10) ?? 1,
-            };
-          }),
+          items: items.map((info) => ({
+            id: info.id,
+            caseId: Number.parseInt(info.caseId, 10),
+            caseContentId: Number.parseInt(info.caseContentId, 10),
+            quantity: Number.parseInt(info.contentQuantity, 10) ?? 1,
+          })),
         },
         token
       );
@@ -56,8 +59,36 @@ export function useOrders() {
     }
   };
 
+  const takeOrder = async (orderId) => {
+    try {
+      return takeOrderAPI(
+        {
+          orderId,
+        },
+        cookies.token
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const markOrderAsReady = async (orderId) => {
+    try {
+      return markOrderAsReadyAPI(
+        {
+          orderId,
+        },
+        cookies.token
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     createOrder,
     updateOrder,
+    takeOrder,
+    markOrderAsReady,
   };
 }

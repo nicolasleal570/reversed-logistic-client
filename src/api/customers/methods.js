@@ -4,6 +4,7 @@ import {
   CUSTOMERS_LOCATION_BY_CUSTOMER_ID_URL,
   CUSTOMER_URL,
   CUSTOMERS_LOCATIONS_URL,
+  CUSTOMER_LOCATIONS_URL,
 } from './endpoints';
 
 export const fetchCustomers = (token) =>
@@ -19,6 +20,9 @@ export const updateCustomer = (customerId, data, token) =>
   axios.patch(`${CUSTOMERS_LOCATIONS_URL}/${customerId}`, data, {
     headers: bearerToken(token),
   });
+
+export const fetchCustomersLocations = (token) =>
+  axios.get(CUSTOMER_LOCATIONS_URL, { headers: bearerToken(token) });
 
 export const fetchCustomerLocationsByCustomer = (customerId, token) =>
   axios.get(CUSTOMERS_LOCATION_BY_CUSTOMER_ID_URL(customerId), {
