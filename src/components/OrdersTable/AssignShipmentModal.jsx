@@ -7,6 +7,7 @@ import { SelectField } from '@components/SelectField/SelectField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { fetchShipments } from '@api/shipments/methods';
 import { useOrders } from '@hooks/useOrders';
+import { useCookies } from 'react-cookie';
 
 export default function AssignShipmentModal({
   isOpen,
@@ -19,6 +20,7 @@ export default function AssignShipmentModal({
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [cookies] = useCookies();
   const { assignShipmentToOrder } = useOrders();
   const [shipments, setShipments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,11 +42,11 @@ export default function AssignShipmentModal({
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const res = await fetchShipments({ status: 'AVAILABLE' });
+      const res = await fetchShipments(cookies.token, { status: 'AVAILABLE' });
       setShipments(res.data);
       setIsLoading(false);
     })();
-  }, []);
+  }, [cookies]);
 
   return (
     <>
