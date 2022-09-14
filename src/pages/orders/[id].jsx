@@ -9,6 +9,7 @@ import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
 import OrderForm from '@components/OrderForm/OrderForm';
 import { OrderSummary } from '@components/OrderSummary/OrderSummary';
+import { TakeOrderButton } from '@components/OrdersTable/TakeOrderButton';
 
 function EditOrderPage({ order, customers, cases, casesContent, token }) {
   const [isEdit, setIsEdit] = useState(false);
@@ -46,6 +47,12 @@ function EditOrderPage({ order, customers, cases, casesContent, token }) {
               </Switch>
             </>
           </Switch.Group>
+        </div>
+      )}
+
+      {order?.orderStatus?.id === 1 && (
+        <div className="mb-8 border-b border-gray-200 pb-8">
+          <TakeOrderButton order={order} />
         </div>
       )}
 

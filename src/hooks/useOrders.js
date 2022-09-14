@@ -7,6 +7,7 @@ const {
   updateOrder: updateOrderAPI,
   takeOrder: takeOrderAPI,
   markOrderAsReady: markOrderAsReadyAPI,
+  assignShipmentToOrder: assignShipmentToOrderAPI,
 } = ordersAPI;
 
 export function useOrders() {
@@ -61,12 +62,14 @@ export function useOrders() {
 
   const takeOrder = async (orderId) => {
     try {
-      return takeOrderAPI(
+      const updatedOrder = await takeOrderAPI(
         {
           orderId,
         },
         cookies.token
       );
+
+      return updatedOrder;
     } catch (error) {
       console.log(error);
     }
@@ -85,10 +88,19 @@ export function useOrders() {
     }
   };
 
+  const assignShipmentToOrder = async (data) => {
+    try {
+      return assignShipmentToOrderAPI(data, cookies.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     createOrder,
     updateOrder,
     takeOrder,
     markOrderAsReady,
+    assignShipmentToOrder,
   };
 }

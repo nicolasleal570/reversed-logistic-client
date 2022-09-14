@@ -2,10 +2,7 @@
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
 import { parseCookies } from '@utils/parseCookies';
-import {
-  fetchCustomers,
-  fetchCustomersLocations,
-} from '@api/customers/methods';
+import { fetchCustomers } from '@api/customers/methods';
 import { fetchCases, fetchCasesContent } from '@api/cases/methods';
 import OrderForm from '@components/OrderForm/OrderForm';
 

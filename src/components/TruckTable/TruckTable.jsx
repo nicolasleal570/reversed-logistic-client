@@ -50,7 +50,7 @@ export function TruckTable({ trucks }) {
         brand,
         type,
         licensePlate,
-        driver: driver.fullName,
+        driver: driver?.fullName ?? '-',
         action() {
           return (
             <Link href="/trucks/[id]" as={`/trucks/${id}`}>

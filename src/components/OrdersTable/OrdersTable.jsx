@@ -5,10 +5,11 @@ import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { formatPrice } from '@utils/formatPrice';
-import { useUser } from '@hooks/useUser';
-import { useOrders } from '@hooks/useOrders';
 import { Badge } from '@components/Badge/Badge';
 import classNames from 'classnames';
+import AssignShipmentModal from './AssignShipmentModal';
+import { TakeOrderButton } from './TakeOrderButton';
+import { fetchOrders } from '@api/orders/methods';
 
 const header = [
   {
@@ -46,58 +47,67 @@ const header = [
 ];
 
 const orderStatusColor = {
-  1: 'blue',
-  2: 'orange',
-  3: 'violet',
-  4: 'cyan',
-  5: 'green',
-  6: 'red',
+  QUEUED: 'blue',
+  IN_TRANSIT: 'orange',
+  FINISHED: 'violet',
+  WAITING_SHIPMENT: 'yellow',
+  IN_SHIPMENT: 'cyan',
+  SHIPMENT_DONE: 'green',
+  CANCELLED: 'red',
 };
 
 export function OrdersTable({ orders }) {
-  const { user } = useUser();
-  const { takeOrder } = useOrders(user);
   const [data, setData] = React.useState([]);
+  const [isShipmentModalOpen, setIsShipmentModalOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [selectedOrder, setSelectedOrder] = React.useState();
 
-  const renderRow = (
-    { id, total, createdBy, assignedTo, orderStatus, purchaseDate },
-    index
-  ) => ({
+  const renderRow = ({
+    id,
+    total,
+    createdBy,
+    assignedTo,
+    orderStatus,
+    purchaseDate,
+    ...rest
+  }) => ({
     id,
     purchaseDate: dayjs(purchaseDate).format('hh:mm A - dddd DD MMMM YYYY'),
     total: formatPrice(total),
     creator: createdBy?.fullName,
     assigned: assignedTo?.fullName ?? '-',
     status() {
-      const { name, id: orderId } = orderStatus ?? {};
-      return <Badge title={name ?? '-'} color={orderStatusColor[orderId]} />;
+      const { name, value } = orderStatus ?? {};
+      return <Badge title={name ?? '-'} color={orderStatusColor[value]} />;
     },
     action() {
       return (
-        <div className="flex items-center">
-          {orderStatus?.id === 1 && (
-            <button
-              type="button"
-              className="ml-auto border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
-              onClick={async () => {
-                const updatedOrder = await takeOrder(id);
-                changeOrderInfo(index, updatedOrder.data);
-              }}
-            >
-              <span>Tomar orden</span>
-            </button>
-          )}
+        <div className="flex items-center justify-end">
+          <TakeOrderButton
+            order={{
+              id,
+              total,
+              createdBy,
+              assignedTo,
+              orderStatus,
+              purchaseDate,
+              ...rest,
+            }}
+          />
+
           {orderStatus?.id === 3 && (
-            <button
-              type="button"
-              className="ml-auto border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
-              onClick={async () => {
-                //const updatedOrder = await takeOrder(id);
-                console.log('ASIGNAR');
-              }}
-            >
-              <span>Asignar envío</span>
-            </button>
+            <>
+              <button
+                type="button"
+                className="ml-auto border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                onClick={async () => {
+                  setIsShipmentModalOpen(true);
+                  setSelectedOrder(id);
+                }}
+              >
+                <span>Asignar envío</span>
+              </button>
+            </>
           )}
 
           <Link href="/orders/[id]" as={`/orders/${id}`}>
@@ -115,20 +125,10 @@ export function OrdersTable({ orders }) {
     },
   });
 
-  const changeOrderInfo = (index, order) => {
-    setData(() =>
-      [...orders.slice(0, index), { ...order }, ...orders.slice(index + 1)].map(
-        (item, index) => {
-          return renderRow(item, index);
-        }
-      )
-    );
-  };
-
   useEffect(() => {
     setData(orders.map(renderRow));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orders, user]);
+  }, [orders]);
 
   return (
     <Card>
@@ -145,6 +145,20 @@ export function OrdersTable({ orders }) {
                 Todas las órdenes
               </h2>
 
+              <button
+                type="button"
+                className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 mr-4"
+                disabled={isLoading}
+                onClick={async () => {
+                  setIsLoading(true);
+                  const { data: updatedOrders } = await fetchOrders();
+                  setData(updatedOrders.map(renderRow));
+                  setIsLoading(false);
+                }}
+              >
+                <span>Actualizar lista</span>
+              </button>
+
               <Link href="/orders/create">
                 <a className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white">
                   <PlusIcon className="w-5 mr-1" />
@@ -155,6 +169,13 @@ export function OrdersTable({ orders }) {
           </>
         }
       />
+      {isShipmentModalOpen && (
+        <AssignShipmentModal
+          isOpen={isShipmentModalOpen}
+          setIsOpen={setIsShipmentModalOpen}
+          selectedOrderId={selectedOrder}
+        />
+      )}
     </Card>
   );
 }

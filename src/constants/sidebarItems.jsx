@@ -29,9 +29,9 @@ export const items = [
     header: 'Analíticas',
     slots: [
       {
-        title: 'Ventas',
+        title: 'Analíticas',
         icon: <ChartBarIcon className={iconStyles} />,
-        url: '/sells',
+        url: '/analytics',
       },
     ],
   },
@@ -58,7 +58,7 @@ export const items = [
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
       {
-        title: 'Órdenes de venta',
+        title: 'Ventas',
         icon: <CashIcon className={iconStyles} />,
         url: '/orders',
       },
@@ -75,7 +75,7 @@ export const items = [
     ],
   },
   {
-    header: 'Limpieza para los cases',
+    header: 'Limpiezas',
     headerAction: () => Router.push('/clean-process/create'),
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [

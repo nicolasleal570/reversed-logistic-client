@@ -1,5 +1,6 @@
 import { axios, bearerToken } from '../config';
 import {
+  ASSIGN_SHIPMENT_ORDER_URL,
   DONE_ORDER_URL,
   ORDERS_URL,
   ORDER_URL,
@@ -25,4 +26,10 @@ export const takeOrder = (data, token) => {
 
 export const markOrderAsReady = (data, token) => {
   return axios.post(DONE_ORDER_URL, data, { headers: bearerToken(token) });
+};
+
+export const assignShipmentToOrder = (data, token) => {
+  return axios.post(ASSIGN_SHIPMENT_ORDER_URL, data, {
+    headers: bearerToken(token),
+  });
 };
