@@ -2,8 +2,11 @@ import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import * as shipmentsAPI from '@api/shipments/methods';
 
-const { createShipment: createShipmentAPI, updateShipment: updateShipmentAPI } =
-  shipmentsAPI;
+const {
+  createShipment: createShipmentAPI,
+  updateShipment: updateShipmentAPI,
+  startShipment: startShipmentAPI,
+} = shipmentsAPI;
 
 export function useShipments() {
   const router = useRouter();
@@ -29,16 +32,7 @@ export function useShipments() {
 
   const updateShipment = async (shipmentId, data, onFinish) => {
     try {
-      await updateShipmentAPI(
-        shipmentId,
-        {
-          ...data,
-          shipmentAt: !Number.isNaN(Date.parse(data.shipmentAt))
-            ? data.shipmentAt
-            : null,
-        },
-        cookies.token
-      );
+      await updateShipmentAPI(shipmentId, data, cookies.token);
 
       onFinish && onFinish();
     } catch (error) {
@@ -46,5 +40,13 @@ export function useShipments() {
     }
   };
 
-  return { createShipment, updateShipment };
+  const startShipment = async (data) => {
+    try {
+      return startShipmentAPI(data, cookies.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { createShipment, updateShipment, startShipment };
 }

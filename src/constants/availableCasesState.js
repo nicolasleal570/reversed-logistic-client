@@ -1,15 +1,39 @@
 export const availableCasesState = {
   AVAILABLE: {
     title: 'Disponible',
-    color: 'green',
+    color: 'indigo',
   },
-  IN_ORDER_PROCESS: {
-    title: 'En proceso de venta',
+  QUEUED: {
+    title: 'En cola de llenado',
+    color: 'blue',
+  },
+  IN_TRANSIT: {
+    title: 'En proceso de llenado',
     color: 'orange',
   },
-  IN_CUSTOMER_SERVICE: {
-    title: 'En uso',
+  FINISHED: {
+    title: 'Llenado listo',
+    color: 'violet',
+  },
+  WAITING_SHIPMENT: {
+    title: 'Esperando que sea enviado',
+    color: 'yellow',
+  },
+  IN_SHIPMENT: {
+    title: 'Ya fue enviado',
+    color: 'cyan',
+  },
+  SHIPMENT_DONE: {
+    title: 'Entregado en destino',
+    color: 'green',
+  },
+  OUT_OF_STOCK: {
+    title: 'Agotado',
     color: 'red',
+  },
+  WAITING_PICKUP: {
+    title: 'Esperando por recogida',
+    color: 'orange',
   },
   IN_CLEAN_PROCESS: {
     title: 'En proceso de limpieza',

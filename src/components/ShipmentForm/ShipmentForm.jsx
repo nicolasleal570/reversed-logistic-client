@@ -74,19 +74,27 @@ export function ShipmentForm({
         />
       </FormRow>
 
-      <FormRow>
-        <InputLabel title="Fecha de envío" inputId="shipmentAt" />
-        <InputField
-          type="datetime-local"
-          id="shipmentAt"
-          name="shipmentAt"
-          inputProps={{
-            min: !isEdit ? dayjs().format('YYYY-MM-DDTHH:mm') : null,
-            ...register('shipmentAt'),
-          }}
-          errors={errors}
-        />
-      </FormRow>
+      {isEdit && (
+        <FormRow>
+          <InputLabel title="Fecha de envío" inputId="shipmentAt" />
+          <InputField
+            type="datetime-local"
+            id="shipmentAt"
+            name="shipmentAt"
+            inputProps={{
+              min: !isEdit ? dayjs().format('YYYY-MM-DDTHH:mm') : null,
+              ...register('shipmentAt'),
+            }}
+            errors={errors}
+            disabled={isEdit && !shipment?.orders?.length}
+            highlight={
+              isEdit && !shipment?.orders?.length
+                ? 'Este envío no tiene ninguna órden asignada, entonces no puede ser enviado'
+                : 'Dejar en blanco este campo si el envío aún no se va a ejecutar.'
+            }
+          />
+        </FormRow>
+      )}
 
       <FormRow>
         <InputLabel title="Detalles" inputId="details" />

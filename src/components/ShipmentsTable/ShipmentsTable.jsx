@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
+import { useShipments } from '@hooks/useShipments';
 // import { availableCasesState } from '@constants/availableCasesState';
 
 const header = [
@@ -34,6 +36,10 @@ const header = [
     accessor: 'details',
   },
   {
+    Header: 'Nro de órdenes asignadas',
+    accessor: 'numOrders',
+  },
+  {
     Header: 'Creado por',
     accessor: 'createdByName',
   },
@@ -46,46 +52,96 @@ const header = [
   },
 ];
 
+const shipentStatusColor = {
+  WAITING_SHIPMENT: 'yellow',
+  IN_SHIPMENT: 'cyan',
+  SHIPMENT_DONE: 'green',
+};
+
 export function ShipmentsTable({ shipments }) {
+  const router = useRouter();
+  const { startShipment, updateShipment } = useShipments();
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
     setData(
-      shipments.map(({ id, trackNumber, details, shipmentAt, deliveredAt }) => {
-        return {
+      shipments.map(
+        ({
           id,
-          trackNumber: trackNumber.toUpperCase(),
-          details: details ?? '-',
-          shipmentAt:
-            shipmentAt !== null
-              ? dayjs(shipmentAt).format('hh:mm A - dddd DD MMMM YYYY')
-              : '-',
-          deliveredAt:
-            deliveredAt !== null
-              ? dayjs(deliveredAt).format('hh:mm A - dddd DD MMMM YYYY')
-              : '-',
-          status() {
-            return (
-              <Badge
-                title={
-                  deliveredAt === null ? 'En proceso de envío' : 'Entregado'
-                }
-                color={deliveredAt === null ? 'orange' : 'green'}
-              />
-            );
-          },
-          action() {
-            return (
-              <Link href="/shipments/[id]" as={`/shipments/${id}`}>
-                <a className="text-gray-900 p-1 float-right">
-                  <PencilIcon className="w-5" />
-                  <span className="sr-only">Editar</span>
-                </a>
-              </Link>
-            );
-          },
-        };
-      })
+          trackNumber,
+          details,
+          shipmentAt,
+          deliveredAt,
+          status: shipmentStatus,
+          createdBy,
+          orders,
+        }) => {
+          return {
+            id,
+            trackNumber: trackNumber.toUpperCase(),
+            details: details ?? '-',
+            numOrders: orders?.length ?? '-',
+            createdByName: createdBy?.fullName ?? '-',
+            shipmentAt:
+              shipmentAt !== null
+                ? dayjs(shipmentAt).format('hh:mm A - dddd DD MMMM YYYY')
+                : '-',
+            deliveredAt:
+              deliveredAt !== null
+                ? dayjs(deliveredAt).format('hh:mm A - dddd DD MMMM YYYY')
+                : '-',
+            status() {
+              const { name, value } = shipmentStatus ?? {};
+              return (
+                <Badge title={name ?? '-'} color={shipentStatusColor[value]} />
+              );
+            },
+            action() {
+              return (
+                <div className="flex items-center justify-end">
+                  {shipmentStatus?.value === 'WAITING_SHIPMENT' &&
+                    orders.length > 0 && (
+                      <>
+                        <button
+                          type="button"
+                          className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                          onClick={async () => {
+                            await startShipment({ id });
+                            router.push(`/shipments/${id}`);
+                          }}
+                        >
+                          <span>Comenzar envío</span>
+                        </button>
+                      </>
+                    )}
+
+                  {shipmentStatus?.value === 'IN_SHIPMENT' && shipmentAt && (
+                    <>
+                      <button
+                        type="button"
+                        className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                        onClick={async () => {
+                          await updateShipment(id, { deliveredAt: new Date() });
+                          router.push(`/shipments/${id}`);
+                        }}
+                      >
+                        <span>Entregado</span>
+                      </button>
+                    </>
+                  )}
+
+                  <Link href="/shipments/[id]" as={`/shipments/${id}`}>
+                    <a className="text-gray-900 p-1">
+                      <PencilIcon className="w-5" />
+                      <span className="sr-only">Editar</span>
+                    </a>
+                  </Link>
+                </div>
+              );
+            },
+          };
+        }
+      )
     );
   }, [shipments]);
 

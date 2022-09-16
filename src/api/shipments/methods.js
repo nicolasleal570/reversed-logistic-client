@@ -12,3 +12,8 @@ export const createShipment = (data, token) =>
 
 export const updateShipment = (id, data, token) =>
   axios.patch(`${SHIPMENT_URL(id)}`, data, { headers: bearerToken(token) });
+
+export const startShipment = (data, token) =>
+  axios.post(`${SHIPMENTS_URL}/start-shipping`, data, {
+    headers: bearerToken(token),
+  });

@@ -31,8 +31,11 @@ export function InputField({
           'w-full',
           { 'border border-gray-300 text-gray-900': !error },
           { 'border border-red-300 text-red-500': error },
+          {
+            'border border-gray-300 text-gray-400 cursor-not-allowed': disabled,
+          },
           'text-base leading-6 font-normal',
-          'bg-white h-10 py-3 px-2.5 shadow-sm rounded-lg',
+          'bg-white h-10 py-3 px-2.5 shadow-sm rounded-lg cursor-pointer',
           'placeholder:text-gray-400',
           'focus:outline-none focus:ring focus:ring-indigo-300'
         )}
@@ -41,7 +44,7 @@ export function InputField({
 
       {highlight && !error && (
         <span
-          className="text-xs leading-5 font-normal text-gray-500 mt-1.5"
+          className="text-xs font-medium text-gray-500"
           {...highlightMsgProps}
         >
           {highlight}

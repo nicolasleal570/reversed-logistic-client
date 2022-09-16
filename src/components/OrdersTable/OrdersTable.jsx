@@ -99,7 +99,7 @@ export function OrdersTable({ orders }) {
             <>
               <button
                 type="button"
-                className="ml-auto border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
                 onClick={async () => {
                   setIsShipmentModalOpen(true);
                   setSelectedOrder(id);
@@ -111,11 +111,7 @@ export function OrdersTable({ orders }) {
           )}
 
           <Link href="/orders/[id]" as={`/orders/${id}`}>
-            <a
-              className={classNames('text-gray-900 p-1', {
-                'ml-auto': orderStatus?.id > 1,
-              })}
-            >
+            <a className={classNames('text-gray-900 p-1')}>
               <PencilIcon className="w-5" />
               <span className="sr-only">Editar</span>
             </a>
