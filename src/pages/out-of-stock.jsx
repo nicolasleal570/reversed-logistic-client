@@ -1,13 +1,13 @@
 import { Fragment, useMemo } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
-import { useCookies } from 'react-cookie';
 import { withLocationProtection } from '@components/withLocationProtection';
 import { SelectField } from '@components/SelectField/SelectField';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button } from '@components/Button/Button';
-import { fetchCases } from '@api/cases/methods';
+import { fetchCasesByCustomer } from '@api/cases/methods';
 import { parseCookies } from '@utils/parseCookies';
+import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
 
 const INITIAL_CASE_ID = { caseId: '' };
 
@@ -46,7 +46,7 @@ function SelectCaseField({ allCases, selectedCases, errors, register, idx }) {
   );
 }
 
-function OutOfStockPage({ cases }) {
+function OutOfStockPage({ cases, customerLocationId }) {
   const {
     register,
     handleSubmit,
@@ -62,26 +62,28 @@ function OutOfStockPage({ cases }) {
     name: 'cases',
   });
   const selectedCases = useWatch({ control, name: 'cases' });
-
-  const [, setCookie] = useCookies(['token']);
+  const { createOutOfStockOrder } = useOutOfStockOrders();
 
   const onSubmit = async (data) => {
-    /*
-    try {
-      const res = await fetchLogin(data);
+    const items = data.cases.map((field) => {
+      const {
+        name: _name,
+        id: caseId,
+        ...caseInfo
+      } = cases.find((elem) => field.caseId === String(elem.id));
 
-      setCookie('token', res.data.token, {
-        path: '/',
-        //maxAge: 3600,
-        sameSite: true,
-      });
-      router.push('/');
+      return {
+        caseId,
+        ...caseInfo,
+      };
+    });
+
+    try {
+      const res = await createOutOfStockOrder({ items, customerLocationId });
+      console.log(res.data);
     } catch (error) {
       console.log({ error });
     }
-*/
-
-    console.log({ data });
   };
 
   return (
@@ -113,8 +115,8 @@ function OutOfStockPage({ cases }) {
                   )}
                 </div>
                 <SelectCaseField
-                  allCases={cases}
-                  selectedCases={selectedCases}
+                  allCases={cases || []}
+                  selectedCases={selectedCases || []}
                   {...{ register, idx, errors }}
                 />
               </FormRow>
@@ -140,10 +142,12 @@ OutOfStockPage.getInitialProps = async ({ req }) => {
   const data = parseCookies(req);
 
   let cases = [];
+  let customerLocationId = '';
   if (data.token) {
     try {
-      const res = await fetchCases(data.token);
-      cases = res.data;
+      const res = await fetchCasesByCustomer(data.token);
+      cases = res.data.cases;
+      customerLocationId = res.data.customerLocationId;
     } catch (error) {
       console.log({ error });
     }
@@ -151,6 +155,7 @@ OutOfStockPage.getInitialProps = async ({ req }) => {
 
   return {
     cases: cases ?? [],
+    customerLocationId: customerLocationId ?? '',
   };
 };
 

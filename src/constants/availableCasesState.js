@@ -28,7 +28,7 @@ export const availableCasesState = {
     color: 'green',
   },
   OUT_OF_STOCK: {
-    title: 'Agotado',
+    title: 'Reportado como agotado',
     color: 'red',
   },
   WAITING_PICKUP: {

@@ -9,6 +9,12 @@ import {
 export const fetchCases = (token, params = {}) =>
   axios.get(CASES_URL, { params, headers: bearerToken(token) });
 
+export const fetchCasesByCustomer = (token, params = {}) =>
+  axios.get(`${CASES_URL}/cases-by-customer`, {
+    params,
+    headers: bearerToken(token),
+  });
+
 export const createCase = (data, token) =>
   axios.post(CASES_URL, data, { headers: bearerToken(token) });
 
