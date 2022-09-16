@@ -102,7 +102,15 @@ export function OrdersTable({ orders }) {
                 className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
                 onClick={async () => {
                   setIsShipmentModalOpen(true);
-                  setSelectedOrder(id);
+                  setSelectedOrder({
+                    id,
+                    total,
+                    createdBy,
+                    assignedTo,
+                    orderStatus,
+                    purchaseDate,
+                    ...rest,
+                  });
                 }}
               >
                 <span>Asignar envío</span>
@@ -169,7 +177,7 @@ export function OrdersTable({ orders }) {
         <AssignShipmentModal
           isOpen={isShipmentModalOpen}
           setIsOpen={setIsShipmentModalOpen}
-          selectedOrderId={selectedOrder}
+          selectedOrder={selectedOrder}
         />
       )}
     </Card>

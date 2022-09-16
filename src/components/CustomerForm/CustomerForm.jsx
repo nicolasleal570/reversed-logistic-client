@@ -72,6 +72,7 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
             city,
             state,
             contact,
+            email,
             country,
           } = item;
           return {
@@ -82,6 +83,7 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
             state,
             state,
             contact,
+            email,
             country,
           };
         })
@@ -199,6 +201,24 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
               inputProps={{
                 ...register(`locations.${idx}.contact`, {
                   required: 'Debes ingresar un contacto de la empresa',
+                }),
+              }}
+              errors={errors?.locations?.[idx]}
+            />
+          </FormRow>
+
+          <FormRow>
+            <InputLabel title="Email para reportar cases" inputId="email" />
+            <InputField
+              type="text"
+              placeholder="john@email.com"
+              id="email"
+              name="email"
+              disabled={onlyRead}
+              inputProps={{
+                ...register(`locations.${idx}.email`, {
+                  required:
+                    'Debes ingresar un email para que la sucursal reporte los cases que se agotan',
                 }),
               }}
               errors={errors?.locations?.[idx]}

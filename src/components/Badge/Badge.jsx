@@ -14,6 +14,7 @@ export function Badge({ title, color }) {
           'bg-blue-50 text-blue-600': color === 'blue',
           'bg-cyan-50 text-cyan-600': color === 'cyan',
           'bg-green-50 text-green-600': color === 'green',
+          'bg-lime-50 text-lime-600': color === 'lime',
         }
       )}
     >
@@ -27,6 +28,7 @@ export function Badge({ title, color }) {
           'bg-blue-600': color === 'blue',
           'bg-cyan-600': color === 'cyan',
           'bg-green-600': color === 'green',
+          'bg-lime-600': color === 'lime',
         })}
       />
       {title}

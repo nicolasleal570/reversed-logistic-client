@@ -35,6 +35,11 @@ export function CustomerSummary({ customer }) {
 
           <DataSection label="Contacto" value={item.contact} />
 
+          <DataSection
+            label="Email asignado para reportar cases"
+            value={item.email}
+          />
+
           <DataSection label="Código postal" value={item.zipCode} />
         </div>
       ))}

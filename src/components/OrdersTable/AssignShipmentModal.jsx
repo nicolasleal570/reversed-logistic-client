@@ -12,7 +12,7 @@ import { useCookies } from 'react-cookie';
 export default function AssignShipmentModal({
   isOpen,
   setIsOpen,
-  selectedOrderId,
+  selectedOrder,
 }) {
   const router = useRouter();
   const {
@@ -32,7 +32,7 @@ export default function AssignShipmentModal({
   async function onSubmit(data) {
     setIsLoading(true);
     const { data: updatedOrder } = await assignShipmentToOrder({
-      orderId: selectedOrderId,
+      orderId: selectedOrder.id,
       ...data,
     });
     closeModal();
@@ -80,7 +80,9 @@ export default function AssignShipmentModal({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Asigna un envío a la órden #fff
+                    Asigna un envío a la órden &quot;
+                    <span className="font-bold">{`OR${selectedOrder.id}`}</span>
+                    &quot;
                   </Dialog.Title>
 
                   <form

@@ -1,7 +1,7 @@
 export const availableCasesState = {
   AVAILABLE: {
     title: 'Disponible',
-    color: 'indigo',
+    color: 'lime',
   },
   QUEUED: {
     title: 'En cola de llenado',

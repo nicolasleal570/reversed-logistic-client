@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
+import { CustomerLocationsModal } from './CustomerLocationsModal';
 
 const header = [
   {
@@ -28,6 +29,11 @@ const header = [
     Cell: ({ row: { index }, data: _data }) => _data[index].website(),
   },
   {
+    Header: 'Sucursales',
+    accessor: 'locations',
+    Cell: ({ row: { index }, data: _data }) => _data[index].locations(),
+  },
+  {
     Header: 'Acciones',
     accessor: 'action',
     Cell: ({ row: { index }, data: _data }) => _data[index].action(),
@@ -38,6 +44,8 @@ const header = [
 
 export function CustomersTable({ customers }) {
   const [data, setData] = React.useState([]);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = React.useState();
 
   useEffect(() => {
     setData(
@@ -63,6 +71,22 @@ export function CustomersTable({ customers }) {
               ) : (
                 '-'
               )}
+            </>
+          );
+        },
+        locations() {
+          return (
+            <>
+              <button
+                type="button"
+                className="text-blue-500 underline"
+                onClick={async () => {
+                  setIsModalOpen(true);
+                  setSelectedCustomerId(id);
+                }}
+              >
+                <span>Ver sucursales</span>
+              </button>
             </>
           );
         },
@@ -108,6 +132,13 @@ export function CustomersTable({ customers }) {
           </>
         }
       />
+      {isModalOpen && (
+        <CustomerLocationsModal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          selectedCustomerId={selectedCustomerId}
+        />
+      )}
     </Card>
   );
 }

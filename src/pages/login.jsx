@@ -19,13 +19,19 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetchLogin(data);
+      const { data: info } = await fetchLogin(data);
 
-      setCookie('token', res.data.token, {
+      setCookie('token', info.token, {
         path: '/',
         //maxAge: 3600,
         sameSite: true,
       });
+
+      if (info.isLocation) {
+        router.push('/out-of-stock');
+        return;
+      }
+
       router.push('/');
     } catch (error) {
       console.log({ error });
