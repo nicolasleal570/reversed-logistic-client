@@ -24,16 +24,24 @@ export const availableCasesState = {
     color: 'cyan',
   },
   SHIPMENT_DONE: {
-    title: 'Entregado en destino',
+    title: 'En uso',
     color: 'green',
   },
   OUT_OF_STOCK: {
     title: 'Reportado como agotado',
     color: 'red',
   },
-  WAITING_PICKUP: {
-    title: 'Esperando por recogida',
+  PICKUP_IN_PROGRESS: {
+    title: 'Esperando la recogida',
     color: 'orange',
+  },
+  PICKUP_DONE: {
+    title: 'Entregado al almacén',
+    color: 'violet',
+  },
+  WAITING_CLEAN_PROCESS: {
+    title: 'Esperando limpieza',
+    color: 'cyan',
   },
   IN_CLEAN_PROCESS: {
     title: 'En proceso de limpieza',

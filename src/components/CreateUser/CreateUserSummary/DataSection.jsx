@@ -1,12 +1,24 @@
-export function DataSection({ label, value, tags }) {
+import { Badge } from '@components/Badge/Badge';
+import classNames from 'classnames';
+
+export function DataSection({ label, value, badge, tags }) {
   return (
     <div className="my-6">
-      <p className="text-sm leading-5 font-medium text-gray-500">{label}</p>
-      {value && (
+      <p
+        className={classNames('text-sm leading-5 font-medium text-gray-500', {
+          'mb-2': badge,
+        })}
+      >
+        {label}
+      </p>
+      {value && !badge && (
         <p className="text-base leading-6 font-normal text-gray-900 mb-6">
           {value}
         </p>
       )}
+
+      {badge && <Badge title={badge.title} color={badge.color} />}
+
       {tags && tags.length > 0 && (
         <div className="flex mt-2">
           {tags.map((tag) => (

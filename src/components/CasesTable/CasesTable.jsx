@@ -16,11 +16,6 @@ const header = [
     accessor: 'name',
   },
   {
-    Header: 'Descripción',
-    accessor: 'description',
-    Cell: ({ row: { index }, data: _data }) => _data[index].description(),
-  },
-  {
     Header: 'Volumen',
     accessor: 'volume',
     Cell: ({ row: { index }, data: _data }) => _data[index].volume(),
@@ -49,12 +44,9 @@ export function CasesTable({ cases }) {
 
   useEffect(() => {
     setData(
-      cases.map(({ id, name, description, volume, weight, state }) => ({
+      cases.map(({ id, name, volume, weight, state: stateId }) => ({
         id,
         name,
-        description() {
-          return <>{description ?? '-'}</>;
-        },
         volume() {
           return <>{volume ?? '-'}</>;
         },
@@ -62,8 +54,8 @@ export function CasesTable({ cases }) {
           return <>{weight ?? '-'}</>;
         },
         state() {
-          const item = availableCasesState[state];
-          return <Badge title={item.title} color={item.color} />;
+          const item = availableCasesState[stateId];
+          return <Badge title={item?.title || ''} color={item?.color || ''} />;
         },
         action() {
           return (

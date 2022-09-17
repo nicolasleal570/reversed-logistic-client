@@ -35,14 +35,14 @@ export function Sidebar() {
   return (
     <div
       className={classNames(
-        'fixed md:relative bg-gray-900/70 w-full md:w-64 min-h-screen z-10',
+        'fixed md:relative bg-gray-900/70 w-full md:w-64 md:min-w-[16rem] min-h-screen z-10',
         {
           block: isSidebarOpen && isMediumSize,
           hidden: !isSidebarOpen && !isMediumSize,
         }
       )}
     >
-      <aside className="fixed w-64 h-full overflow-y-scroll lg:overflow-y-auto bg-white flex flex-col">
+      <aside className="fixed w-64 h-full bg-white flex flex-col">
         <button
           className="block md:hidden absolute right-2 top-2 rounded bg-red-400 text-white p-1"
           onClick={() => setIsSidebarOpen(false)}
@@ -54,19 +54,21 @@ export function Sidebar() {
           <Link href="/">LOGO</Link>
         </section>
 
-        {items.map((item) => (
-          <SidebarSection
-            key={item.header ?? item.slots[0].title}
-            header={item.header}
-            headerAction={item.headerAction}
-            headerActionIcon={item.headerActionIcon}
-            slots={item.slots}
-          />
-        ))}
+        <div className="overflow-y-scroll lg:overflow-y-auto">
+          {items.map((item) => (
+            <SidebarSection
+              key={item.header ?? item.slots[0].title}
+              header={item.header}
+              headerAction={item.headerAction}
+              headerActionIcon={item.headerActionIcon}
+              slots={item.slots}
+            />
+          ))}
 
-        <section className="w-full block flex-grow" />
+          <section className="w-full block flex-grow min-h-[60px]" />
+        </div>
 
-        <section className="w-full p-4 md:border-t md:border-gray-200">
+        <section className="bg-gray-100/20 w-full p-4 md:border-t md:border-gray-200">
           <button
             type="button"
             className="bg-white border border-red-400 rounded-lg text-red-400 block w-full py-4 text-center"

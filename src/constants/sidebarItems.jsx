@@ -1,5 +1,4 @@
 import {
-  BellIcon,
   BeakerIcon,
   ChartBarIcon,
   CollectionIcon,
@@ -10,21 +9,13 @@ import {
   UsersIcon,
   CashIcon,
   ClipboardCheckIcon,
+  CubeTransparentIcon,
 } from '@heroicons/react/outline';
 import Router from 'next/router';
 
 const iconStyles = 'w-5 h-5 mr-3 text-gray-500';
 
 export const items = [
-  {
-    slots: [
-      {
-        title: 'Notificaciones',
-        icon: <BellIcon className={iconStyles} />,
-        url: '/notifications',
-      },
-    ],
-  },
   {
     header: 'Analíticas',
     slots: [
@@ -66,6 +57,11 @@ export const items = [
         title: 'Envíos',
         icon: <ClipboardCheckIcon className={iconStyles} />,
         url: '/shipments',
+      },
+      {
+        title: 'Agotamiento',
+        icon: <CubeTransparentIcon className={iconStyles} />,
+        url: '/out-of-stock-orders',
       },
       {
         title: 'Transporte',

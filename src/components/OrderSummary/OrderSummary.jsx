@@ -6,6 +6,7 @@ import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSectio
 import { formatPrice } from '@utils/formatPrice';
 import classNames from 'classnames';
 import { useOrders } from '@hooks/useOrders';
+import { orderStatusColor } from '@components/OrdersTable/OrdersTable';
 
 export function OrderSummary({ order }) {
   const router = useRouter();
@@ -34,7 +35,13 @@ export function OrderSummary({ order }) {
         Información de la orden
       </h2>
 
-      <DataSection label="Estado" value={order?.orderStatus?.name} />
+      <DataSection
+        label="Estado"
+        badge={{
+          title: order?.orderStatus?.name,
+          color: orderStatusColor[order?.orderStatus?.value],
+        }}
+      />
 
       <DataSection label="Total" value={formatPrice(order.total)} />
 
@@ -99,18 +106,23 @@ export function OrderSummary({ order }) {
         );
       })}
 
-      {doneItems.length === order.items.length && (
-        <button
-          type="button"
-          className="w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8"
-          onClick={async () => {
-            await markOrderAsReady(order.id);
-            router.push('/orders');
-          }}
-        >
-          Finalizar orden
-        </button>
-      )}
+      <button
+        type="button"
+        className={classNames(
+          'w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8',
+          {
+            'text-gray-400 bg-gray-200':
+              doneItems.length !== order.items.length,
+          }
+        )}
+        disabled={doneItems.length !== order.items.length}
+        onClick={async () => {
+          await markOrderAsReady(order.id);
+          router.push('/orders');
+        }}
+      >
+        Finalizar pedido
+      </button>
     </div>
   );
 }

@@ -46,7 +46,7 @@ const header = [
   },
 ];
 
-const orderStatusColor = {
+export const orderStatusColor = {
   QUEUED: 'blue',
   IN_TRANSIT: 'orange',
   FINISHED: 'violet',

@@ -19,3 +19,13 @@ export const updateOutOfStockOrder = (id, data, token) =>
   axios.patch(`${OUT_OF_STOCK_ORDER_URL(id)}`, data, {
     headers: bearerToken(token),
   });
+
+export const takeOutOfStockOrder = (data, token) =>
+  axios.post(`${OUT_OF_STOCK_ORDERS_URL}/take-order`, data, {
+    headers: bearerToken(token),
+  });
+
+export const finishOutOfStockOrder = (data, token) =>
+  axios.post(`${OUT_OF_STOCK_ORDERS_URL}/finish`, data, {
+    headers: bearerToken(token),
+  });

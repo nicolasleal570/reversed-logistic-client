@@ -15,10 +15,6 @@ const header = [
     accessor: 'id',
   },
   {
-    Header: 'Identificador de tracking',
-    accessor: 'trackNumber',
-  },
-  {
     Header: 'Fecha de envío',
     accessor: 'shipmentAt',
   },
@@ -30,10 +26,6 @@ const header = [
     Header: 'Estado',
     accessor: 'status',
     Cell: ({ row: { index }, data: _data }) => _data[index].status(),
-  },
-  {
-    Header: 'Detalles',
-    accessor: 'details',
   },
   {
     Header: 'Nro de órdenes asignadas',
@@ -68,8 +60,6 @@ export function ShipmentsTable({ shipments }) {
       shipments.map(
         ({
           id,
-          trackNumber,
-          details,
           shipmentAt,
           deliveredAt,
           status: shipmentStatus,
@@ -78,8 +68,6 @@ export function ShipmentsTable({ shipments }) {
         }) => {
           return {
             id,
-            trackNumber: trackNumber.toUpperCase(),
-            details: details ?? '-',
             numOrders: orders?.length ?? '-',
             createdByName: createdBy?.fullName ?? '-',
             shipmentAt:
