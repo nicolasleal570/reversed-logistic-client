@@ -32,7 +32,7 @@ export const availableCasesState = {
     color: 'red',
   },
   PICKUP_IN_PROGRESS: {
-    title: 'Esperando la recogida',
+    title: 'Recogida en progreso',
     color: 'orange',
   },
   PICKUP_DONE: {

@@ -118,7 +118,6 @@ CreateCleanProcessPage.getInitialProps = async ({ req }) => {
     try {
       const res = await fetchCustomers(data.token);
       const { data: casesArr } = await fetchCases(data.token, {
-        state: 'WAITING_CLEAN_PROCESS',
       });
       const { data: casesContentArr } = await fetchCasesContent(data.token);
       const { data: processStepsArr } = await fetchProcessSteps(data.token);

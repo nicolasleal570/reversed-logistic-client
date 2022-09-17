@@ -9,6 +9,7 @@ import { Button, SM_SIZE } from '@components/Button/Button';
 import { fetchCustomerLocationsByCustomer } from '@api/customers/methods';
 import { useOrders } from '@hooks/useOrders';
 import { useRouter } from 'next/router';
+import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
 
 export function formatCustomerLocationName(customer, location) {
   return `${customer.companyName}, ${location.line1}, ${location.state}`;
@@ -194,21 +195,11 @@ function OrderForm({
 
             <FormRow>
               <InputLabel title="Selecciona el case" inputId="caseId" />
-              <SelectField
-                id="caseId"
-                name="caseId"
-                errors={errors?.items?.[idx]}
-                placeholder="Selecciona un case"
-                disabled={onlyRead}
-                inputProps={{
-                  ...register(`items.${idx}.caseId`, {
-                    required: 'Debes seleccionar un case',
-                  }),
-                }}
-                options={cases.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                }))}
+              <MultipleSelectCasesField
+                allCases={cases || []}
+                selectedCases={casesInfo || []}
+                fieldName={`items.${idx}.caseId`}
+                {...{ register, idx, errors }}
               />
             </FormRow>
 

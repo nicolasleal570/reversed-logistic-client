@@ -59,12 +59,28 @@ export function CasesTable({ cases }) {
         },
         action() {
           return (
-            <Link href="/cases/[id]" as={`/cases/${id}`}>
-              <a className="text-gray-900 p-1 float-right">
-                <PencilIcon className="w-5" />
-                <span className="sr-only">Editar</span>
-              </a>
-            </Link>
+            <div className="flex items-center justify-end">
+              {stateId === 'PICKUP_DONE' && (
+                <>
+                  <button
+                    type="button"
+                    className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                    onClick={async () => {
+                      console.log('Hoal mundo');
+                    }}
+                  >
+                    <span>Asignar limpieza</span>
+                  </button>
+                </>
+              )}
+
+              <Link href="/cases/[id]" as={`/cases/${id}`}>
+                <a className="text-gray-900 p-1 float-right">
+                  <PencilIcon className="w-5" />
+                  <span className="sr-only">Editar</span>
+                </a>
+              </Link>
+            </div>
           );
         },
       }))

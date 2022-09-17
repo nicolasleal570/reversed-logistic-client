@@ -10,12 +10,23 @@ import {
   CashIcon,
   ClipboardCheckIcon,
   CubeTransparentIcon,
+  FilterIcon,
+  HomeIcon,
 } from '@heroicons/react/outline';
 import Router from 'next/router';
 
 const iconStyles = 'w-5 h-5 mr-3 text-gray-500';
 
 export const items = [
+  {
+    slots: [
+      {
+        title: 'Inicio',
+        icon: <HomeIcon className={iconStyles} />,
+        url: '/',
+      },
+    ],
+  },
   {
     header: 'Analíticas',
     slots: [
@@ -77,7 +88,7 @@ export const items = [
     slots: [
       {
         title: 'Órdenes de limpieza',
-        icon: <DatabaseIcon className={iconStyles} />,
+        icon: <FilterIcon className={iconStyles} />,
         url: '/clean-process',
       },
       {

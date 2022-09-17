@@ -1,52 +1,19 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
+import { useRouter } from 'next/router';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { withLocationProtection } from '@components/withLocationProtection';
-import { SelectField } from '@components/SelectField/SelectField';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button } from '@components/Button/Button';
 import { fetchCasesByCustomer } from '@api/cases/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
+import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
 
 const INITIAL_CASE_ID = { caseId: '' };
 
-function SelectCaseField({ allCases, selectedCases, errors, register, idx }) {
-  const filteredCases = useMemo(() => {
-    const selectedCasesIds = selectedCases
-      .map((item) => Number.parseInt(item.caseId, 10 || '0'))
-      .filter(Boolean);
-
-    return allCases.filter((caseInfo) => {
-      if (caseInfo.id === Number.parseInt(selectedCases[idx]?.caseId || '0')) {
-        return caseInfo;
-      }
-
-      return !selectedCasesIds.includes(caseInfo.id);
-    });
-  }, [allCases, selectedCases, idx]);
-
-  return (
-    <SelectField
-      id="caseId"
-      name="caseId"
-      errors={errors?.cases?.[idx]}
-      placeholder="Selecciona un case"
-      highlight="Selecciona el case que se agotó"
-      inputProps={{
-        ...register(`cases.${idx}.caseId`, {
-          required: 'Debes seleccionar un case',
-        }),
-      }}
-      options={filteredCases.map((caseInfo) => ({
-        label: caseInfo.name,
-        value: caseInfo.id,
-      }))}
-    />
-  );
-}
-
 function OutOfStockPage({ cases, customerLocationId }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -81,6 +48,7 @@ function OutOfStockPage({ cases, customerLocationId }) {
     try {
       const res = await createOutOfStockOrder({ items, customerLocationId });
       console.log(res.data);
+      router.push('/out-of-stock');
     } catch (error) {
       console.log({ error });
     }
@@ -114,9 +82,11 @@ function OutOfStockPage({ cases, customerLocationId }) {
                     </button>
                   )}
                 </div>
-                <SelectCaseField
+                <MultipleSelectCasesField
                   allCases={cases || []}
                   selectedCases={selectedCases || []}
+                  highlight="Selecciona el case que se agotó"
+                  fieldName={`cases.${idx}.caseId`}
                   {...{ register, idx, errors }}
                 />
               </FormRow>

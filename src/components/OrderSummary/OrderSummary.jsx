@@ -31,6 +31,11 @@ export function OrderSummary({ order }) {
         value={order.customerLocation.contact}
       />
 
+      <DataSection
+        label="Email asignado para reportar cases"
+        value={order.customerLocation.email}
+      />
+
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Información de la orden
       </h2>

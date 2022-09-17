@@ -63,7 +63,7 @@ function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
 
       <div className="overflow-x-auto w-full block">
         <table
-          className="w-full border-collapse mb-4 text-gray-600 min-w-max"
+          className="w-full border-collapse mb-4 text-gray-600"
           style={{ captionSide: 'bottom' }}
           {...getTableProps()}
         >
