@@ -24,6 +24,11 @@ export const updateCase = (caseId, data, token) =>
 export const fetchCase = (caseId, token) =>
   axios.get(CASE_URL(caseId), { headers: bearerToken(token) });
 
+export const fetchCaseInfoLastOutOfStock = (caseId, token) =>
+  axios.get(`${CASE_URL(caseId)}/out-of-stock`, {
+    headers: bearerToken(token),
+  });
+
 export const fetchCasesContent = (token) =>
   axios.get(CASES_CONTENT_URL, { headers: bearerToken(token) });
 
@@ -35,5 +40,10 @@ export const fetchCaseContent = (caseContentId, token) =>
 
 export const updateCaseContent = (caseContentId, data, token) =>
   axios.patch(CASE_CONTENT_URL(caseContentId), data, {
+    headers: bearerToken(token),
+  });
+
+export const handleCaseStateAfterPickupDone = (caseId, data, token) =>
+  axios.post(`${CASE_URL(caseId)}/after-out-of-stock`, data, {
     headers: bearerToken(token),
   });

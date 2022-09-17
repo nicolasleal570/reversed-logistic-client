@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { parseCookies } from '@utils/parseCookies';
 import { createCleanProcessOrderFull } from '@api/clean-process-order/methods';
@@ -11,6 +11,7 @@ export default function CreateCleanProcessOrderFormContextProvider({
   children,
 }) {
   const router = useRouter();
+  const [lastOutOfStockInfo, setLastOutOfStockInfo] = useState();
   const [caseInformation, setCaseInformation] = useState({
     caseId: null,
     caseContentId: null,
@@ -43,6 +44,21 @@ export default function CreateCleanProcessOrderFormContextProvider({
     }
   };
 
+  useEffect(() => {
+    if (lastOutOfStockInfo) {
+      const { caseId, caseContentId, order } = lastOutOfStockInfo;
+      setCaseInformation(() => ({
+        caseId: caseId,
+        caseContentId: caseContentId,
+      }));
+      setCustomerInformation((oldValues) => ({
+        ...oldValues,
+        customerId: String(order.customerLocation.customer.id),
+        customerLocationId: String(order.customerLocationId),
+      }));
+    }
+  }, [lastOutOfStockInfo]);
+
   return (
     <CreateCleanProcessOrderFormContext.Provider
       value={{
@@ -53,6 +69,8 @@ export default function CreateCleanProcessOrderFormContextProvider({
         processSteps,
         setProcessSteps,
         onCreateCleanProcessOrder,
+        lastOutOfStockInfo,
+        setLastOutOfStockInfo,
       }}
     >
       {children}

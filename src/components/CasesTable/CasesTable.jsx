@@ -61,17 +61,16 @@ export function CasesTable({ cases }) {
           return (
             <div className="flex items-center justify-end">
               {stateId === 'PICKUP_DONE' && (
-                <>
-                  <button
-                    type="button"
-                    className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
-                    onClick={async () => {
-                      console.log('Hoal mundo');
-                    }}
-                  >
-                    <span>Asignar limpieza</span>
-                  </button>
-                </>
+                <Link
+                  href={{
+                    pathname: `/cases/${id}`,
+                    query: { checkHealth: true },
+                  }}
+                >
+                  <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
+                    Examinar
+                  </a>
+                </Link>
               )}
 
               <Link href="/cases/[id]" as={`/cases/${id}`}>

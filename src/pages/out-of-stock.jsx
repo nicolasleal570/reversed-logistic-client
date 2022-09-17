@@ -9,10 +9,11 @@ import { fetchCasesByCustomer } from '@api/cases/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
 import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
+import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
 
 const INITIAL_CASE_ID = { caseId: '' };
 
-function OutOfStockPage({ cases, customerLocationId }) {
+function OutOfStockPage({ cases, customerLocationId, location: client }) {
   const router = useRouter();
   const {
     register,
@@ -31,6 +32,8 @@ function OutOfStockPage({ cases, customerLocationId }) {
   const selectedCases = useWatch({ control, name: 'cases' });
   const { createOutOfStockOrder } = useOutOfStockOrders();
 
+  console.log(client.location);
+
   const onSubmit = async (data) => {
     const items = data.cases.map((field) => {
       const {
@@ -46,8 +49,7 @@ function OutOfStockPage({ cases, customerLocationId }) {
     });
 
     try {
-      const res = await createOutOfStockOrder({ items, customerLocationId });
-      console.log(res.data);
+       await createOutOfStockOrder({ items, customerLocationId });
       router.push('/out-of-stock');
     } catch (error) {
       console.log({ error });
@@ -56,9 +58,14 @@ function OutOfStockPage({ cases, customerLocationId }) {
 
   return (
     <div className="flex justify-center pt-32 bg-white min-h-screen overflow-y-auto">
-      <div className="flex flex-col self-start bg-white border border-gray-200 shadow rounded-lg px-12 py-16 min-w-[458px]">
-        <h1 className="w-full text-3xl leading-9 font-medium text-center text-gray-900">
-          Hola XXX!
+      <div className="flex flex-col self-start bg-white border border-gray-200 shadow rounded-lg px-12 py-16 w-[458px]">
+        <h1 className="w-full text-3xl leading-9 tracking-tight font-medium text-center text-gray-900">
+          Hola{' '}
+          {formatCustomerLocationName(
+            client.location.customer,
+            client.location
+          )}
+          !
         </h1>
 
         <p className="text-sm md:text-base leading-6 font-normal text-center text-gray-500 my-3">

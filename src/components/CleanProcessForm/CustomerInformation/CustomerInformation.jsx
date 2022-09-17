@@ -88,7 +88,6 @@ export function CustomerInformation({
           name="customerId"
           errors={errors}
           placeholder="Selecciona un cliente"
-          disabled={onlyRead}
           inputProps={{
             ...register('customerId', {
               required: 'Debes seleccionar un cliente',
@@ -98,6 +97,7 @@ export function CustomerInformation({
             label: customer.companyName,
             value: customer.id,
           }))}
+          disabled
         />
       </FormRow>
 
@@ -108,7 +108,6 @@ export function CustomerInformation({
           name="customerLocationId"
           errors={errors}
           placeholder="Selecciona una sucursal"
-          disabled={onlyRead}
           inputProps={{
             ...register('customerLocationId', {
               required: 'Debes seleccionar una sucursal',
@@ -121,6 +120,7 @@ export function CustomerInformation({
             ),
             value: location.id,
           }))}
+          disabled
         />
       </FormRow>
 

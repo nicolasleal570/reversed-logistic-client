@@ -1,9 +1,13 @@
 import { Badge } from '@components/Badge/Badge';
 import classNames from 'classnames';
 
-export function DataSection({ label, value, badge, tags }) {
+export function DataSection({ label, value, badge, tags, withoutMargins }) {
   return (
-    <div className="my-6">
+    <div
+      className={classNames({
+        'my-6': !withoutMargins,
+      })}
+    >
       <p
         className={classNames('text-sm leading-5 font-medium text-gray-500', {
           'mb-2': badge,
@@ -12,7 +16,14 @@ export function DataSection({ label, value, badge, tags }) {
         {label}
       </p>
       {value && !badge && (
-        <p className="text-base leading-6 font-normal text-gray-900 mb-6">
+        <p
+          className={classNames(
+            'text-base leading-6 font-normal text-gray-900',
+            {
+              'mb-6': !withoutMargins,
+            }
+          )}
+        >
           {value}
         </p>
       )}

@@ -3,7 +3,11 @@ import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
 import { parseCookies } from '@utils/parseCookies';
 import { fetchCustomers } from '@api/customers/methods';
-import { fetchCases, fetchCasesContent } from '@api/cases/methods';
+import {
+  fetchCaseInfoLastOutOfStock,
+  fetchCases,
+  fetchCasesContent,
+} from '@api/cases/methods';
 import { CustomSidebar } from '@components/CustomSidebar/CustomSidebar';
 import { useFormStepper } from '@hooks/useFormStepper';
 import { CaseInformation } from '@components/CleanProcessForm/CaseInformation/CaseInformation';
@@ -118,6 +122,7 @@ CreateCleanProcessPage.getInitialProps = async ({ req }) => {
     try {
       const res = await fetchCustomers(data.token);
       const { data: casesArr } = await fetchCases(data.token, {
+        state: 'WAITING_CLEAN_PROCESS',
       });
       const { data: casesContentArr } = await fetchCasesContent(data.token);
       const { data: processStepsArr } = await fetchProcessSteps(data.token);

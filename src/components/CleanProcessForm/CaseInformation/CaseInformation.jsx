@@ -1,9 +1,12 @@
-import { useForm } from 'react-hook-form';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { useCookies } from 'react-cookie';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { SelectField } from '@components/SelectField/SelectField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { useCreateCleanProcessOrderForm } from '@hooks/useCreateCleanProcessOrderForm';
+import { fetchCaseInfoLastOutOfStock } from '@api/cases/methods';
 
 export function CaseInformation({
   isEdit = false,
@@ -12,24 +15,49 @@ export function CaseInformation({
   casesContent,
   onChangeStep,
 }) {
-  const { caseInformation, setCaseInformation } =
-    useCreateCleanProcessOrderForm();
-
+  const {
+    caseInformation,
+    setCaseInformation,
+    lastOutOfStockInfo,
+    setLastOutOfStockInfo,
+  } = useCreateCleanProcessOrderForm();
+  const [cookies] = useCookies();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    control,
   } = useForm({
     defaultValues: { ...caseInformation },
   });
+  const caseIdField = useWatch({ control, name: 'caseId' });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = async (data) => {
-    setCaseInformation({
-      caseId: Number.parseInt(data.caseId, 10),
-      caseContentId: Number.parseInt(data.caseContentId, 10),
-    });
+  const handleCaseIdChange = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetchCaseInfoLastOutOfStock(caseIdField, cookies.token);
+      setIsLoading(false);
+      setLastOutOfStockInfo(res.data);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
+  const onSubmit = async () => {
     onChangeStep();
   };
+
+  useEffect(() => {
+    if (caseIdField && !isLoading && !lastOutOfStockInfo) {
+      handleCaseIdChange();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseIdField]);
+
+  console.log(caseInformation);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">
@@ -64,22 +92,22 @@ export function CaseInformation({
           name="caseContentId"
           errors={errors}
           placeholder="Selecciona el contenido que tenía el case"
-          disabled={onlyRead}
+          value={caseInformation.caseContentId}
           inputProps={{
             ...register('caseContentId', {
-              required:
-                'Debes seleccionar el contenido que tenía el case para la limpieza',
+              required: 'Debes seleccionar el contenido que tenía el case',
             }),
           }}
           options={casesContent.map((item) => ({
             label: item.name,
             value: item.id,
           }))}
+          disabled
         />
       </FormRow>
 
       <div className="w-2/5 mt-4 ml-auto">
-        <Button type="submit" size={SM_SIZE}>
+        <Button type="submit" size={SM_SIZE} disabled={isLoading}>
           {isEdit ? 'Terminar edición' : 'Siguiente'}
         </Button>
       </div>

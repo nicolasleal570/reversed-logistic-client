@@ -1,7 +1,11 @@
 import { useRouter } from 'next/router';
 import * as casesAPI from '@api/cases/methods';
 
-const { createCase: createCaseAPI, updateCase: updateCaseAPI } = casesAPI;
+const {
+  createCase: createCaseAPI,
+  updateCase: updateCaseAPI,
+  handleCaseStateAfterPickupDone: handleCaseStateAfterPickupDoneAPI,
+} = casesAPI;
 
 export function useCases() {
   const router = useRouter();
@@ -35,5 +39,13 @@ export function useCases() {
     }
   };
 
-  return { createCase, updateCase };
+  const handleCaseStateAfterPickupDone = async (caseId, data, token) => {
+    try {
+      return handleCaseStateAfterPickupDoneAPI(caseId, data, token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { createCase, updateCase, handleCaseStateAfterPickupDone };
 }
