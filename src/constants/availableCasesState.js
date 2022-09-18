@@ -39,12 +39,16 @@ export const availableCasesState = {
     title: 'Entregado al almacén',
     color: 'violet',
   },
-  WAITING_CLEAN_PROCESS: {
-    title: 'Esperando limpieza',
+  CLEAN_PROCESS_QUEUED: {
+    title: 'En cola de limpieza',
     color: 'cyan',
   },
   IN_CLEAN_PROCESS: {
     title: 'En proceso de limpieza',
-    color: 'blue',
+    color: 'orange',
+  },
+  CLEAN_PROCESS_DONE: {
+    title: 'Limpieza lista',
+    color: 'green',
   },
 };

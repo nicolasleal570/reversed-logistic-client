@@ -23,17 +23,17 @@ const header = [
     accessor: 'deliveredAt',
   },
   {
-    Header: 'Estado',
-    accessor: 'status',
-    Cell: ({ row: { index }, data: _data }) => _data[index].status(),
-  },
-  {
-    Header: 'Nro de órdenes asignadas',
+    Header: 'Órdenes asignadas',
     accessor: 'numOrders',
   },
   {
     Header: 'Creado por',
     accessor: 'createdByName',
+  },
+  {
+    Header: 'Estado',
+    accessor: 'status',
+    Cell: ({ row: { index }, data: _data }) => _data[index].status(),
   },
   {
     Header: 'Acciones',

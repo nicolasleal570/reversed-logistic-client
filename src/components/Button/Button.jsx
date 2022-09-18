@@ -18,6 +18,7 @@ export function Button({
   fullWidth = true,
   className,
   outline = false,
+  disabled,
   ...props
 }) {
   const validKind = validKindOfBtn.has(kind) ? kind : DEFAULT_KIND;
@@ -25,8 +26,7 @@ export function Button({
 
   return (
     <button
-      type="submit"
-      className={classNames(
+      className={classNames('cursor-pointer',
         {
           'w-full': fullWidth,
           'text-sm leading-5 font-medium rounded-lg':
@@ -38,9 +38,11 @@ export function Button({
           'bg-transparent border-2 border': outline,
           'border-indigo-600 text-indigo-700':
             outline && validKind === DEFAULT_KIND,
+          'bg-gray-300 text-gray-400 cursor-not-allowed': disabled,
         },
         className
       )}
+      disabled={disabled}
       {...props}
     >
       {children}

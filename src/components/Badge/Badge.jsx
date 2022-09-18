@@ -1,11 +1,12 @@
 import classNames from 'classnames';
 
-export function Badge({ title, color }) {
+export function Badge({ title, color, size }) {
   return (
     <p
       className={classNames(
         `inline-flex items-center px-2 py-0.5 rounded-full border`,
         {
+          'text-xs': size === 'small',
           'bg-indigo-50 text-indigo-600 border-indigo-600/40':
             color === 'indigo',
           'bg-violet-50 text-violet-600 border-violet-600/40':
@@ -24,6 +25,7 @@ export function Badge({ title, color }) {
     >
       <span
         className={classNames(`block w-1.5 h-1.5 rounded-full mr-2`, {
+          'w-1 h-1': size === 'small',
           'bg-indigo-600': color === 'violet',
           'bg-violet-600': color === 'indigo',
           'bg-red-600': color === 'red',

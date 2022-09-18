@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 import * as casesAPI from '@api/cases/methods';
 
 const {
@@ -9,6 +10,7 @@ const {
 
 export function useCases() {
   const router = useRouter();
+  const [cookies] = useCookies();
 
   const createCase = async (data, token) => {
     try {
@@ -30,7 +32,7 @@ export function useCases() {
       const res = await updateCaseAPI(
         caseId,
         { description: description || undefined, ...rest },
-        token
+        token ?? cookies.token
       );
 
       onFinish && onFinish();

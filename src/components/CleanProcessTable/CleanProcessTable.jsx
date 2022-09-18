@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import dayjs from 'dayjs';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
-import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
+import { Badge } from '@components/Badge/Badge';
+import { useCleanProcess } from '@hooks/useCleanProcess';
+import { useRouter } from 'next/router';
 
 const header = [
   {
@@ -15,16 +18,25 @@ const header = [
     accessor: 'caseName',
   },
   {
-    Header: 'Contenido del case',
-    accessor: 'caseContentName',
+    Header: 'Fecha de cominzo',
+    accessor: 'startedAtDate',
   },
   {
-    Header: 'Cliente',
-    accessor: 'customer',
+    Header: 'Fecha de finalización',
+    accessor: 'finishedAtDate',
   },
   {
-    Header: 'Sucursal del cliente',
-    accessor: 'customerLocation',
+    Header: 'Total de pasos',
+    accessor: 'stepsLength',
+  },
+  {
+    Header: 'Progreso',
+    accessor: 'progress',
+  },
+  {
+    Header: 'Estado',
+    accessor: 'statusBadge',
+    Cell: ({ row: { index }, data: _data }) => _data[index].statusBadge(),
   },
   {
     Header: 'Acciones',
@@ -35,40 +47,96 @@ const header = [
   },
 ];
 
+export const cleanProcessOrderStatusColor = {
+  CLEAN_PROCESS_QUEUED: 'blue',
+  IN_CLEAN_PROCESS: 'orange',
+  CLEAN_PROCESS_DONE: 'green',
+};
+
 export function CleanProcessTable({ cleanProcessOrders }) {
+  const router = useRouter();
+  const { startCleanProcess, doneCleanProcess } = useCleanProcess();
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
     setData(
       cleanProcessOrders.map(
-        ({ id, case: caseInfo, caseContent, customerLocation }) => {
+        ({ id, case: caseInfo, startedAt, finishedAt, status, steps }) => {
           const { name: caseName } = caseInfo;
-          const { name: caseContentName } = caseContent;
-          const {} = customerLocation;
+
+          const allStepsDone =
+            steps?.filter((elem) => elem.isDone).length === steps?.length;
 
           return {
             id,
             caseName,
-            caseContentName,
-            customer: customerLocation.customer.companyName,
-            customerLocation: formatCustomerLocationName(
-              customerLocation.customer,
-              customerLocation
-            ),
+            stepsLength: steps.length,
+            progress: `${Math.floor(
+              (steps.filter((elem) => elem.isDone).length / steps.length) * 100
+            )}%`,
+            startedAtDate:
+              startedAt !== null
+                ? dayjs(startedAt).format('hh:mm A - dddd DD MMMM YYYY')
+                : '-',
+            finishedAtDate:
+              finishedAt !== null
+                ? dayjs(finishedAt).format('hh:mm A - dddd DD MMMM YYYY')
+                : '-',
+            statusBadge() {
+              const { name, value } = status ?? {};
+              return (
+                <Badge
+                  title={name ?? '-'}
+                  color={cleanProcessOrderStatusColor[value]}
+                />
+              );
+            },
             action() {
               return (
-                <Link href="/clean-process/[id]" as={`/clean-process/${id}`}>
-                  <a className="text-gray-900 p-1 float-right">
-                    <PencilIcon className="w-5" />
-                    <span className="sr-only">Editar</span>
-                  </a>
-                </Link>
+                <div className="flex items-center justify-end">
+                  {status.value === 'CLEAN_PROCESS_QUEUED' && (
+                    <>
+                      <button
+                        type="button"
+                        className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                        onClick={async () => {
+                          await startCleanProcess(id);
+                          router.push(`/clean-process/${id}`);
+                        }}
+                      >
+                        <span>Comenzar limpieza</span>
+                      </button>
+                    </>
+                  )}
+                  {status.value === 'IN_CLEAN_PROCESS' && allStepsDone && (
+                    <>
+                      <button
+                        type="button"
+                        className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                        onClick={async () => {
+                          await doneCleanProcess(id);
+                          router.push('/clean-process');
+                        }}
+                      >
+                        <span>Finalizar</span>
+                      </button>
+                    </>
+                  )}
+
+                  <Link href="/clean-process/[id]" as={`/clean-process/${id}`}>
+                    <a className="text-gray-900 p-1 float-right">
+                      <PencilIcon className="w-5" />
+                      <span className="sr-only">Editar</span>
+                    </a>
+                  </Link>
+                </div>
               );
             },
           };
         }
       )
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cleanProcessOrders]);
 
   return (

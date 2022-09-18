@@ -1,38 +1,10 @@
 import dayjs from 'dayjs';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
+import { formatDuration } from '@utils/formatDuration';
 
 export function ShipmentSummary({ shipment }) {
   const { trackNumber, shipmentAt, deliveredAt, truck, createdBy, createdAt } =
     shipment ?? {};
-
-  const formatDuration = () => {
-    const shipmentAtFormat = dayjs(shipmentAt || new Date());
-    const deliveredAtFormat = dayjs(deliveredAt || new Date());
-    let deliveryDuration = '-';
-
-    if (shipmentAt && deliveredAt) {
-      deliveryDuration = `${deliveredAtFormat.diff(
-        shipmentAtFormat,
-        'minute'
-      )} minutos`;
-
-      if (deliveryDuration > 60) {
-        deliveryDuration = `${deliveredAtFormat.diff(
-          shipmentAtFormat,
-          'hour'
-        )} horas`;
-      }
-
-      if (deliveryDuration > 24) {
-        deliveryDuration = `${deliveredAtFormat.diff(
-          shipmentAtFormat,
-          'day'
-        )} días`;
-      }
-    }
-
-    return deliveryDuration;
-  };
 
   return (
     <div className="w-full lg:w-96">
@@ -67,7 +39,10 @@ export function ShipmentSummary({ shipment }) {
         }
       />
 
-      <DataSection label="Duración del envío" value={formatDuration()} />
+      <DataSection
+        label="Duración del envío"
+        value={formatDuration(shipmentAt, deliveredAt)}
+      />
 
       <DataSection
         label="Transporte"

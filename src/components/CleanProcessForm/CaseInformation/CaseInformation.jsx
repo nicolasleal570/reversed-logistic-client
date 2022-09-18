@@ -15,18 +15,13 @@ export function CaseInformation({
   casesContent,
   onChangeStep,
 }) {
-  const {
-    caseInformation,
-    setCaseInformation,
-    lastOutOfStockInfo,
-    setLastOutOfStockInfo,
-  } = useCreateCleanProcessOrderForm();
+  const { caseInformation, lastOutOfStockInfo, setLastOutOfStockInfo } =
+    useCreateCleanProcessOrderForm();
   const [cookies] = useCookies();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     control,
   } = useForm({
     defaultValues: { ...caseInformation },
@@ -59,6 +54,15 @@ export function CaseInformation({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">
+      {cases.length === 0 && (
+        <div className="bg-red-200 border border-red-300 w-full mb-4 rounded p-4">
+          <h3 className="text-lg font-bold text-gray-800">Alerta!</h3>
+          <p className="text-gray-700">
+            En este momento no hay cases disponibles para limpieza.
+          </p>
+        </div>
+      )}
+
       <h2 className="w-full text-lg leading-7 font-medium mb-8">
         Información del case
       </h2>
@@ -103,7 +107,11 @@ export function CaseInformation({
       </FormRow>
 
       <div className="w-2/5 mt-4 ml-auto">
-        <Button type="submit" size={SM_SIZE} disabled={isLoading}>
+        <Button
+          type="submit"
+          size={SM_SIZE}
+          disabled={isLoading || cases.length === 0}
+        >
           {isEdit ? 'Terminar edición' : 'Siguiente'}
         </Button>
       </div>

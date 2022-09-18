@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
 import { availableCasesState } from '@constants/availableCasesState';
+import { useCases } from '@hooks/useCases';
 
 const header = [
   {
@@ -40,6 +42,8 @@ const header = [
 ];
 
 export function CasesTable({ cases }) {
+  const router = useRouter();
+  const { updateCase } = useCases();
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
@@ -73,6 +77,21 @@ export function CasesTable({ cases }) {
                 </Link>
               )}
 
+              {stateId === 'CLEAN_PROCESS_DONE' && (
+                <button
+                  type="button"
+                  className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                  onClick={async () => {
+                    await updateCase(id, {
+                      state: 'AVAILABLE',
+                    });
+                    router.push(`/cases/${id}`);
+                  }}
+                >
+                  Habilitar
+                </button>
+              )}
+
               <Link href="/cases/[id]" as={`/cases/${id}`}>
                 <a className="text-gray-900 p-1 float-right">
                   <PencilIcon className="w-5" />
@@ -84,6 +103,7 @@ export function CasesTable({ cases }) {
         },
       }))
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cases]);
 
   return (

@@ -107,6 +107,21 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
             </>
           )}
 
+          {orderStatus?.id === 3 &&
+            items.filter((elem) => !elem.finished).length > 0 && (
+              <>
+                <button
+                  type="button"
+                  className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                  onClick={async () => {
+                    router.push(`/cases`);
+                  }}
+                >
+                  <span>Examinar cases</span>
+                </button>
+              </>
+            )}
+
           <Link
             href="/out-of-stock-orders/[id]"
             as={`/out-of-stock-orders/${id}`}
