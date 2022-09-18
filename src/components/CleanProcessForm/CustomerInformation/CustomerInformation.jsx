@@ -89,9 +89,7 @@ export function CustomerInformation({
           errors={errors}
           placeholder="Selecciona un cliente"
           inputProps={{
-            ...register('customerId', {
-              required: 'Debes seleccionar un cliente',
-            }),
+            ...register('customerId'),
           }}
           options={customers.map((customer) => ({
             label: customer.companyName,
@@ -109,9 +107,7 @@ export function CustomerInformation({
           errors={errors}
           placeholder="Selecciona una sucursal"
           inputProps={{
-            ...register('customerLocationId', {
-              required: 'Debes seleccionar una sucursal',
-            }),
+            ...register('customerLocationId'),
           }}
           options={customerLocations.locations.map((location) => ({
             label: formatCustomerLocationName(

@@ -57,8 +57,6 @@ export function CaseInformation({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [caseIdField]);
 
-  console.log(caseInformation);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">
       <h2 className="w-full text-lg leading-7 font-medium mb-8">
@@ -94,9 +92,7 @@ export function CaseInformation({
           placeholder="Selecciona el contenido que tenía el case"
           value={caseInformation.caseContentId}
           inputProps={{
-            ...register('caseContentId', {
-              required: 'Debes seleccionar el contenido que tenía el case',
-            }),
+            ...register('caseContentId'),
           }}
           options={casesContent.map((item) => ({
             label: item.name,
