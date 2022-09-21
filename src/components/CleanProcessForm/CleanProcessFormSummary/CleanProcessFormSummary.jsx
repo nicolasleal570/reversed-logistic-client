@@ -75,13 +75,7 @@ export function CleanProcessFormSummary({
       </h2>
 
       <DataSection label="Cliente" value={currentCustomer.companyName} />
-      <DataSection
-        label="Comentarios"
-        value={formatCustomerLocationName(
-          customerLocations.customer,
-          currentCustomerLocation
-        )}
-      />
+      <DataSection label="Comentarios" value={currentCustomerLocation.name} />
       <DataSection label="Comentarios" value={customerInformation.comments} />
 
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">

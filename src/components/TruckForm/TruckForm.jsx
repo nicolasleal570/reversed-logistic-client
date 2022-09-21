@@ -3,11 +3,18 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
+import { SelectField } from '@components/SelectField/SelectField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { useTrucks } from '@hooks/useTrucks';
 
-export function TruckForm({ isEdit = false, onlyRead = false, truck, token }) {
+export function TruckForm({
+  isEdit = false,
+  onlyRead = false,
+  truck,
+  token,
+  employees,
+}) {
   const router = useRouter();
   const {
     register,
@@ -26,7 +33,6 @@ export function TruckForm({ isEdit = false, onlyRead = false, truck, token }) {
     } else {
       updateTruck(truck.id, data, token, handleOnFinishUpdate);
     }
-    console.log(data);
   };
 
   useEffect(() => {
@@ -111,17 +117,21 @@ export function TruckForm({ isEdit = false, onlyRead = false, truck, token }) {
 
       <FormRow>
         <InputLabel title="Conductor" inputId="userId" />
-        <InputField
-          type="text"
-          placeholder="xd"
+        <SelectField
           id="userId"
           name="userId"
+          placeholder="Selecciona el empleado que maneja el camión"
+          errors={errors}
+          disabled={onlyRead}
           inputProps={{
             ...register('userId', {
               required: 'Debes ingresar el conductor responsable del vehículo',
             }),
           }}
-          errors={errors}
+          options={employees.map((employee) => ({
+            label: employee.fullName,
+            value: employee.id,
+          }))}
         />
       </FormRow>
 

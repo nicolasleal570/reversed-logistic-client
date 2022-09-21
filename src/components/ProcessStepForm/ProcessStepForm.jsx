@@ -24,7 +24,7 @@ export function ProcessStepForm({
 
   const { createProcessStep, updateProcessStep } = useProcessStep();
 
-  const handleOnFinishUpdate = () => router.push('/clean-process/steps');
+  const handleOnFinishUpdate = () => router.push('/clean-steps');
 
   const onSubmit = async (data) => {
     if (!isEdit) {

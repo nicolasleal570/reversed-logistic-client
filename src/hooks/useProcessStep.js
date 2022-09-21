@@ -15,7 +15,7 @@ export function useProcessStep() {
         token
       );
 
-      router.push(`/clean-process/steps/${res.data.id}`);
+      router.push(`/clean-steps/${res.data.id}`);
     } catch (error) {
       console.log(error);
     }

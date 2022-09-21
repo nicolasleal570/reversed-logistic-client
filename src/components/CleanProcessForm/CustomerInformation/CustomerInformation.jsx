@@ -110,10 +110,7 @@ export function CustomerInformation({
             ...register('customerLocationId'),
           }}
           options={customerLocations.locations.map((location) => ({
-            label: formatCustomerLocationName(
-              customerLocations.customer,
-              location
-            ),
+            label: location.name,
             value: location.id,
           }))}
           disabled

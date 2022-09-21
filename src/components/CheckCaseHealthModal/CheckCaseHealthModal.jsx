@@ -123,10 +123,7 @@ export default function CheckCaseHealthModal({ isOpen, setIsOpen }) {
                         <div className="space-y-4">
                           <DataSection
                             label="Cliente que utilizó el case"
-                            value={formatCustomerLocationName(
-                              lastOutOfStock.order.customerLocation.customer,
-                              lastOutOfStock.order.customerLocation
-                            )}
+                            value={lastOutOfStock.order.customerLocation.name}
                             withoutMargins
                           />
 

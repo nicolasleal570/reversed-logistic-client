@@ -12,6 +12,7 @@ import {
   CubeTransparentIcon,
   FilterIcon,
   HomeIcon,
+  LockClosedIcon,
 } from '@heroicons/react/outline';
 import Router from 'next/router';
 
@@ -23,7 +24,7 @@ export const items = [
       {
         title: 'Inicio',
         icon: <HomeIcon className={iconStyles} />,
-        url: '/',
+        url: '/home',
       },
     ],
   },
@@ -94,7 +95,7 @@ export const items = [
       {
         title: 'Pasos de limpieza',
         icon: <BeakerIcon className={iconStyles} />,
-        url: '/clean-process/steps',
+        url: '/clean-steps',
       },
     ],
   },
@@ -104,14 +105,19 @@ export const items = [
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
       {
+        title: 'Clientes y sucursales',
+        icon: <UserGroupIcon className={iconStyles} />,
+        url: '/customers',
+      },
+      {
         title: 'Empleados',
         icon: <UsersIcon className={iconStyles} />,
         url: '/users',
       },
       {
-        title: 'Clientes y sucursales',
-        icon: <UserGroupIcon className={iconStyles} />,
-        url: '/customers',
+        title: 'Roles y permisos',
+        icon: <LockClosedIcon className={iconStyles} />,
+        url: '/roles',
       },
     ],
   },

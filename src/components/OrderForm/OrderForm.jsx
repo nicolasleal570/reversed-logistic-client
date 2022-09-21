@@ -11,9 +11,9 @@ import { useOrders } from '@hooks/useOrders';
 import { useRouter } from 'next/router';
 import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
 
-export function formatCustomerLocationName(customer, location) {
-  return `${customer.companyName}, ${location.line1}, ${location.state}`;
-}
+// export function formatCustomerLocationName(customer, location) {
+//   return `${customer.companyName}, ${location.line1}, ${location.state}`;
+// }
 
 const INITIAL_CASE = { caseId: '', caseContentId: '', contentQuantity: '' };
 
@@ -144,10 +144,7 @@ function OrderForm({
             }),
           }}
           options={customerLocations.locations.map((location) => ({
-            label: formatCustomerLocationName(
-              customerLocations.customer,
-              location
-            ),
+            label: location.name,
             value: location.id,
           }))}
         />

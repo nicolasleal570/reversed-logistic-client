@@ -10,6 +10,7 @@ import { parseCookies } from '@utils/parseCookies';
 import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
 import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
 import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
+import { useAuth } from '@hooks/useAuth';
 
 const INITIAL_CASE_ID = { caseId: '' };
 
@@ -31,8 +32,7 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
   });
   const selectedCases = useWatch({ control, name: 'cases' });
   const { createOutOfStockOrder } = useOutOfStockOrders();
-
-  console.log(client.location);
+  const { handleLogout } = useAuth();
 
   const onSubmit = async (data) => {
     const items = data.cases.map((field) => {
@@ -49,7 +49,7 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
     });
 
     try {
-       await createOutOfStockOrder({ items, customerLocationId });
+      await createOutOfStockOrder({ items, customerLocationId });
       router.push('/out-of-stock');
     } catch (error) {
       console.log({ error });
@@ -57,61 +57,67 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
   };
 
   return (
-    <div className="flex justify-center pt-32 bg-white min-h-screen overflow-y-auto">
-      <div className="flex flex-col self-start bg-white border border-gray-200 shadow rounded-lg px-12 py-16 w-[458px]">
-        <h1 className="w-full text-3xl leading-9 tracking-tight font-medium text-center text-gray-900">
-          Hola{' '}
-          {formatCustomerLocationName(
-            client.location.customer,
-            client.location
-          )}
-          !
-        </h1>
-
-        <p className="text-sm md:text-base leading-6 font-normal text-center text-gray-500 my-3">
-          Reporta aquí los cases que tienes vacíos
+    <>
+      <nav className="flex items-center justify-between py-8 px-4 border-b border-gray-200">
+        <p className="text-base lg:text-xl leading-9 tracking-tight text-left text-gray-900">
+          Hola <span className="font-medium">{client.location.name}</span>!
         </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          {fields.map((field, idx) => (
-            <Fragment key={field.id}>
-              <FormRow>
-                <div className="w-full flex items-center justify-between">
-                  <InputLabel title="Selecciona un case" inputId="caseId" />
+        <button
+          type="button"
+          className="border border-red-600 text-red-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+          onClick={handleLogout}
+        >
+          <span>Cerrar sesión</span>
+        </button>
+      </nav>
+      <div className="flex justify-center pt-32 bg-white h-full overflow-y-auto px-6 lg:px-0">
+        <div className="flex flex-col self-start bg-white border border-gray-200 shadow rounded-lg p-6 lg:px-12 lg:pb-16 lg:pt-8 w-[458px]">
+          <p className="text-sm md:text-base leading-6 font-normal text-left text-gray-500 mb-3">
+            Reporta aquí los cases que tienes vacíos
+          </p>
 
-                  {idx > 0 && (
-                    <button
-                      type="button"
-                      className="text-xs font-medium text-right text-red-500"
-                      onClick={() => remove(idx)}
-                    >
-                      Eliminar
-                    </button>
-                  )}
-                </div>
-                <MultipleSelectCasesField
-                  allCases={cases || []}
-                  selectedCases={selectedCases || []}
-                  highlight="Selecciona el case que se agotó"
-                  fieldName={`cases.${idx}.caseId`}
-                  {...{ register, idx, errors }}
-                />
-              </FormRow>
-            </Fragment>
-          ))}
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+            {fields.map((field, idx) => (
+              <Fragment key={field.id}>
+                <FormRow>
+                  <div className="w-full flex items-center justify-between">
+                    <InputLabel title="Selecciona un case" inputId="caseId" />
 
-          <button
-            type="button"
-            className="block w-full text-sm leading-5 font-medium text-right text-indigo-700 mb-12"
-            onClick={() => append(INITIAL_CASE_ID)}
-          >
-            Agregar otro
-          </button>
+                    {idx > 0 && (
+                      <button
+                        type="button"
+                        className="text-xs font-medium text-right text-red-500"
+                        onClick={() => remove(idx)}
+                      >
+                        Eliminar
+                      </button>
+                    )}
+                  </div>
+                  <MultipleSelectCasesField
+                    allCases={cases || []}
+                    selectedCases={selectedCases || []}
+                    highlight="Selecciona el case que se agotó"
+                    fieldName={`cases.${idx}.caseId`}
+                    {...{ register, idx, errors }}
+                  />
+                </FormRow>
+              </Fragment>
+            ))}
 
-          <Button type="submit">Finalizar reporte</Button>
-        </form>
+            <button
+              type="button"
+              className="block w-full text-sm leading-5 font-medium text-right text-indigo-700 mb-12"
+              onClick={() => append(INITIAL_CASE_ID)}
+            >
+              Agregar otro
+            </button>
+
+            <Button type="submit">Finalizar reporte</Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -191,6 +191,22 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
           )}
 
           <FormRow>
+            <InputLabel title="Nombre de la sucursal" inputId="name" />
+            <InputField
+              id="name"
+              name="name"
+              placeholder="Fresh Fish La Castellana"
+              disabled={onlyRead}
+              inputProps={{
+                ...register(`locations.${idx}.name`, {
+                  required: 'Debes ingresar el nombre de la sucursal',
+                }),
+              }}
+              errors={errors?.locations?.[idx]}
+            />
+          </FormRow>
+
+          <FormRow>
             <InputLabel title="Contacto del cliente" inputId="contact" />
             <InputField
               type="text"

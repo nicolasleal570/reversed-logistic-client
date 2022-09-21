@@ -2,7 +2,7 @@ import {
   ShoppingCartIcon,
   TruckIcon,
   UserIcon,
-  CogIcon,
+  UserGroupIcon,
 } from '@heroicons/react/outline';
 import { withProtection } from '@components/withProtection';
 import { Layout } from '@components/Layout/Layout';
@@ -12,14 +12,14 @@ function HomePage() {
   return (
     <Layout
       title="Bienvenidos!"
-      description="Esperamos que vayas progresando con tu proyecto. A continuaciócn te
+      description="Esperamos que vayas progresando con tu proyecto. A continuación te
         brindamos algunos accesos rápidos hacia los diferentes módulo de nuestra
         plataforma para que puedas empezar a gestionar la logística inversa de
         tu empresa."
     >
       <DashboardInfoCard
-        title="Productos"
-        description="Gestiona los productos de tu empresa y su procesamiento al ser utilizados y devueltos."
+        title="Cases"
+        description="Gestiona los cases de tu empresa y su procesamiento al ser utilizados y devueltos."
         icon={<ShoppingCartIcon className="w-5 h-5" />}
         route="/cases"
         firstColor="bg-green-100"
@@ -37,7 +37,7 @@ function HomePage() {
 
       <DashboardInfoCard
         title="Usuarios"
-        description="Desde nuestra plataforma puedes gestionar tanto clientes como empleados. Además puedes controlar sus roles y permisos."
+        description="Desde nuestra plataforma puedes gestionar tus empleados. Además puedes controlar sus roles y permisos."
         icon={<UserIcon className="w-5 h-5" />}
         route="/users"
         firstColor="bg-purple-100"
@@ -45,12 +45,12 @@ function HomePage() {
       />
 
       <DashboardInfoCard
-        title="Configuración"
-        description="Configura datos importante sobre tu perfil o sobre la empresa. Desde nuestra plataforma puedes gestionar tanto clientes como empleados. Además puedes controlar sus roles y permisos."
-        icon={<CogIcon className="w-5 h-5" />}
+        title="Clientes"
+        description="Desde nuestra plataforma puedes ver tus clientes y sus sucursales."
+        icon={<UserGroupIcon className="w-5 h-5" />}
         route="/config"
-        firstColor="bg-red-100"
-        secondColor="bg-red-600"
+        firstColor="bg-orange-100"
+        secondColor="bg-orange-600"
       />
     </Layout>
   );

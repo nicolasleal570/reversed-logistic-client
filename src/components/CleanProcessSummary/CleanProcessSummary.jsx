@@ -94,13 +94,7 @@ export function CleanProcessSummary({ cleanProcessOrder: data }) {
         value={customerLocation.customer.companyName}
       />
 
-      <DataSection
-        label="Sucursal"
-        value={formatCustomerLocationName(
-          customerLocation?.customer,
-          customerLocation
-        )}
-      />
+      <DataSection label="Sucursal" value={customerLocation.name} />
 
       <DataSection
         label="Contacto de la sucursal"

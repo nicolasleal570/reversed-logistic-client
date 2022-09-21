@@ -18,8 +18,8 @@ const header = [
     accessor: 'description',
   },
   {
-    Header: 'Creado por',
-    accessor: 'createdByName',
+    Header: 'Permisos',
+    accessor: 'permissions',
   },
   {
     Header: 'Acciones',
@@ -30,57 +30,54 @@ const header = [
   },
 ];
 
-export function ProcessStepsTable({ processSteps }) {
+export function RolesTable({ roles }) {
   const [data, setData] = React.useState([]);
+
+  console.log({ roles });
 
   useEffect(() => {
     setData(
-      processSteps.map(({ id, name, description, createdBy }) => {
-        return {
-          id,
-          name,
-          description,
-          createdByName: createdBy.fullName,
-          action() {
-            return (
-              <Link
-                href="/clean-steps/[id]"
-                as={`/clean-steps/${id}`}
-              >
-                <a className="text-gray-900 p-1 float-right">
-                  <PencilIcon className="w-5" />
-                  <span className="sr-only">Editar</span>
-                </a>
-              </Link>
-            );
-          },
-        };
-      })
+      roles.map(({ id, name, description, permissions }) => ({
+        id,
+        name,
+        description: description || '-',
+        permissions: permissions.length,
+        action() {
+          return (
+            <Link href="/roles/[id]" as={`/roles/${id}`}>
+              <a className="text-gray-900 p-1 float-right">
+                <PencilIcon className="w-5" />
+                <span className="sr-only">Editar</span>
+              </a>
+            </Link>
+          );
+        },
+      }))
     );
-  }, [processSteps]);
+  }, [roles]);
 
   return (
     <Card>
       <Table
         headers={header}
         content={data}
-        href="/clean-steps/create"
-        as="/clean-steps/create"
-        text="Pasos para el proceso de limpieza"
+        href="/roles/create"
+        as="/roles/create"
+        text="Roles"
         tableHeader={
           <>
             <div className="flex flex-row flex-wrap w-full p-6">
               <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
-                Todos los pasos de limpieza
+                Todos los roles
               </h2>
 
-              <Link href="/clean-steps/create">
+              <Link href="/roles/create">
                 <a
                   type="button"
                   className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
                 >
                   <PlusIcon className="w-5 mr-1" />
-                  <span>Nuevo paso de limpieza</span>
+                  <span>Nuevo rol</span>
                 </a>
               </Link>
             </div>

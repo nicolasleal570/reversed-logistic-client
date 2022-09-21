@@ -63,13 +63,7 @@ export function OutOfStockOrderSummary({ outOfStockOrder }) {
         value={customerLocation.customer.companyName}
       />
 
-      <DataSection
-        label="Sucursal"
-        value={formatCustomerLocationName(
-          customerLocation.customer,
-          customerLocation
-        )}
-      />
+      <DataSection label="Sucursal" value={customerLocation.name} />
 
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Cases reportados

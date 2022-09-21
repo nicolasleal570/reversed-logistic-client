@@ -1,31 +1,17 @@
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import classNames from 'classnames';
-import { useCookies } from 'react-cookie';
 import { XIcon } from '@heroicons/react/outline';
 import { SidebarSection } from '@components/SidebarSection/SidebarSection';
 import { items } from '@constants/sidebarItems';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useLayout } from '@hooks/useLayout';
 import Link from 'next/link';
-import { logoutUser } from '@api/auth/methods';
+import { useAuth } from '@hooks/useAuth';
 
 export function Sidebar() {
-  const router = useRouter();
   const { isSidebarOpen, setIsSidebarOpen } = useLayout();
+  const { handleLogout } = useAuth();
   const isMediumSize = useMediaQuery('(min-width: 768px)');
-  const [cookies, _, removeCookie] = useCookies(['token']);
-
-  const handleLogout = async () => {
-    const { token } = cookies;
-    try {
-      await logoutUser(token);
-      removeCookie('token');
-      router.replace('/login');
-    } catch (error) {
-      console.log({ error });
-    }
-  };
 
   useEffect(() => {
     setIsSidebarOpen(isMediumSize);

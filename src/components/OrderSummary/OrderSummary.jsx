@@ -24,7 +24,7 @@ export function OrderSummary({ order }) {
         value={order.customerLocation.customer.companyName}
       />
 
-      <DataSection label="Sucursal" value={order.customerLocation.line1} />
+      <DataSection label="Sucursal" value={order.customerLocation.name} />
 
       <DataSection
         label="Contacto de la sucursal"

@@ -32,7 +32,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/');
+      router.push('/home');
     } catch (error) {
       console.log({ error });
     }
