@@ -5,7 +5,9 @@ import { useEffect } from 'react';
 function IndexPage() {
   const router = useRouter();
 
-  useEffect(() => router.push('/home'), [router]);
+  useEffect(() => {
+    router.push('/home');
+  }, [router]);
 
   return null;
 }

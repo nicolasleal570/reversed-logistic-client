@@ -1,8 +1,9 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { parseCookies } from '@utils/parseCookies';
 import { fetchCurrentUser } from '@api/auth/methods';
 import { useUser } from '@hooks/useUser';
+import { useCookies } from 'react-cookie';
+import { useAuth } from '@hooks/useAuth';
 
 const redirectUrl = '/login?redirected=true';
 
@@ -10,63 +11,68 @@ export function withProtection(WrappedComponent) {
   const componentName =
     WrappedComponent.displayName ?? WrappedComponent.name ?? 'Component';
 
-  const Component = ({ user: authUser, ...props }) => {
-    const { setUser } = useUser();
+  const Component = ({ ...props }) => {
+    const router = useRouter();
+    const [cookies] = useCookies();
+    const { handleLogout } = useAuth();
+    const { setUser, user, loading, setLoading } = useUser();
+
+    const handleFetchCurrentUser = async () => {
+      try {
+        setLoading(true);
+
+        if (!cookies.token) {
+          await handleLogout();
+          setLoading(false);
+        }
+
+        const { data } = await fetchCurrentUser(cookies.token);
+
+        if (data.isLocation) {
+          setUser({ ...data.location, isLocation: data.isLocation });
+          router.push('/out-of-stock');
+        } else {
+          setUser({ ...data.user, isLocation: data.isLocation });
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+        router.push(redirectUrl);
+      }
+    };
 
     useEffect(() => {
-      setUser(authUser?.user ?? null);
+      handleFetchCurrentUser();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authUser]);
+    }, []);
 
-    return <WrappedComponent user={authUser.user} {...props} />;
+    useEffect(() => {
+      if (!user && !loading) {
+        router.push(redirectUrl);
+      }
+    }, [user, loading, router]);
+
+    if (loading || !user) {
+      return <></>;
+    }
+
+    return <WrappedComponent {...props} />;
   };
 
   Component.getInitialProps = async ({ req, res, ...context }) => {
-    const data = parseCookies(req);
-
-    let user = undefined;
-
-    if (data.token) {
-      try {
-        const res = await fetchCurrentUser(data.token);
-        user = res.data;
-      } catch (error) {
-        console.log('Failed user fetch into getInitialProps', { error });
-      }
-    }
-
-    if (!user) {
-      if (res) {
-        res.writeHead(302, {
-          Location: redirectUrl,
-        });
-        res.end();
-      } else {
-        Router.replace(redirectUrl);
-      }
-    } else if (Object.keys(user?.location ?? {}).length > 0) {
-      if (res) {
-        res.writeHead(302, {
-          Location: '/out-of-stock',
-        });
-        res.end();
-      } else {
-        Router.replace('/out-of-stock');
-      }
-    } else if (WrappedComponent.getInitialProps) {
+    if (WrappedComponent.getInitialProps) {
       const wrappedProps = await WrappedComponent.getInitialProps({
         ...context,
         req,
         res,
-        user,
       });
 
-      return { ...wrappedProps, user };
+      return { ...wrappedProps };
     }
 
-    return {
-      user,
-    };
+    return {};
   };
 
   Component.displayName = `withuser(${componentName})`;

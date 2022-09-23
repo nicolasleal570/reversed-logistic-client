@@ -37,7 +37,7 @@ export function SidebarSection({
                 className={classNames(
                   'text-gray-700 text-base leading-6 font-medium',
                   {
-                    'text-indigo-500 underline': isActive,
+                    'text-indigo-500': isActive,
                   }
                 )}
               >
