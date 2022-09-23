@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Table from '@components/Table/Table';
-import { PlusIcon, PencilIcon, UploadIcon } from '@heroicons/react/outline';
+import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 
 function UserTable({ users }) {
@@ -39,7 +39,7 @@ function UserTable({ users }) {
         id,
         action() {
           return (
-            <Link href="/app/users/[id]" as={`/app/users/${id}`}>
+            <Link href="/users/[id]" as={`/users/${id}`}>
               <a className="text-gray-900 p-1 float-right">
                 <PencilIcon className="w-5" />
                 <span className="sr-only">Editar</span>

@@ -17,8 +17,7 @@ const steps = [
     description: 'Ingresa toda la información personal respectiva del usuario',
   },
   {
-    title: 'Asigna un rol',
-    description: 'Asigna el rol del empleado',
+    title: 'Asigna un rol', description: 'Asigna el rol del empleado',
   },
   {
     title: 'Asigna permisos',

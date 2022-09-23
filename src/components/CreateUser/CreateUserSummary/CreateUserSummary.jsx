@@ -2,6 +2,24 @@ import { useCreateUserForm } from '@hooks/useCreateUserForm';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { DataSection } from './DataSection';
 
+export const transformPermissionsInformation = (key, permissions) => {
+  const translation = {
+    read: 'Leer',
+    create: 'Crear',
+    update: 'Actualizar',
+    delete: 'Eliminar',
+  };
+  const keys = Object.entries(permissions)
+    .filter(({ 1: value }) => Boolean(value))
+    .filter(({ 0: objectKey }) => objectKey.startsWith(key));
+
+  return keys.map(({ 0: objectKey }) => {
+    const arr = objectKey.split('_');
+
+    return translation[arr[arr.length - 1]];
+  });
+};
+
 export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
   const {
     personalInformation,
@@ -9,24 +27,6 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
     permissionsInformation,
     onCreateUser,
   } = useCreateUserForm();
-
-  const transformPermissionsInformation = (key) => {
-    const translation = {
-      read: 'Leer',
-      create: 'Crear',
-      update: 'Actualizar',
-      delete: 'Eliminar',
-    };
-    const keys = Object.entries(permissionsInformation)
-      .filter(({ 1: value }) => Boolean(value))
-      .filter(({ 0: objectKey }) => objectKey.startsWith(key));
-
-    return keys.map(({ 0: objectKey }) => {
-      const arr = objectKey.split('_');
-
-      return translation[arr[arr.length - 1]];
-    });
-  };
 
   const role =
     roles.find(
@@ -60,47 +60,62 @@ export function CreateUserSummary({ onChangeStep, currentStep, roles }) {
 
       <DataSection
         label="Permisos - Módulo de cases"
-        tags={transformPermissionsInformation('cases')}
+        tags={transformPermissionsInformation('cases', permissionsInformation)}
       />
 
       <DataSection
         label="Permisos - Módulo de sabores"
-        tags={transformPermissionsInformation('flavors')}
+        tags={transformPermissionsInformation(
+          'flavors',
+          permissionsInformation
+        )}
       />
 
       <DataSection
         label="Permisos - Módulo de órdenes de venta"
-        tags={transformPermissionsInformation('orders')}
+        tags={transformPermissionsInformation('orders', permissionsInformation)}
       />
 
       <DataSection
         label="Permisos - Módulo de envíos"
-        tags={transformPermissionsInformation('shipments')}
+        tags={transformPermissionsInformation(
+          'shipments',
+          permissionsInformation
+        )}
       />
 
       <DataSection
         label="Permisos - Módulo de transporte"
-        tags={transformPermissionsInformation('trucks')}
+        tags={transformPermissionsInformation('trucks', permissionsInformation)}
       />
 
       <DataSection
         label="Permisos - Módulo de órdenes de limpieza"
-        tags={transformPermissionsInformation('clean_process')}
+        tags={transformPermissionsInformation(
+          'clean_process',
+          permissionsInformation
+        )}
       />
 
       <DataSection
         label="Permisos - Módulo de pasos de limpieza"
-        tags={transformPermissionsInformation('clean_steps')}
+        tags={transformPermissionsInformation(
+          'clean_steps',
+          permissionsInformation
+        )}
       />
 
       <DataSection
         label="Permisos - Módulo de empleados"
-        tags={transformPermissionsInformation('users')}
+        tags={transformPermissionsInformation('users', permissionsInformation)}
       />
 
       <DataSection
         label="Permisos - Módulo de clientes"
-        tags={transformPermissionsInformation('customers')}
+        tags={transformPermissionsInformation(
+          'customers',
+          permissionsInformation
+        )}
       />
 
       <div className="grid grid-cols-2 gap-3 ml-auto w-9/12 lg:w-3/12 mt-8">

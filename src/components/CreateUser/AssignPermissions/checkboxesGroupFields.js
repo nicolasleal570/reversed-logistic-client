@@ -32,6 +32,11 @@ export const listOfModules = (permissions) => [
     fields: productsModuleFields('shipments', permissions),
   },
   {
+    title: 'Módulo de agotamiento',
+    description: 'Permisos que afectan al módulo de agotamiento',
+    fields: productsModuleFields('out_of_stock', permissions),
+  },
+  {
     title: 'Módulo de transportes',
     description: 'Permisos que afectan al módulo de transportes',
     fields: productsModuleFields('trucks', permissions),

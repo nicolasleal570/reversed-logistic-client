@@ -28,6 +28,8 @@ export function CustomerSummary({ customer }) {
             Sucursal {idx + 1}
           </h3>
 
+          <DataSection label="Nombre" value={item.name} />
+
           <DataSection
             label="Dirección"
             value={`${item.line1}, ${item.city}. ${item.state}, ${item.country}`}

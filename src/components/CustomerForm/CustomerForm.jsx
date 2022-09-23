@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { useCustomers } from '@hooks/useCustomers';
 
 const INITIAL_LOCATION = {
+  name: '',
   line1: '',
   zipCode: '',
   city: '',
@@ -67,6 +68,7 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
         customer.locations.map((item) => {
           const {
             id: locationId,
+            name,
             line1,
             zipCode,
             city,
@@ -77,6 +79,7 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
           } = item;
           return {
             id: locationId,
+            name,
             line1,
             zipCode,
             city,

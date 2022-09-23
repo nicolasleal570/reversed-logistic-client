@@ -33,15 +33,13 @@ const header = [
 export function RolesTable({ roles }) {
   const [data, setData] = React.useState([]);
 
-  console.log({ roles });
-
   useEffect(() => {
     setData(
-      roles.map(({ id, name, description, permissions }) => ({
+      roles.map(({ id, name, description, value, permissions }) => ({
         id,
         name,
         description: description || '-',
-        permissions: permissions.length,
+        permissions: value !== 'SUDO' ? permissions.length : 'N/A',
         action() {
           return (
             <Link href="/roles/[id]" as={`/roles/${id}`}>
