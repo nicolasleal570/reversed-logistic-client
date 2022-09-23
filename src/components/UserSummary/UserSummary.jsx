@@ -1,4 +1,5 @@
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
+import Link from 'next/link';
 
 export function UserSummary({ user }) {
   return (
@@ -29,6 +30,12 @@ export function UserSummary({ user }) {
               </h3>
 
               <DataSection label="Descripción" value={item.description} />
+
+              <Link href="/roles/[id]" as={`/roles/${item.id}`}>
+                <a className="block text-blue-500 underline text-sm my-6">
+                  Revisar permisos
+                </a>
+              </Link>
             </div>
           ))}
         </>

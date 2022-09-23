@@ -6,8 +6,10 @@ import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
 import { fetchUser } from '@api/users/methods';
 import { UserSummary } from '@components/UserSummary/UserSummary';
+import { UserForm } from '@components/UserForm/UserForm';
+import { fetchRoles } from '@api/roles/methods';
 
-function UserPage({ userInfo }) {
+function UserPage({ userInfo, roles, token }) {
   const [isEdit, setIsEdit] = useState(false);
 
   return (
@@ -44,7 +46,17 @@ function UserPage({ userInfo }) {
         </Switch.Group>
       </div>
 
-      <UserSummary user={userInfo} />
+      {isEdit ? (
+        <UserForm
+          token={token}
+          user={userInfo}
+          roles={roles}
+          isEdit={isEdit}
+          onlyRead={!isEdit}
+        />
+      ) : (
+        <UserSummary user={userInfo} />
+      )}
     </Layout>
   );
 }
@@ -53,11 +65,14 @@ UserPage.getInitialProps = async ({ req, query }) => {
   const data = parseCookies(req);
 
   let user = {};
+  let roles = [];
   if (data.token) {
     try {
       const res = await fetchUser(query.id, data.token);
+      const { data: rolesData } = await fetchRoles(data.token);
 
       user = res.data;
+      roles = rolesData;
     } catch (error) {
       console.log({ error });
     }
@@ -66,6 +81,7 @@ UserPage.getInitialProps = async ({ req, query }) => {
   return {
     token: data?.token ?? '',
     userInfo: user ?? {},
+    roles: roles ?? [],
   };
 };
 

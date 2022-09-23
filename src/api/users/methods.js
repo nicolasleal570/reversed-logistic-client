@@ -9,3 +9,6 @@ export const fetchUser = (id, token) =>
 
 export const createUser = (data, token) =>
   axios.post(USERS_URL, data, { headers: bearerToken(token) });
+
+export const updateUser = (id, data, token) =>
+  axios.patch(USER_URL(id), data, { headers: bearerToken(token) });
