@@ -30,11 +30,9 @@ export function useShipments() {
     }
   };
 
-  const updateShipment = async (shipmentId, data, onFinish) => {
+  const updateShipment = async (shipmentId, data) => {
     try {
-      await updateShipmentAPI(shipmentId, data, cookies.token);
-
-      onFinish && onFinish();
+      return await updateShipmentAPI(shipmentId, data, cookies.token);
     } catch (error) {
       console.log(error);
     }

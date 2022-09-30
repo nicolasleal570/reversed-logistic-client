@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { fetchCustomers } from '@api/customers/methods';
@@ -10,9 +10,16 @@ import { withProtection } from '@components/withProtection';
 import OrderForm from '@components/OrderForm/OrderForm';
 import { OrderSummary } from '@components/OrderSummary/OrderSummary';
 import { TakeOrderButton } from '@components/OrdersTable/TakeOrderButton';
+import AssignShipmentModal from '@components/OrdersTable/AssignShipmentModal';
 
-function EditOrderPage({ order, customers, cases, casesContent, token }) {
+function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
+  const [order, setOrder] = useState(data);
   const [isEdit, setIsEdit] = useState(false);
+  const [isShipmentModalOpen, setIsShipmentModalOpen] = useState(false);
+
+  useEffect(() => {
+    setOrder(data);
+  }, [data]);
 
   return (
     <Layout
@@ -50,9 +57,23 @@ function EditOrderPage({ order, customers, cases, casesContent, token }) {
         </div>
       )}
 
-      {order?.orderStatus?.id === 1 && (
+      {order?.orderStatus?.value === 'QUEUED' && (
         <div className="mb-8 border-b border-gray-200 pb-8">
           <TakeOrderButton order={order} />
+        </div>
+      )}
+
+      {order?.orderStatus?.value === 'FINISHED' && (
+        <div className="mb-8 border-b border-gray-200 pb-8">
+          <button
+            type="button"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            onClick={async () => {
+              setIsShipmentModalOpen(true);
+            }}
+          >
+            <span>Asignar envío</span>
+          </button>
         </div>
       )}
 
@@ -67,7 +88,16 @@ function EditOrderPage({ order, customers, cases, casesContent, token }) {
           onlyRead={!isEdit}
         />
       ) : (
-        <OrderSummary order={order} />
+        <OrderSummary order={order} setOrder={setOrder} />
+      )}
+
+      {isShipmentModalOpen && (
+        <AssignShipmentModal
+          isOpen={isShipmentModalOpen}
+          setIsOpen={setIsShipmentModalOpen}
+          selectedOrder={order}
+          setOrder={setOrder}
+        />
       )}
     </Layout>
   );

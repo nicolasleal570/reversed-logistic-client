@@ -44,7 +44,7 @@ const header = [
   },
 ];
 
-const shipentStatusColor = {
+export const shipentStatusColor = {
   WAITING_SHIPMENT: 'yellow',
   IN_SHIPMENT: 'cyan',
   SHIPMENT_DONE: 'green',
@@ -81,7 +81,11 @@ export function ShipmentsTable({ shipments }) {
             status() {
               const { name, value } = shipmentStatus ?? {};
               return (
-                <Badge title={name ?? '-'} color={shipentStatusColor[value]} />
+                <Badge
+                  title={name ?? '-'}
+                  color={shipentStatusColor[value]}
+                  size="small"
+                />
               );
             },
             action() {
@@ -98,7 +102,7 @@ export function ShipmentsTable({ shipments }) {
                             router.push(`/shipments/${id}`);
                           }}
                         >
-                          <span>Comenzar envío</span>
+                          <span>Enviar</span>
                         </button>
                       </>
                     )}
@@ -113,7 +117,7 @@ export function ShipmentsTable({ shipments }) {
                           router.push(`/shipments/${id}`);
                         }}
                       >
-                        <span>Entregado</span>
+                        <span>Entregar</span>
                       </button>
                     </>
                   )}

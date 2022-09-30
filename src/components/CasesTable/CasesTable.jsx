@@ -48,60 +48,83 @@ export function CasesTable({ cases }) {
 
   useEffect(() => {
     setData(
-      cases.map(({ id, name, volume, weight, state: stateId }) => ({
-        id,
-        name,
-        volume() {
-          return <>{volume ?? '-'}</>;
-        },
-        weight() {
-          return <>{weight ?? '-'}</>;
-        },
-        state() {
-          const item = availableCasesState[stateId];
-          return <Badge title={item?.title || ''} color={item?.color || ''} />;
-        },
-        action() {
-          return (
-            <div className="flex items-center justify-end">
-              {stateId === 'PICKUP_DONE' && (
-                <Link
-                  href={{
-                    pathname: `/cases/${id}`,
-                    query: { checkHealth: true },
-                  }}
-                >
-                  <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
-                    Examinar
+      cases.map(
+        ({
+          id,
+          name,
+          volume,
+          weight,
+          state: stateId,
+          currentOutOfStockOrderId,
+        }) => ({
+          id,
+          name,
+          volume() {
+            return <>{volume ?? '-'}</>;
+          },
+          weight() {
+            return <>{weight ?? '-'}</>;
+          },
+          state() {
+            const item = availableCasesState[stateId];
+            return (
+              <Badge title={item?.title || ''} color={item?.color || ''} />
+            );
+          },
+          action() {
+            return (
+              <div className="flex items-center justify-end">
+                {stateId === 'OUT_OF_STOCK' && currentOutOfStockOrderId >= 0 && (
+                  <Link
+                    href={{
+                      pathname: `/out-of-stock-orders/${currentOutOfStockOrderId}`,
+                    }}
+                  >
+                    <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
+                      Revisar orden
+                    </a>
+                  </Link>
+                )}
+
+                {stateId === 'PICKUP_DONE' && (
+                  <Link
+                    href={{
+                      pathname: `/cases/${id}`,
+                      query: { checkHealth: true },
+                    }}
+                  >
+                    <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
+                      Examinar
+                    </a>
+                  </Link>
+                )}
+
+                {stateId === 'CLEAN_PROCESS_DONE' && (
+                  <button
+                    type="button"
+                    className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                    onClick={async () => {
+                      await updateCase(id, {
+                        state: 'AVAILABLE',
+                      });
+                      router.push(`/cases/${id}`);
+                    }}
+                  >
+                    Habilitar
+                  </button>
+                )}
+
+                <Link href="/cases/[id]" as={`/cases/${id}`}>
+                  <a className="text-gray-900 p-1 float-right">
+                    <PencilIcon className="w-5" />
+                    <span className="sr-only">Editar</span>
                   </a>
                 </Link>
-              )}
-
-              {stateId === 'CLEAN_PROCESS_DONE' && (
-                <button
-                  type="button"
-                  className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
-                  onClick={async () => {
-                    await updateCase(id, {
-                      state: 'AVAILABLE',
-                    });
-                    router.push(`/cases/${id}`);
-                  }}
-                >
-                  Habilitar
-                </button>
-              )}
-
-              <Link href="/cases/[id]" as={`/cases/${id}`}>
-                <a className="text-gray-900 p-1 float-right">
-                  <PencilIcon className="w-5" />
-                  <span className="sr-only">Editar</span>
-                </a>
-              </Link>
-            </div>
-          );
-        },
-      }))
+              </div>
+            );
+          },
+        })
+      )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cases]);

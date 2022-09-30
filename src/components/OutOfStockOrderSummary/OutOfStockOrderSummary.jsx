@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
-import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
 import { outOfStockOrderStatusColor } from '@components/OutOfStockOrdersTable/OutOfStockOrdersTable';
 
 export function OutOfStockOrderSummary({ outOfStockOrder }) {

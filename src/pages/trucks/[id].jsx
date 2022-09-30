@@ -7,12 +7,15 @@ import { withProtection } from '@components/withProtection';
 import { TruckForm } from '@components/TruckForm/TruckForm';
 import { TruckSummary } from '@components/TruckSummary/TruckSummary';
 import { fetchTruck } from '@api/trucks/methods';
+import { fetchUsers } from '@api/users/methods';
 
-function EditTruckPage({ truck, token }) {
+function EditTruckPage({ truck, employees, token }) {
   const [isEdit, setIsEdit] = useState(false);
-
   return (
-    <Layout title={`Transporte: ${truck.brand} - ${truck.model}`} description="Información detallada del vehículo">
+    <Layout
+      title={`Transporte: ${truck.brand} - ${truck.model}`}
+      description="Información detallada del vehículo"
+    >
       <div className="mb-8 border-b border-gray-200 pb-8">
         <Switch.Group>
           <>
@@ -45,6 +48,7 @@ function EditTruckPage({ truck, token }) {
       {isEdit ? (
         <TruckForm
           truck={truck}
+          employees={employees}
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}
@@ -60,11 +64,14 @@ EditTruckPage.getInitialProps = async ({ req, query }) => {
   const data = parseCookies(req);
 
   let truck = {};
+  let employees = [];
   if (data.token) {
     try {
       const res = await fetchTruck(query.id, data.token);
+      const { data: employeesData } = await fetchUsers(data.token);
 
       truck = res.data;
+      employees = employeesData;
     } catch (error) {
       console.log({ error });
     }
@@ -73,6 +80,7 @@ EditTruckPage.getInitialProps = async ({ req, query }) => {
   return {
     token: data?.token ?? '',
     truck: truck ?? {},
+    employees: employees ?? [],
   };
 };
 

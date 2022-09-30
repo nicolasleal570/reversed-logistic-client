@@ -9,7 +9,6 @@ import { fetchCasesByCustomer } from '@api/cases/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
 import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
-import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
 import { useAuth } from '@hooks/useAuth';
 
 const INITIAL_CASE_ID = { caseId: '' };

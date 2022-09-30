@@ -77,7 +77,7 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
     action() {
       return (
         <div className="flex items-center justify-end">
-          {orderStatus?.id === 1 && (
+          {orderStatus?.value === 'OUT_OF_STOCK' && (
             <>
               <button
                 type="button"
@@ -92,7 +92,7 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
             </>
           )}
 
-          {orderStatus?.id === 2 && (
+          {orderStatus?.value === 'PICKUP_IN_PROGRESS' && (
             <>
               <button
                 type="button"
@@ -107,7 +107,7 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
             </>
           )}
 
-          {orderStatus?.id === 3 &&
+          {orderStatus?.value === 'PICKUP_DONE' &&
             items.filter((elem) => !elem.finished).length > 0 && (
               <>
                 <button

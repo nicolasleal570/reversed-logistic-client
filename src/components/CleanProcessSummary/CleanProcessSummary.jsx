@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
-import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
 import { cleanProcessOrderStatusColor } from '@components/CleanProcessTable/CleanProcessTable';
 import { formatDuration } from '@utils/formatDuration';
 import { StepCard } from './StepCard';
 import { useCleanProcess } from '@hooks/useCleanProcess';
 
-export function CleanProcessSummary({ cleanProcessOrder: data }) {
-  const router = useRouter();
+export function CleanProcessSummary({
+  cleanProcessOrder,
+  setCleanProcessOrder,
+}) {
   const { doneCleanProcess } = useCleanProcess();
-  const [cleanProcessOrder, setCleanProcessOrder] = useState();
   const {
     customerLocation,
     status,
@@ -25,12 +23,6 @@ export function CleanProcessSummary({ cleanProcessOrder: data }) {
   const allStepsDone =
     cleanProcessOrder?.steps?.filter((elem) => elem.isDone).length ===
     cleanProcessOrder?.steps?.length;
-
-  useEffect(() => {
-    if (!cleanProcessOrder) {
-      setCleanProcessOrder(data ?? {});
-    }
-  }, [data, cleanProcessOrder]);
 
   if (!cleanProcessOrder) {
     return (
@@ -123,8 +115,13 @@ export function CleanProcessSummary({ cleanProcessOrder: data }) {
             'w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8'
           }
           onClick={async () => {
-            await doneCleanProcess(cleanProcessOrder.id);
-            router.push('/clean-process');
+            const { data: updatedData } = await doneCleanProcess(
+              cleanProcessOrder.id
+            );
+            setCleanProcessOrder({
+              ...updatedData,
+              steps: updatedData.steps.sort((a, b) => a.order - b.order),
+            });
           }}
         >
           Finalizar limpieza

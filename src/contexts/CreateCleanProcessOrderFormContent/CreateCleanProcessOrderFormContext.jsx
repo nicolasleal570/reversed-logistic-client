@@ -36,8 +36,11 @@ export default function CreateCleanProcessOrderFormContextProvider({
       const { token } = parseCookies() ?? {};
 
       if (token) {
-        await createCleanProcessOrderFull(data, token);
-        router.push('/clean-process');
+        const { data: createdOrder } = await createCleanProcessOrderFull(
+          data,
+          token
+        );
+        router.push(`/clean-process/${createdOrder.id}`);
       }
     } catch (error) {
       console.log('[Clean process order]', error);

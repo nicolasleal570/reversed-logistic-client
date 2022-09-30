@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
 import { availableCasesState } from '@constants/availableCasesState';
 import CheckCaseHealthModal from '@components/CheckCaseHealthModal/CheckCaseHealthModal';
+import { OrdersTable } from '@components/OrdersTable/OrdersTable';
 
 export function CaseSummary({ case: caseInfo }) {
   const { query } = useRouter();
@@ -60,6 +61,20 @@ export function CaseSummary({ case: caseInfo }) {
           />
         )}
       </div>
+
+      {caseInfo?.orders?.length > 0 ? (
+        <>
+          <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
+            Histórico de órdenes
+          </h2>
+
+          <OrdersTable
+            orders={caseInfo?.orders || []}
+            onlyTable
+            deactivateSearchBar
+          />
+        </>
+      ) : null}
     </>
   );
 }
