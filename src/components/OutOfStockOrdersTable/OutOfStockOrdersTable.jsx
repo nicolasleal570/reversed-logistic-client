@@ -77,7 +77,7 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
     action() {
       return (
         <div className="flex items-center justify-end">
-          {orderStatus?.id === 1 && (
+          {orderStatus?.value === 'OUT_OF_STOCK' && (
             <>
               <button
                 type="button"
@@ -92,7 +92,7 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
             </>
           )}
 
-          {orderStatus?.id === 2 && (
+          {orderStatus?.value === 'PICKUP_IN_PROGRESS' && (
             <>
               <button
                 type="button"
@@ -107,7 +107,7 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
             </>
           )}
 
-          {orderStatus?.id === 3 &&
+          {orderStatus?.value === 'PICKUP_DONE' &&
             items.filter((elem) => !elem.finished).length > 0 && (
               <>
                 <button
@@ -151,8 +151,8 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
         text="Órdenes"
         tableHeader={
           <>
-            <div className="flex flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
+            <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
                 Todas las órdenes de agotamiento
               </h2>
 

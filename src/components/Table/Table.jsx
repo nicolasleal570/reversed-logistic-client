@@ -12,7 +12,17 @@ import { GlobalFilter } from './GlobalFilter';
 import { NoData } from './NoData';
 //import Pagination from './Pagination';
 
-function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
+function Table({
+  headers,
+  content,
+  href,
+  as,
+  text,
+  onClickRow,
+  tableHeader,
+  deactivateSearchBar,
+  filterTabs,
+}) {
   const columns = React.useMemo(() => [...headers], [headers]);
   const data = React.useMemo(() => [...content], [content]);
   const {
@@ -45,19 +55,21 @@ function Table({ headers, content, href, as, text, onClickRow, tableHeader }) {
     <>
       {tableHeader}
 
-      <div className="flex flex-row flex-wrap w-full px-6 py-3">
-        <div className="w-2/3"></div>
+      {!deactivateSearchBar && (
+        <div className="flex flex-row flex-wrap w-full px-6 py-3">
+          <div className="w-full lg:w-2/3">{filterTabs}</div>
 
-        {content.length > 0 && (
-          <div className="w-1/3 ml-auto">
-            <GlobalFilter
-              globalFilter={globalFilter}
-              preGlobalFilteredRows={preGlobalFilteredRows}
-              setGlobalFilter={setGlobalFilter}
-            />
-          </div>
-        )}
-      </div>
+          {content.length > 0 && (
+            <div className="w-full lg:w-1/3 ml-auto">
+              <GlobalFilter
+                globalFilter={globalFilter}
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="overflow-x-auto w-full block">
         {content.length === 0 ? (

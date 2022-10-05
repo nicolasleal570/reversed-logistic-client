@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
 import { BadgeCheckIcon } from '@heroicons/react/solid';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
 import { formatPrice } from '@utils/formatPrice';
@@ -8,8 +7,7 @@ import classNames from 'classnames';
 import { useOrders } from '@hooks/useOrders';
 import { orderStatusColor } from '@components/OrdersTable/OrdersTable';
 
-export function OrderSummary({ order }) {
-  const router = useRouter();
+export function OrderSummary({ order, setOrder }) {
   const { markOrderAsReady } = useOrders();
   const [doneItems, setDoneItems] = useState([]);
 
@@ -82,7 +80,7 @@ export function OrderSummary({ order }) {
               value={`${item.quantity} L`}
             />
 
-            {order.orderStatusId === 2 && (
+            {order.orderStatus.value === 'IN_TRANSIT' && (
               <button
                 type="button"
                 className={classNames(
@@ -111,23 +109,26 @@ export function OrderSummary({ order }) {
         );
       })}
 
-      <button
-        type="button"
-        className={classNames(
-          'w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8',
-          {
-            'text-gray-400 bg-gray-200':
-              doneItems.length !== order.items.length,
-          }
-        )}
-        disabled={doneItems.length !== order.items.length}
-        onClick={async () => {
-          await markOrderAsReady(order.id);
-          router.push('/orders');
-        }}
-      >
-        Finalizar pedido
-      </button>
+      {order.orderStatusId < 4 && (
+        <button
+          type="button"
+          className={classNames(
+            'w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8',
+            {
+              'text-gray-400 bg-gray-200':
+                doneItems.length !== order.items.length,
+            }
+          )}
+          disabled={doneItems.length !== order.items.length}
+          onClick={async () => {
+            const { data: updatedData } = await markOrderAsReady(order.id);
+            setOrder({ ...updatedData });
+            setDoneItems([]);
+          }}
+        >
+          Finalizar pedido
+        </button>
+      )}
     </div>
   );
 }

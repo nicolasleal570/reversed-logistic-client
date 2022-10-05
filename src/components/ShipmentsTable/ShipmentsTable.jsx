@@ -44,7 +44,7 @@ const header = [
   },
 ];
 
-const shipentStatusColor = {
+export const shipentStatusColor = {
   WAITING_SHIPMENT: 'yellow',
   IN_SHIPMENT: 'cyan',
   SHIPMENT_DONE: 'green',
@@ -81,7 +81,11 @@ export function ShipmentsTable({ shipments }) {
             status() {
               const { name, value } = shipmentStatus ?? {};
               return (
-                <Badge title={name ?? '-'} color={shipentStatusColor[value]} />
+                <Badge
+                  title={name ?? '-'}
+                  color={shipentStatusColor[value]}
+                  size="small"
+                />
               );
             },
             action() {
@@ -98,7 +102,7 @@ export function ShipmentsTable({ shipments }) {
                             router.push(`/shipments/${id}`);
                           }}
                         >
-                          <span>Comenzar envío</span>
+                          <span>Enviar</span>
                         </button>
                       </>
                     )}
@@ -113,7 +117,7 @@ export function ShipmentsTable({ shipments }) {
                           router.push(`/shipments/${id}`);
                         }}
                       >
-                        <span>Entregado</span>
+                        <span>Entregar</span>
                       </button>
                     </>
                   )}
@@ -144,8 +148,8 @@ export function ShipmentsTable({ shipments }) {
         text="Cases"
         tableHeader={
           <>
-            <div className="flex flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
+            <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
                 Todos los envíos
               </h2>
 

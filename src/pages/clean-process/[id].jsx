@@ -1,16 +1,49 @@
+import { useEffect, useState } from 'react';
 import { parseCookies } from '@utils/parseCookies';
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
 import { CleanProcessSummary } from '@components/CleanProcessSummary/CleanProcessSummary';
 import { fetchCleanProcessOrder } from '@api/clean-process-order/methods';
+import { useCleanProcess } from '@hooks/useCleanProcess';
 
-function EditCleanProcessOrderPage({ cleanProcessOrder }) {
+function EditCleanProcessOrderPage({ cleanProcessOrder: data }) {
+  const [cleanProcessOrder, setCleanProcessOrder] = useState(data);
+  const { startCleanProcess } = useCleanProcess();
+
+  useEffect(() => {
+    setCleanProcessOrder(data);
+  }, [data]);
+
   return (
     <Layout
-      title={`Orden #OR`}
+      title={`Limpieza #LIM${cleanProcessOrder.id}`}
       description="Información detallada del proceso de limpieza"
     >
-      <CleanProcessSummary cleanProcessOrder={cleanProcessOrder} />
+      {cleanProcessOrder.status.value === 'CLEAN_PROCESS_QUEUED' && (
+        <div className="mb-8 border-b border-gray-200 pb-8">
+          <button
+            type="button"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            onClick={async () => {
+              const { data: updatedCleanProcessOrder } =
+                await startCleanProcess(cleanProcessOrder.id);
+              setCleanProcessOrder({
+                ...updatedCleanProcessOrder,
+                steps: updatedCleanProcessOrder.steps.sort(
+                  (a, b) => a.order - b.order
+                ),
+              });
+            }}
+          >
+            <span>Comenzar limpieza</span>
+          </button>
+        </div>
+      )}
+
+      <CleanProcessSummary
+        cleanProcessOrder={cleanProcessOrder}
+        setCleanProcessOrder={setCleanProcessOrder}
+      />
     </Layout>
   );
 }

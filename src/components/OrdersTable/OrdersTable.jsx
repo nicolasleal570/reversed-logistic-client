@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
-import { formatPrice } from '@utils/formatPrice';
 import { Badge } from '@components/Badge/Badge';
 import classNames from 'classnames';
 import AssignShipmentModal from './AssignShipmentModal';
@@ -21,11 +20,11 @@ const header = [
     accessor: 'purchaseDate',
   },
   {
-    Header: 'Total',
-    accessor: 'total',
+    Header: 'Cliente',
+    accessor: 'customer',
   },
   {
-    Header: 'Creador por',
+    Header: 'Creado por',
     accessor: 'creator',
   },
   {
@@ -56,7 +55,7 @@ export const orderStatusColor = {
   CANCELLED: 'red',
 };
 
-export function OrdersTable({ orders }) {
+export function OrdersTable({ orders, onlyTable }) {
   const [data, setData] = React.useState([]);
   const [isShipmentModalOpen, setIsShipmentModalOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -64,21 +63,25 @@ export function OrdersTable({ orders }) {
 
   const renderRow = ({
     id,
-    total,
     createdBy,
     assignedTo,
     orderStatus,
     purchaseDate,
+    customerLocation,
     ...rest
   }) => ({
     id,
     purchaseDate: dayjs(purchaseDate).format('hh:mm A - dddd DD MMMM YYYY'),
-    total: formatPrice(total),
+    customer: customerLocation?.name ?? '-',
     creator: createdBy?.fullName,
     assigned: assignedTo?.fullName ?? '-',
     status() {
       const { name, value } = orderStatus ?? {};
-      return <Badge title={name ?? '-'} color={orderStatusColor[value]} />;
+      return name ? (
+        <Badge title={name} color={orderStatusColor[value]} />
+      ) : (
+        '-'
+      );
     },
     action() {
       return (
@@ -86,7 +89,6 @@ export function OrdersTable({ orders }) {
           <TakeOrderButton
             order={{
               id,
-              total,
               createdBy,
               assignedTo,
               orderStatus,
@@ -104,7 +106,6 @@ export function OrdersTable({ orders }) {
                   setIsShipmentModalOpen(true);
                   setSelectedOrder({
                     id,
-                    total,
                     createdBy,
                     assignedTo,
                     orderStatus,
@@ -142,34 +143,37 @@ export function OrdersTable({ orders }) {
         href="/orders/create"
         as="/orders/create"
         text="Órdenes"
+        deactivateSearchBar
         tableHeader={
           <>
-            <div className="flex flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
-                Todas las órdenes
-              </h2>
+            {!onlyTable && (
+              <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
+                  Todas las órdenes
+                </h2>
 
-              <button
-                type="button"
-                className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 mr-4"
-                disabled={isLoading}
-                onClick={async () => {
-                  setIsLoading(true);
-                  const { data: updatedOrders } = await fetchOrders();
-                  setData(updatedOrders.map(renderRow));
-                  setIsLoading(false);
-                }}
-              >
-                <span>Actualizar lista</span>
-              </button>
+                <button
+                  type="button"
+                  className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 lg:mr-4 mb-4 lg:mb-0"
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setIsLoading(true);
+                    const { data: updatedOrders } = await fetchOrders();
+                    setData(updatedOrders.map(renderRow));
+                    setIsLoading(false);
+                  }}
+                >
+                  <span>Actualizar lista</span>
+                </button>
 
-              <Link href="/orders/create">
-                <a className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white">
-                  <PlusIcon className="w-5 mr-1" />
-                  <span>Nueva orden</span>
-                </a>
-              </Link>
-            </div>
+                <Link href="/orders/create">
+                  <a className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white">
+                    <PlusIcon className="w-5 mr-1" />
+                    <span>Nueva orden</span>
+                  </a>
+                </Link>
+              </div>
+            )}
           </>
         }
       />
@@ -178,6 +182,17 @@ export function OrdersTable({ orders }) {
           isOpen={isShipmentModalOpen}
           setIsOpen={setIsShipmentModalOpen}
           selectedOrder={selectedOrder}
+          setOrder={(order) => {
+            setData((oldData) => {
+              const idx = oldData.findIndex((item) => item.id === order.id);
+
+              return [
+                ...oldData.slice(0, idx),
+                { ...renderRow(order) },
+                ...oldData.slice(idx + 1),
+              ];
+            });
+          }}
         />
       )}
     </Card>

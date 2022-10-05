@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 import { InputLabel } from '@components/InputLabel/InputLabel';
@@ -13,8 +12,8 @@ export default function AssignShipmentModal({
   isOpen,
   setIsOpen,
   selectedOrder,
+  setOrder,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -35,8 +34,10 @@ export default function AssignShipmentModal({
       orderId: selectedOrder.id,
       ...data,
     });
+
+    setOrder(updatedOrder);
+
     closeModal();
-    router.push(`/orders/${updatedOrder.id}`);
   }
 
   useEffect(() => {

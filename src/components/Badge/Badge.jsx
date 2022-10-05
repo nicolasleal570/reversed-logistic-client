@@ -25,7 +25,7 @@ export function Badge({ title, color, size }) {
     >
       <span
         className={classNames(`block w-1.5 h-1.5 rounded-full mr-2`, {
-          'w-1 h-1': size === 'small',
+          'w-1 h-1 mr-1': size === 'small',
           'bg-indigo-600': color === 'violet',
           'bg-violet-600': color === 'indigo',
           'bg-red-600': color === 'red',

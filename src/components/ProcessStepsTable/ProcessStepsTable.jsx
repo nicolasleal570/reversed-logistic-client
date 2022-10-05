@@ -43,10 +43,7 @@ export function ProcessStepsTable({ processSteps }) {
           createdByName: createdBy.fullName,
           action() {
             return (
-              <Link
-                href="/clean-steps/[id]"
-                as={`/clean-steps/${id}`}
-              >
+              <Link href="/clean-steps/[id]" as={`/clean-steps/${id}`}>
                 <a className="text-gray-900 p-1 float-right">
                   <PencilIcon className="w-5" />
                   <span className="sr-only">Editar</span>
@@ -69,8 +66,8 @@ export function ProcessStepsTable({ processSteps }) {
         text="Pasos para el proceso de limpieza"
         tableHeader={
           <>
-            <div className="flex flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
+            <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
                 Todos los pasos de limpieza
               </h2>
 

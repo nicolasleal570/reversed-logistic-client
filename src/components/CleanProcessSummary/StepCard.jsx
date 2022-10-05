@@ -119,7 +119,7 @@ export function StepCard({ step, cleanProcessOrder, setCleanProcessOrder }) {
                           className="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
                           onClick={async () => {
                             // Finished
-                            const { data: updatedCleanProcess } =
+                            const { data: updatedData } =
                               await setStepDoneCleanProcess(
                                 cleanProcessOrder.id,
                                 {
@@ -127,8 +127,8 @@ export function StepCard({ step, cleanProcessOrder, setCleanProcessOrder }) {
                                 }
                               );
                             setCleanProcessOrder({
-                              ...updatedCleanProcess,
-                              steps: updatedCleanProcess.steps.sort(
+                              ...updatedData,
+                              steps: updatedData.steps.sort(
                                 (a, b) => a.order - b.order
                               ),
                             });
