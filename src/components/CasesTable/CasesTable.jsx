@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Table from '@components/Table/Table';
@@ -7,6 +7,7 @@ import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
 import { availableCasesState } from '@constants/availableCasesState';
 import { useCases } from '@hooks/useCases';
+import classNames from 'classnames';
 
 const header = [
   {
@@ -41,93 +42,102 @@ const header = [
   },
 ];
 
-export function CasesTable({ cases }) {
+const handleMap =
+  ({ router, updateCase }) =>
+  ({ id, name, volume, weight, state: stateId, currentOutOfStockOrderId }) => ({
+    id,
+    name,
+    volume() {
+      return <>{volume ?? '-'}</>;
+    },
+    weight() {
+      return <>{weight ?? '-'}</>;
+    },
+    state() {
+      const item = availableCasesState[stateId];
+      return <Badge title={item?.title || ''} color={item?.color || ''} />;
+    },
+    action() {
+      return (
+        <div className="flex items-center justify-end">
+          {stateId === 'OUT_OF_STOCK' && currentOutOfStockOrderId >= 0 && (
+            <Link
+              href={{
+                pathname: `/out-of-stock-orders/${currentOutOfStockOrderId}`,
+              }}
+            >
+              <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
+                Revisar orden
+              </a>
+            </Link>
+          )}
+
+          {stateId === 'PICKUP_DONE' && (
+            <Link
+              href={{
+                pathname: `/cases/${id}`,
+                query: { checkHealth: true },
+              }}
+            >
+              <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
+                Examinar
+              </a>
+            </Link>
+          )}
+
+          {stateId === 'CLEAN_PROCESS_DONE' && (
+            <button
+              type="button"
+              className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+              onClick={async () => {
+                await updateCase(id, {
+                  state: 'AVAILABLE',
+                });
+                router.push(`/cases/${id}`);
+              }}
+            >
+              Habilitar
+            </button>
+          )}
+
+          <Link href="/cases/[id]" as={`/cases/${id}`}>
+            <a className="text-gray-900 p-1 float-right">
+              <PencilIcon className="w-5" />
+              <span className="sr-only">Editar</span>
+            </a>
+          </Link>
+        </div>
+      );
+    },
+  });
+
+export function CasesTable({ cases: allCases }) {
   const router = useRouter();
   const { updateCase } = useCases();
   const [data, setData] = React.useState([]);
+  const [cases, setCases] = React.useState([]);
+  const [currentTab, setCurrentTab] = React.useState('ALL');
+
+  const tabs = useMemo(
+    () =>
+      Object.keys(availableCasesState).map((key) => ({
+        title: availableCasesState[key].title,
+        value: key,
+      })),
+    []
+  );
 
   useEffect(() => {
-    setData(
-      cases.map(
-        ({
-          id,
-          name,
-          volume,
-          weight,
-          state: stateId,
-          currentOutOfStockOrderId,
-        }) => ({
-          id,
-          name,
-          volume() {
-            return <>{volume ?? '-'}</>;
-          },
-          weight() {
-            return <>{weight ?? '-'}</>;
-          },
-          state() {
-            const item = availableCasesState[stateId];
-            return (
-              <Badge title={item?.title || ''} color={item?.color || ''} />
-            );
-          },
-          action() {
-            return (
-              <div className="flex items-center justify-end">
-                {stateId === 'OUT_OF_STOCK' && currentOutOfStockOrderId >= 0 && (
-                  <Link
-                    href={{
-                      pathname: `/out-of-stock-orders/${currentOutOfStockOrderId}`,
-                    }}
-                  >
-                    <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
-                      Revisar orden
-                    </a>
-                  </Link>
-                )}
+    if (currentTab !== 'ALL') {
+      setCases(allCases.filter((item) => item.state === currentTab));
+    } else {
+      setCases([...allCases]);
+    }
+  }, [allCases, currentTab]);
 
-                {stateId === 'PICKUP_DONE' && (
-                  <Link
-                    href={{
-                      pathname: `/cases/${id}`,
-                      query: { checkHealth: true },
-                    }}
-                  >
-                    <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
-                      Examinar
-                    </a>
-                  </Link>
-                )}
-
-                {stateId === 'CLEAN_PROCESS_DONE' && (
-                  <button
-                    type="button"
-                    className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
-                    onClick={async () => {
-                      await updateCase(id, {
-                        state: 'AVAILABLE',
-                      });
-                      router.push(`/cases/${id}`);
-                    }}
-                  >
-                    Habilitar
-                  </button>
-                )}
-
-                <Link href="/cases/[id]" as={`/cases/${id}`}>
-                  <a className="text-gray-900 p-1 float-right">
-                    <PencilIcon className="w-5" />
-                    <span className="sr-only">Editar</span>
-                  </a>
-                </Link>
-              </div>
-            );
-          },
-        })
-      )
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cases]);
+  useEffect(() => {
+    setData(cases.map(handleMap({ router, updateCase })));
+  }, [cases, router, updateCase]);
 
   return (
     <Card>
@@ -137,10 +147,45 @@ export function CasesTable({ cases }) {
         href="/cases/create"
         as="/cases/create"
         text="Cases"
+        filterTabs={
+          <div className="flex flex-row flex-wrap items-center space-x-2">
+            <button
+              type="button"
+              onClick={() => setCurrentTab('ALL')}
+              className={classNames(
+                'mb-3 py-1 px-3 rounded-full border text-sm',
+                {
+                  'bg-white border-gray-300': 'ALL' !== currentTab,
+                  'bg-indigo-500 text-white border-indigo-500':
+                    'ALL' === currentTab,
+                }
+              )}
+            >
+              Todos
+            </button>
+            {tabs.map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                onClick={() => setCurrentTab(item.value)}
+                className={classNames(
+                  'mb-3 py-1 px-3 rounded-full border text-sm',
+                  {
+                    'bg-white border-gray-300': item.value !== currentTab,
+                    'bg-indigo-500 text-white border-indigo-500':
+                      item.value === currentTab,
+                  }
+                )}
+              >
+                {item.title}
+              </button>
+            ))}
+          </div>
+        }
         tableHeader={
           <>
-            <div className="flex flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
+            <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
                 Todos los cases
               </h2>
 

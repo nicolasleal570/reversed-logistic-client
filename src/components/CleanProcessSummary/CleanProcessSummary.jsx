@@ -100,7 +100,7 @@ export function CleanProcessSummary({
       {steps.map((step) => {
         return (
           <StepCard
-            key={step.id}
+            key={`${step.id}-${step.processStep.name}`}
             step={step}
             cleanProcessOrder={cleanProcessOrder}
             setCleanProcessOrder={setCleanProcessOrder}

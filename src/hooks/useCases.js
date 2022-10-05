@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import * as casesAPI from '@api/cases/methods';
+import { useCallback } from 'react';
 
 const {
   createCase: createCaseAPI,
@@ -26,20 +27,21 @@ export function useCases() {
     }
   };
 
-  const updateCase = async (caseId, data, token, onFinish) => {
-    try {
-      const { description, ...rest } = data;
-      const res = await updateCaseAPI(
-        caseId,
-        { description: description || undefined, ...rest },
-        token ?? cookies.token
-      );
-
-      onFinish && onFinish();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const updateCase = useCallback(
+    async (caseId, data, token) => {
+      try {
+        const { description, ...rest } = data;
+        return await updateCaseAPI(
+          caseId,
+          { description: description || undefined, ...rest },
+          token ?? cookies.token
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [cookies]
+  );
 
   const handleCaseStateAfterPickupDone = async (caseId, data, token) => {
     try {

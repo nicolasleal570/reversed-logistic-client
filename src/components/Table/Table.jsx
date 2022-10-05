@@ -21,6 +21,7 @@ function Table({
   onClickRow,
   tableHeader,
   deactivateSearchBar,
+  filterTabs,
 }) {
   const columns = React.useMemo(() => [...headers], [headers]);
   const data = React.useMemo(() => [...content], [content]);
@@ -56,10 +57,10 @@ function Table({
 
       {!deactivateSearchBar && (
         <div className="flex flex-row flex-wrap w-full px-6 py-3">
-          <div className="w-2/3"></div>
+          <div className="w-full lg:w-2/3">{filterTabs}</div>
 
           {content.length > 0 && (
-            <div className="w-1/3 ml-auto">
+            <div className="w-full lg:w-1/3 ml-auto">
               <GlobalFilter
                 globalFilter={globalFilter}
                 preGlobalFilteredRows={preGlobalFilteredRows}

@@ -147,14 +147,14 @@ export function OrdersTable({ orders, onlyTable }) {
         tableHeader={
           <>
             {!onlyTable && (
-              <div className="flex flex-row flex-wrap w-full p-6">
-                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1">
+              <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
                   Todas las órdenes
                 </h2>
 
                 <button
                   type="button"
-                  className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 mr-4"
+                  className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 lg:mr-4 mb-4 lg:mb-0"
                   disabled={isLoading}
                   onClick={async () => {
                     setIsLoading(true);
@@ -182,6 +182,17 @@ export function OrdersTable({ orders, onlyTable }) {
           isOpen={isShipmentModalOpen}
           setIsOpen={setIsShipmentModalOpen}
           selectedOrder={selectedOrder}
+          setOrder={(order) => {
+            setData((oldData) => {
+              const idx = oldData.findIndex((item) => item.id === order.id);
+
+              return [
+                ...oldData.slice(0, idx),
+                { ...renderRow(order) },
+                ...oldData.slice(idx + 1),
+              ];
+            });
+          }}
         />
       )}
     </Card>

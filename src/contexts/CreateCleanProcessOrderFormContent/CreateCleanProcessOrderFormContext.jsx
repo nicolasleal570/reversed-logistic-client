@@ -40,7 +40,7 @@ export default function CreateCleanProcessOrderFormContextProvider({
           data,
           token
         );
-        router.push(`/clean-process/${createdOrder.id}`);
+        router.push(`/clean-process/${createdOrder.cleanProcessOrder.id}`);
       }
     } catch (error) {
       console.log('[Clean process order]', error);

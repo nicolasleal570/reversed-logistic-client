@@ -34,7 +34,9 @@ export default function AssignShipmentModal({
       orderId: selectedOrder.id,
       ...data,
     });
+
     setOrder(updatedOrder);
+
     closeModal();
   }
 
