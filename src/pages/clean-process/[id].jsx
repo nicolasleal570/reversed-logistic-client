@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { parseCookies } from '@utils/parseCookies';
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
@@ -7,8 +8,9 @@ import { fetchCleanProcessOrder } from '@api/clean-process-order/methods';
 import { useCleanProcess } from '@hooks/useCleanProcess';
 
 function EditCleanProcessOrderPage({ cleanProcessOrder: data }) {
-  const [cleanProcessOrder, setCleanProcessOrder] = useState(data);
+  const router = useRouter();
   const { startCleanProcess } = useCleanProcess();
+  const [cleanProcessOrder, setCleanProcessOrder] = useState(data);
 
   useEffect(() => {
     setCleanProcessOrder(data);
@@ -36,6 +38,20 @@ function EditCleanProcessOrderPage({ cleanProcessOrder: data }) {
             }}
           >
             <span>Comenzar limpieza</span>
+          </button>
+        </div>
+      )}
+
+      {cleanProcessOrder?.case?.state === 'CLEAN_PROCESS_DONE' && (
+        <div className="mb-8 border-b border-gray-200 pb-8">
+          <button
+            type="button"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            onClick={async () =>
+              router.push(`/cases/${cleanProcessOrder?.case?.id}`)
+            }
+          >
+            <span>Revisar case</span>
           </button>
         </div>
       )}

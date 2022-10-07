@@ -11,7 +11,7 @@ export function TruckSummary({ truck }) {
       <DataSection label="Modelo" value={truck.model} />
       <DataSection label="Tipo" value={truck.type} />
       <DataSection label="Placa" value={truck.licensePlate} />
-      <DataSection label="Conductor" value={truck.driver.fullName} />
+      <DataSection label="Conductor" value={truck.driver?.fullName || '-'} />
     </div>
   );
 }

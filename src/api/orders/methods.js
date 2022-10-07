@@ -3,6 +3,7 @@ import {
   ASSIGN_SHIPMENT_ORDER_URL,
   DONE_ORDER_URL,
   ORDERS_URL,
+  ORDER_STATUS,
   ORDER_URL,
   TAKE_ORDER_URL,
 } from './endpoints';
@@ -12,6 +13,9 @@ export const fetchOrders = (token) =>
 
 export const fetchOrder = (orderId, token) =>
   axios.get(ORDER_URL(orderId), { headers: bearerToken(token) });
+
+export const fetchOrderStatus = (token) =>
+  axios.get(ORDER_STATUS, { headers: bearerToken(token) });
 
 export const createOrder = (data, token) =>
   axios.post(ORDERS_URL, data, { headers: bearerToken(token) });

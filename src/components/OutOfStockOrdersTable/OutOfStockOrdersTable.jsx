@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import dayjs from 'dayjs';
@@ -9,6 +9,7 @@ import { Badge } from '@components/Badge/Badge';
 import classNames from 'classnames';
 import { fetchOutOfStockOrders } from '@api/out-of-stock/methods';
 import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
+import { FilterPillTable } from '@components/FilterPillTable/FilterPillTable';
 
 const header = [
   {
@@ -47,11 +48,16 @@ export const outOfStockOrderStatusColor = {
   PICKUP_DONE: 'green',
 };
 
-export function OutOfStockOrdersTable({ outOfStockOrders }) {
+export function OutOfStockOrdersTable({
+  outOfStockOrders: rawData,
+  filterTabs,
+}) {
   const router = useRouter();
-  const [data, setData] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
   const { takeOutOfStockOrder, finishOutOfStockOrder } = useOutOfStockOrders();
+  const [data, setData] = React.useState([]);
+  const [outOfStockOrders, setOutOfStockOrders] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [currentTab, setCurrentTab] = useState('ALL');
 
   const renderRow = ({
     id,
@@ -141,38 +147,59 @@ export function OutOfStockOrdersTable({ outOfStockOrders }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [outOfStockOrders]);
 
-  return (
-    <Card>
-      <Table
-        headers={header}
-        content={data}
-        href="/out-of-stock-orders/create"
-        as="/out-of-stock-orders/create"
-        text="Órdenes"
-        tableHeader={
-          <>
-            <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
-                Todas las órdenes de agotamiento
-              </h2>
+  useEffect(() => {
+    if (currentTab !== 'ALL') {
+      setOutOfStockOrders(
+        rawData.filter((item) => item.status.value === currentTab)
+      );
+    } else {
+      setOutOfStockOrders([...rawData]);
+    }
+  }, [rawData, currentTab]);
 
-              <button
-                type="button"
-                className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 mr-4"
-                disabled={isLoading}
-                onClick={async () => {
-                  setIsLoading(true);
-                  const { data: updatedOrders } = await fetchOutOfStockOrders();
-                  setData(updatedOrders.map(renderRow));
-                  setIsLoading(false);
-                }}
-              >
-                <span>Actualizar lista</span>
-              </button>
-            </div>
-          </>
+  return (
+    <>
+      <FilterPillTable
+        tabs={filterTabs}
+        currentTab={currentTab}
+        onClick={(value) =>
+          value ? setCurrentTab(value) : setCurrentTab('ALL')
         }
       />
-    </Card>
+
+      <Card>
+        <Table
+          headers={header}
+          content={data}
+          href="/out-of-stock-orders/create"
+          as="/out-of-stock-orders/create"
+          text="Órdenes"
+          tableHeader={
+            <>
+              <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
+                  Todas las órdenes de agotamiento
+                </h2>
+
+                <button
+                  type="button"
+                  className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 mr-4"
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setIsLoading(true);
+                    const { data: updatedOrders } =
+                      await fetchOutOfStockOrders();
+                    setData(updatedOrders.map(renderRow));
+                    setIsLoading(false);
+                  }}
+                >
+                  <span>Actualizar lista</span>
+                </button>
+              </div>
+            </>
+          }
+        />
+      </Card>
+    </>
   );
 }

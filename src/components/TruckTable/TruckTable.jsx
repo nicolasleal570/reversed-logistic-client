@@ -24,7 +24,7 @@ const header = [
   },
   {
     Header: 'Placa',
-    accessor: 'license_plate',
+    accessor: 'licensePlate',
   },
   {
     Header: 'Conductor',

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import Table from '@components/Table/Table';
@@ -6,9 +6,10 @@ import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
 import classNames from 'classnames';
+import { fetchOrders } from '@api/orders/methods';
+import { FilterPillTable } from '@components/FilterPillTable/FilterPillTable';
 import AssignShipmentModal from './AssignShipmentModal';
 import { TakeOrderButton } from './TakeOrderButton';
-import { fetchOrders } from '@api/orders/methods';
 
 const header = [
   {
@@ -55,11 +56,17 @@ export const orderStatusColor = {
   CANCELLED: 'red',
 };
 
-export function OrdersTable({ orders, onlyTable }) {
-  const [data, setData] = React.useState([]);
-  const [isShipmentModalOpen, setIsShipmentModalOpen] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedOrder, setSelectedOrder] = React.useState();
+export function OrdersTable({
+  orders: ordersRawData,
+  onlyTable,
+  filterTabs = [],
+}) {
+  const [data, setData] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [isShipmentModalOpen, setIsShipmentModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState();
+  const [currentTab, setCurrentTab] = useState('ALL');
 
   const renderRow = ({
     id,
@@ -131,70 +138,90 @@ export function OrdersTable({ orders, onlyTable }) {
   });
 
   useEffect(() => {
+    if (currentTab !== 'ALL') {
+      setOrders(
+        ordersRawData.filter((item) => item.orderStatus.value === currentTab)
+      );
+    } else {
+      setOrders([...ordersRawData]);
+    }
+  }, [ordersRawData, currentTab]);
+
+  useEffect(() => {
     setData(orders.map(renderRow));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders]);
 
   return (
-    <Card>
-      <Table
-        headers={header}
-        content={data}
-        href="/orders/create"
-        as="/orders/create"
-        text="Órdenes"
-        deactivateSearchBar
-        tableHeader={
-          <>
-            {!onlyTable && (
-              <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
-                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
-                  Todas las órdenes
-                </h2>
-
-                <button
-                  type="button"
-                  className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 lg:mr-4 mb-4 lg:mb-0"
-                  disabled={isLoading}
-                  onClick={async () => {
-                    setIsLoading(true);
-                    const { data: updatedOrders } = await fetchOrders();
-                    setData(updatedOrders.map(renderRow));
-                    setIsLoading(false);
-                  }}
-                >
-                  <span>Actualizar lista</span>
-                </button>
-
-                <Link href="/orders/create">
-                  <a className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white">
-                    <PlusIcon className="w-5 mr-1" />
-                    <span>Nueva orden</span>
-                  </a>
-                </Link>
-              </div>
-            )}
-          </>
+    <>
+      <FilterPillTable
+        tabs={filterTabs}
+        currentTab={currentTab}
+        onClick={(value) =>
+          value ? setCurrentTab(value) : setCurrentTab('ALL')
         }
       />
-      {isShipmentModalOpen && (
-        <AssignShipmentModal
-          isOpen={isShipmentModalOpen}
-          setIsOpen={setIsShipmentModalOpen}
-          selectedOrder={selectedOrder}
-          setOrder={(order) => {
-            setData((oldData) => {
-              const idx = oldData.findIndex((item) => item.id === order.id);
 
-              return [
-                ...oldData.slice(0, idx),
-                { ...renderRow(order) },
-                ...oldData.slice(idx + 1),
-              ];
-            });
-          }}
+      <Card>
+        <Table
+          headers={header}
+          content={data}
+          href="/orders/create"
+          as="/orders/create"
+          text="Órdenes"
+          deactivateSearchBar
+          tableHeader={
+            <>
+              {!onlyTable && (
+                <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+                  <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
+                    Todas las órdenes
+                  </h2>
+
+                  <button
+                    type="button"
+                    className="border border-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-indigo-600 lg:mr-4 mb-4 lg:mb-0"
+                    disabled={isLoading}
+                    onClick={async () => {
+                      setIsLoading(true);
+                      const { data: updatedOrders } = await fetchOrders();
+                      setData(updatedOrders.map(renderRow));
+                      setCurrentTab('ALL');
+                      setIsLoading(false);
+                    }}
+                  >
+                    <span>Actualizar lista</span>
+                  </button>
+
+                  <Link href="/orders/create">
+                    <a className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white">
+                      <PlusIcon className="w-5 mr-1" />
+                      <span>Nueva orden</span>
+                    </a>
+                  </Link>
+                </div>
+              )}
+            </>
+          }
         />
-      )}
-    </Card>
+        {isShipmentModalOpen && (
+          <AssignShipmentModal
+            isOpen={isShipmentModalOpen}
+            setIsOpen={setIsShipmentModalOpen}
+            selectedOrder={selectedOrder}
+            setOrder={(order) => {
+              setData((oldData) => {
+                const idx = oldData.findIndex((item) => item.id === order.id);
+
+                return [
+                  ...oldData.slice(0, idx),
+                  { ...renderRow(order) },
+                  ...oldData.slice(idx + 1),
+                ];
+              });
+            }}
+          />
+        )}
+      </Card>
+    </>
   );
 }

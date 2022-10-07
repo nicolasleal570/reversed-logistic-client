@@ -31,7 +31,7 @@ export function useCases() {
     async (caseId, data, token) => {
       try {
         const { description, ...rest } = data;
-        return await updateCaseAPI(
+        return updateCaseAPI(
           caseId,
           { description: description || undefined, ...rest },
           token ?? cookies.token

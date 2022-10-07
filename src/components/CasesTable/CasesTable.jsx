@@ -7,7 +7,7 @@ import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
 import { availableCasesState } from '@constants/availableCasesState';
 import { useCases } from '@hooks/useCases';
-import classNames from 'classnames';
+import { FilterPillTable } from '@components/FilterPillTable/FilterPillTable';
 
 const header = [
   {
@@ -140,68 +140,42 @@ export function CasesTable({ cases: allCases }) {
   }, [cases, router, updateCase]);
 
   return (
-    <Card>
-      <Table
-        headers={header}
-        content={data}
-        href="/cases/create"
-        as="/cases/create"
-        text="Cases"
-        filterTabs={
-          <div className="flex flex-row flex-wrap items-center space-x-2">
-            <button
-              type="button"
-              onClick={() => setCurrentTab('ALL')}
-              className={classNames(
-                'mb-3 py-1 px-3 rounded-full border text-sm',
-                {
-                  'bg-white border-gray-300': 'ALL' !== currentTab,
-                  'bg-indigo-500 text-white border-indigo-500':
-                    'ALL' === currentTab,
-                }
-              )}
-            >
-              Todos
-            </button>
-            {tabs.map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                onClick={() => setCurrentTab(item.value)}
-                className={classNames(
-                  'mb-3 py-1 px-3 rounded-full border text-sm',
-                  {
-                    'bg-white border-gray-300': item.value !== currentTab,
-                    'bg-indigo-500 text-white border-indigo-500':
-                      item.value === currentTab,
-                  }
-                )}
-              >
-                {item.title}
-              </button>
-            ))}
-          </div>
-        }
-        tableHeader={
-          <>
-            <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
-              <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
-                Todos los cases
-              </h2>
-
-              <Link href="/cases/create">
-                <a
-                  type="button"
-                  className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
-                >
-                  <PlusIcon className="w-5 mr-1" />
-                  <span>Nuevo case</span>
-                </a>
-              </Link>
-            </div>
-          </>
+    <>
+      <FilterPillTable
+        tabs={tabs}
+        currentTab={currentTab}
+        onClick={(value) =>
+          value ? setCurrentTab(value) : setCurrentTab('ALL')
         }
       />
-    </Card>
+      <Card>
+        <Table
+          headers={header}
+          content={data}
+          href="/cases/create"
+          as="/cases/create"
+          text="Cases"
+          tableHeader={
+            <>
+              <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
+                  Todos los cases
+                </h2>
+
+                <Link href="/cases/create">
+                  <a
+                    type="button"
+                    className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
+                  >
+                    <PlusIcon className="w-5 mr-1" />
+                    <span>Nuevo case</span>
+                  </a>
+                </Link>
+              </div>
+            </>
+          }
+        />
+      </Card>
+    </>
   );
 }

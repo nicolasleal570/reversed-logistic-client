@@ -1,5 +1,9 @@
 import { axios, bearerToken } from '../config';
-import { OUT_OF_STOCK_ORDERS_URL, OUT_OF_STOCK_ORDER_URL } from './endpoints';
+import {
+  OUT_OF_STOCK_ORDERS_URL,
+  OUT_OF_STOCK_ORDER_URL,
+  OUT_OF_STOCK_STATUS_URL,
+} from './endpoints';
 
 export const fetchOutOfStockOrders = (token, params = {}) =>
   axios.get(`${OUT_OF_STOCK_ORDERS_URL}`, {
@@ -9,6 +13,9 @@ export const fetchOutOfStockOrders = (token, params = {}) =>
 
 export const fetchOutOfStockOrder = (id, token) =>
   axios.get(`${OUT_OF_STOCK_ORDER_URL(id)}`, { headers: bearerToken(token) });
+
+export const fetchOutOfStockStatus = (token) =>
+  axios.get(`${OUT_OF_STOCK_STATUS_URL}`, { headers: bearerToken(token) });
 
 export const createOutOfStockOrder = (data, token) =>
   axios.post(`${OUT_OF_STOCK_ORDERS_URL}`, data, {
