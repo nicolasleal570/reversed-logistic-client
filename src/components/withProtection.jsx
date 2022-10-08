@@ -4,7 +4,7 @@ import { parseCookies } from '@utils/parseCookies';
 import { fetchCurrentUser } from '@api/auth/methods';
 import { useUser } from '@hooks/useUser';
 
-const redirectUrl = '/login?redirected=true';
+const redirectUrl = (from) => `/login?redirected=true&from=${from || '/home'}`;
 
 export function withProtection(WrappedComponent) {
   const componentName =
@@ -38,11 +38,11 @@ export function withProtection(WrappedComponent) {
     if (!user) {
       if (res) {
         res.writeHead(302, {
-          Location: redirectUrl,
+          Location: redirectUrl(context.pathname),
         });
         res.end();
       } else {
-        Router.replace(redirectUrl);
+        Router.replace(redirectUrl(context.pathname));
       }
     } else if (Object.keys(user?.location ?? {}).length > 0) {
       if (res) {

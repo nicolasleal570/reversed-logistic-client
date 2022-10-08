@@ -7,6 +7,7 @@ import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { fetchLogin } from '@api/auth/methods';
 import { Button } from '@components/Button/Button';
+import { useEffect } from 'react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [, setCookie] = useCookies(['token']);
+  const [, setCookie, removeCookie] = useCookies(['token']);
 
   const onSubmit = async (data) => {
     try {
@@ -32,11 +33,18 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/home');
+      router.push(router.query.from || '/home');
     } catch (error) {
       console.log({ error });
     }
   };
+
+  useEffect(() => {
+    if (Boolean(router.query.redirected)) {
+      removeCookie('token');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   return (
     <main className="w-full bg-red-400 flex justify-between">
