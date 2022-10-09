@@ -25,55 +25,67 @@ export function RoleSummary({ role }) {
         Permisos asignados
       </h2>
 
-      <DataSection
-        label="Permisos - Módulo de cases"
-        tags={transformPermissionsInformation('cases', permissions)}
-      />
+      {role.value === 'SUDO' ? (
+        <DataSection
+          label=""
+          badge={{
+            title: 'Todos los permisos disponibles',
+            color: 'green',
+          }}
+        />
+      ) : (
+        <>
+          <DataSection
+            label="Permisos - Módulo de cases"
+            tags={transformPermissionsInformation('cases', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de sabores"
-        tags={transformPermissionsInformation('flavors', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de sabores"
+            tags={transformPermissionsInformation('flavors', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de órdenes de venta"
-        tags={transformPermissionsInformation('orders', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de órdenes de venta"
+            tags={transformPermissionsInformation('orders', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de envíos"
-        tags={transformPermissionsInformation('shipments', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de envíos"
+            tags={transformPermissionsInformation('shipments', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de agotamiento"
-        tags={transformPermissionsInformation('out_of_stock', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de agotamiento"
+            tags={transformPermissionsInformation('out_of_stock', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de transporte"
-        tags={transformPermissionsInformation('trucks', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de transporte"
+            tags={transformPermissionsInformation('trucks', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de órdenes de limpieza"
-        tags={transformPermissionsInformation('clean_process', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de órdenes de limpieza"
+            tags={transformPermissionsInformation('clean_process', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de pasos de limpieza"
-        tags={transformPermissionsInformation('clean_steps', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de pasos de limpieza"
+            tags={transformPermissionsInformation('clean_steps', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de empleados"
-        tags={transformPermissionsInformation('users', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de empleados"
+            tags={transformPermissionsInformation('users', permissions)}
+          />
 
-      <DataSection
-        label="Permisos - Módulo de clientes"
-        tags={transformPermissionsInformation('customers', permissions)}
-      />
+          <DataSection
+            label="Permisos - Módulo de clientes"
+            tags={transformPermissionsInformation('customers', permissions)}
+          />
+        </>
+      )}
     </div>
   );
 }

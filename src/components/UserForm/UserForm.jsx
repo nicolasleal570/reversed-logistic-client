@@ -48,7 +48,7 @@ export function UserForm({
       setValue('fullName', user.fullName);
       setValue('email', user.email);
       setValue('phone', user.phone);
-      setValue('roleId', String(user.roles[0].id));
+      setValue('roleId', String(user.roles[0]?.id));
     }
   }, [user, setValue]);
 
