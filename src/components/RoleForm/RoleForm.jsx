@@ -30,14 +30,16 @@ export function RoleForm({
   const handleOnFinishUpdate = () => router.push('/roles');
 
   const onSubmit = async (data) => {
-    const { name, description, ...permissions } = data;
+    const { name, description, ...selectedPermissions } = data;
+
+    const permissionsWithFormat = Object.entries(selectedPermissions).filter(
+      ([, item]) => item === true
+    );
 
     const payload = {
       name,
       description,
-      permissions: Object.entries(permissions).filter(
-        ([, item]) => item === true
-      ),
+      permissions: permissionsWithFormat,
     };
 
     if (!isEdit) {
@@ -51,6 +53,10 @@ export function RoleForm({
     if (role) {
       setValue('name', role.name);
       setValue('description', role.description);
+
+      role.permissions.forEach((item) => {
+        setValue(item.value.toLowerCase(), true);
+      });
     }
   }, [role, setValue]);
 

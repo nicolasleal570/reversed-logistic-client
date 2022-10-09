@@ -12,8 +12,6 @@ export function RoleSummary({ role }) {
     [role]
   );
 
-  console.log(permissions);
-
   return (
     <div className="w-full lg:w-96">
       <h2 className="block w-full text-lg leading-7 font-semibold mb-8">

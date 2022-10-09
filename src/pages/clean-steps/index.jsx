@@ -5,8 +5,6 @@ import { withProtection } from '@components/withProtection';
 import { parseCookies } from '@utils/parseCookies';
 
 function CleanProcessStepsPage({ processSteps }) {
-  console.log({ processSteps });
-
   return (
     <Layout
       title="Lista de procesos de limpieza"

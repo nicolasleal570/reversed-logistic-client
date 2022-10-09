@@ -81,7 +81,7 @@ export function UserForm({
           name="email"
           placeholder="john@email.com"
           errors={errors}
-          disabled
+          disabled={isEdit}
           inputProps={{
             ...register('email', {
               required: 'Debes ingresar un correo electrónico válido',
