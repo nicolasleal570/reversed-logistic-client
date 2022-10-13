@@ -7,7 +7,7 @@ import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { fetchLogin } from '@api/auth/methods';
 import { Button } from '@components/Button/Button';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,10 +16,12 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
   const [, setCookie, removeCookie] = useCookies(['token']);
 
   const onSubmit = async (data) => {
     try {
+      setIsLoading(true);
       const { data: info } = await fetchLogin(data);
 
       setCookie('token', info.token, {
@@ -35,6 +37,7 @@ export default function LoginPage() {
 
       router.push(router.query.from || '/home');
     } catch (error) {
+      setIsLoading(false);
       console.log({ error });
     }
   };
@@ -92,7 +95,12 @@ export default function LoginPage() {
             </a>
           </Link>
 
-          <Button type="submit">Iniciar sesión</Button>
+          <Button
+            type="submit"
+            disabled={isLoading || Object.values(errors).length > 0}
+          >
+            Iniciar sesión
+          </Button>
 
           <p className="mt-5 text-sm leading-5 font-normal text-center text-gray-500">
             Aún no eres miembro?{' '}
