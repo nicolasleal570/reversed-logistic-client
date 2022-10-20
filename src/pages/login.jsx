@@ -8,21 +8,29 @@ import { FormRow } from '@components/FormRow/FormRow';
 import { fetchLogin } from '@api/auth/methods';
 import { Button } from '@components/Button/Button';
 import { useEffect, useState } from 'react';
+import { useNotify } from '@hooks/useNotify';
 
 export default function LoginPage() {
   const router = useRouter();
   const {
     register,
     handleSubmit,
+    setError,
+    setValue,
     formState: { errors },
   } = useForm();
+  const { asyncNotify } = useNotify();
   const [isLoading, setIsLoading] = useState(false);
   const [, setCookie, removeCookie] = useCookies(['token']);
 
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
-      const { data: info } = await fetchLogin(data);
+      const { data: info } = await asyncNotify(fetchLogin(data), {
+        pending: 'Valindando los datos...',
+        success: 'Bienvenido de vuelta!',
+        error: 'Revisa los datos ingresados.',
+      });
 
       setCookie('token', info.token, {
         path: '/',
@@ -38,7 +46,9 @@ export default function LoginPage() {
       router.push(router.query.from || '/home');
     } catch (error) {
       setIsLoading(false);
-      console.log({ error });
+      setValue('password', '');
+      setError('email', { shouldFocus: true });
+      setError('password', { shouldFocus: false });
     }
   };
 
@@ -95,10 +105,7 @@ export default function LoginPage() {
             </a>
           </Link>
 
-          <Button
-            type="submit"
-            disabled={isLoading || Object.values(errors).length > 0}
-          >
+          <Button type="submit" disabled={isLoading}>
             Iniciar sesión
           </Button>
 

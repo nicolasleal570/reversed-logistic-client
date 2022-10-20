@@ -49,7 +49,7 @@ export function OrdersByCustomerLocationsGraph({ customers }) {
           : 'Total de órdenes realizadas por un cliente y sus sucursales'}
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full lg:w-1/2 mb-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-8">
         <FormRow>
           <InputLabel title="Selecciona un cliente" inputId="customerId" />
 

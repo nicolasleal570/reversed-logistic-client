@@ -4,8 +4,12 @@ import Head from 'next/head';
 import { CookiesProvider } from 'react-cookie';
 import NProgress from 'nprogress';
 import dayjs from 'dayjs';
-import 'dayjs/locale/es';
+import { ToastContainer } from 'react-toastify';
 import UserContextProvider from '@contexts/UserContext/UserContext';
+
+import 'dayjs/locale/es';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 import '../styles/globals.css';
 import '../styles/nprogress.css';
 
@@ -40,6 +44,7 @@ function MyApp({ Component, pageProps }) {
         </Head>
 
         <Component {...pageProps} />
+        <ToastContainer />
       </UserContextProvider>
     </CookiesProvider>
   );
