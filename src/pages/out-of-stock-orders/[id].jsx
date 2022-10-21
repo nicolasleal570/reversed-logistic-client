@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { parseCookies } from '@utils/parseCookies';
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
@@ -8,7 +7,6 @@ import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
 import { useEffect, useState } from 'react';
 
 function EditOrderPage({ outOfStockOrder: data }) {
-  const router = useRouter();
   const [outOfStockOrder, setOutOfStockOrder] = useState(data);
   const { takeOutOfStockOrder, finishOutOfStockOrder } = useOutOfStockOrders();
 

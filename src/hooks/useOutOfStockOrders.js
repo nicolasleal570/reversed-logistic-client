@@ -1,5 +1,6 @@
 import { useCookies } from 'react-cookie';
 import * as outOfStockOrdersAPI from '@api/out-of-stock/methods';
+import { useNotify } from './useNotify';
 
 const {
   createOutOfStockOrder: createcreateOutOfStockOrderAPI,
@@ -10,10 +11,15 @@ const {
 
 export function useOutOfStockOrders() {
   const [cookies] = useCookies(['token']);
+  const { asyncNotify } = useNotify();
 
   const createOutOfStockOrder = async (data) => {
     try {
-      return createcreateOutOfStockOrderAPI(data, cookies.token);
+      return asyncNotify(createcreateOutOfStockOrderAPI(data, cookies.token), {
+        pending: 'Creando reporte de agotamiento...',
+        success: 'Se creó el reporte correctamente.',
+        error: 'Tuvimos problemas creando el reporte. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }
@@ -21,7 +27,11 @@ export function useOutOfStockOrders() {
 
   const updateOutOfStockOrder = async (id, data) => {
     try {
-      return updateOutOfStockOrderAPI(id, data, cookies.token);
+      return asyncNotify(updateOutOfStockOrderAPI(id, data, cookies.token), {
+        pending: 'Actualizando reporte de agotamiento...',
+        success: 'Se actualizó el reporte correctamente.',
+        error: 'Tuvimos problemas actulizando el reporte. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +39,11 @@ export function useOutOfStockOrders() {
 
   const takeOutOfStockOrder = async (data) => {
     try {
-      return takeOutOfStockOrderAPI(data, cookies.token);
+      return asyncNotify(takeOutOfStockOrderAPI(data, cookies.token), {
+        pending: 'Comenzando con la recogida...',
+        success: 'Se comenzó la recogida correctamente.',
+        error: 'Tuvimos problemas comenzando la recogida. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +51,11 @@ export function useOutOfStockOrders() {
 
   const finishOutOfStockOrder = async (data) => {
     try {
-      return finishOutOfStockOrderAPI(data, cookies.token);
+      return asyncNotify(finishOutOfStockOrderAPI(data, cookies.token), {
+        pending: 'Entregando la recogida...',
+        success: 'Se entregó todo correctamente.',
+        error: 'Tuvimos problemas haciendo la entrega. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }
