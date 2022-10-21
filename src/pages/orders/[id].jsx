@@ -59,7 +59,7 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
 
       {order?.orderStatus?.value === 'QUEUED' && (
         <div className="mb-8 border-b border-gray-200 pb-8">
-          <TakeOrderButton order={order} />
+          <TakeOrderButton order={order} setOrder={setOrder} />
         </div>
       )}
 
@@ -80,6 +80,10 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
       {isEdit ? (
         <OrderForm
           order={order}
+          onUpdate={(updatedOrder) => {
+            setOrder(updatedOrder);
+            setIsEdit(false);
+          }}
           customers={customers ?? []}
           cases={cases ?? []}
           casesContent={casesContent ?? []}

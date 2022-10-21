@@ -8,12 +8,7 @@ import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { fetchCustomerLocationsByCustomer } from '@api/customers/methods';
 import { useOrders } from '@hooks/useOrders';
-import { useRouter } from 'next/router';
 import { MultipleSelectCasesField } from '@components/MultipleSelectCasesField/MultipleSelectCasesField';
-
-// export function formatCustomerLocationName(customer, location) {
-//   return `${customer.companyName}, ${location.line1}, ${location.state}`;
-// }
 
 const INITIAL_CASE = { caseId: '', caseContentId: '', contentQuantity: '' };
 
@@ -21,12 +16,12 @@ function OrderForm({
   isEdit = false,
   onlyRead = false,
   order,
+  onUpdate,
   customers,
   cases,
   casesContent,
   token,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -67,15 +62,12 @@ function OrderForm({
     }
   };
 
-  const handleOnFinishUpdate = () => {
-    router.push('/orders');
-  };
-
   const onSubmit = async (data) => {
     if (!isEdit) {
-      createOrder(data, token);
+      await createOrder(data, token);
     } else {
-      updateOrder(order.id, data, token, handleOnFinishUpdate);
+      const { data: updatedOrder } = await updateOrder(order.id, data, token);
+      onUpdate(updatedOrder);
     }
   };
 
