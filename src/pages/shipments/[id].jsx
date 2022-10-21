@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { fetchShipment } from '@api/shipments/methods';
@@ -12,10 +11,9 @@ import { fetchTrucks } from '@api/trucks/methods';
 import { useShipments } from '@hooks/useShipments';
 
 function EditShipmentPage({ shipment: data, trucks, token }) {
-  const router = useRouter();
   const [shipment, setShipment] = useState(data);
   const [isEdit, setIsEdit] = useState(false);
-  const { startShipment, updateShipment } = useShipments();
+  const { startShipment, deliverShipment } = useShipments();
 
   useEffect(() => {
     setShipment(data);
@@ -81,9 +79,7 @@ function EditShipmentPage({ shipment: data, trucks, token }) {
             type="button"
             className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
             onClick={async () => {
-              const { data: updatedData } = await updateShipment(shipment.id, {
-                deliveredAt: new Date(),
-              });
+              const { data: updatedData } = await deliverShipment(shipment.id);
               setShipment(updatedData);
             }}
           >
@@ -99,6 +95,10 @@ function EditShipmentPage({ shipment: data, trucks, token }) {
           isEdit={isEdit}
           onlyRead={!isEdit}
           trucks={trucks}
+          onUpdate={(updatedShipment) => {
+            setShipment(updatedShipment);
+            setIsEdit(false);
+          }}
         />
       ) : (
         <ShipmentSummary shipment={shipment} />

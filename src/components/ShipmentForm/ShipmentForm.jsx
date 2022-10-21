@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { SelectField } from '@components/SelectField/SelectField';
 import { InputField } from '@components/InputField/InputField';
@@ -15,8 +14,8 @@ export function ShipmentForm({
   onlyRead = false,
   shipment,
   trucks,
+  onUpdate,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -26,14 +25,16 @@ export function ShipmentForm({
 
   const { createShipment, updateShipment } = useShipments();
 
-  const handleOnFinishUpdate = () => router.push('/shipments');
-
   const onSubmit = async (data) => {
     const { customerId: _, ...restData } = data;
     if (!isEdit) {
-      createShipment(restData);
+      await createShipment(restData);
     } else {
-      updateShipment(shipment.id, restData, handleOnFinishUpdate);
+      const { data: updatedShipment } = await updateShipment(
+        shipment.id,
+        restData
+      );
+      onUpdate(updatedShipment);
     }
   };
 
