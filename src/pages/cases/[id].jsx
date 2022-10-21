@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { fetchCase } from '@api/cases/methods';
@@ -8,8 +8,13 @@ import { withProtection } from '@components/withProtection';
 import { CaseSummary } from '@components/CaseSummary/CaseSummary';
 import CaseForm from '@components/CaseForm/CaseForm';
 
-function EditCasePage({ case: caseInfo, token }) {
+function EditCasePage({ case: data, token }) {
+  const [caseInfo, setCaseInfo] = useState({ ...data });
   const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    setCaseInfo(data);
+  }, [data]);
 
   return (
     <Layout
@@ -48,6 +53,10 @@ function EditCasePage({ case: caseInfo, token }) {
       {isEdit ? (
         <CaseForm
           case={caseInfo}
+          onUpdate={(updatedCase) => {
+            setCaseInfo(updatedCase);
+            setIsEdit(false);
+          }}
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}

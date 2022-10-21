@@ -38,11 +38,11 @@ export function withProtection(WrappedComponent) {
     if (!user) {
       if (res) {
         res.writeHead(302, {
-          Location: redirectUrl(context.pathname),
+          Location: redirectUrl(context.asPath),
         });
         res.end();
       } else {
-        Router.replace(redirectUrl(context.pathname));
+        Router.replace(redirectUrl(context.asPath));
       }
     } else if (Object.keys(user?.location ?? {}).length > 0) {
       if (res) {

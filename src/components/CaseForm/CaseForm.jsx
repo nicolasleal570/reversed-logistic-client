@@ -6,8 +6,15 @@ import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { useCases } from '@hooks/useCases';
+import { useNotify } from '@hooks/useNotify';
 
-function CaseForm({ isEdit = false, onlyRead = false, case: caseInfo, token }) {
+function CaseForm({
+  isEdit = false,
+  onlyRead = false,
+  case: caseInfo,
+  onUpdate,
+  token,
+}) {
   const router = useRouter();
   const {
     register,
@@ -15,16 +22,28 @@ function CaseForm({ isEdit = false, onlyRead = false, case: caseInfo, token }) {
     formState: { errors },
     setValue,
   } = useForm();
+  const { asyncNotify } = useNotify();
 
   const { createCase, updateCase } = useCases();
 
-  const handleOnFinishUpdate = () => router.push('/cases');
-
   const onSubmit = async (data) => {
     if (!isEdit) {
-      createCase(data, token);
+      await asyncNotify(createCase(data, token), {
+        pending: 'Creando un case...',
+        success: 'Se creó correctamente.',
+        error: 'Tuvimos problemas con la creación del case. Intenta de nuevo.',
+      });
     } else {
-      updateCase(caseInfo.id, data, token, handleOnFinishUpdate);
+      const { data: updatedCase } = await asyncNotify(
+        updateCase(caseInfo.id, data, token),
+        {
+          pending: 'Actualizando el case...',
+          success: 'Se actualizó correctamente.',
+          error:
+            'Tuvimos problemas con la actualización del case. Intenta de nuevo.',
+        }
+      );
+      onUpdate(updatedCase);
     }
   };
 
