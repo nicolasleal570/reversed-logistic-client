@@ -30,9 +30,15 @@ export function ShipmentForm({
     if (!isEdit) {
       await createShipment(restData);
     } else {
+      const { shipmentAt, ...rest } = restData;
+      const payload = {
+        shipmentAt: shipmentAt === 'Invalid Date' ? null : shipmentAt,
+        ...rest,
+      };
+
       const { data: updatedShipment } = await updateShipment(
         shipment.id,
-        restData
+        payload
       );
       onUpdate(updatedShipment);
     }

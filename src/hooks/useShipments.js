@@ -42,14 +42,8 @@ export function useShipments() {
 
   const updateShipment = async (shipmentId, data) => {
     try {
-      const { shipmentAt: date, ...rest } = data;
-      const payload = {
-        shipmentAt: Number.isNaN(new Date(date).getTime()) ? null : date,
-        ...rest,
-      };
-
       return asyncNotify(
-        updateShipmentAPI(shipmentId, payload, cookies.token),
+        updateShipmentAPI(shipmentId, data, cookies.token),
         {
           pending: 'Actualizando la órden de envío...',
           success: 'Se actualizó correctamente.',

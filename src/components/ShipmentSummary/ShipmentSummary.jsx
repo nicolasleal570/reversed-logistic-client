@@ -13,6 +13,7 @@ export function ShipmentSummary({ shipment }) {
     createdBy,
     createdAt,
     status,
+    orders,
   } = shipment ?? {};
 
   return (
@@ -78,8 +79,8 @@ export function ShipmentSummary({ shipment }) {
         Órdenes asignadas
       </h2>
 
-      {shipment?.orders?.length > 0 ? (
-        <OrdersTable orders={shipment?.orders || []} onlyTable />
+      {orders?.length > 0 ? (
+        <OrdersTable orders={orders || []} onlyTable />
       ) : (
         <DataSection label="" value="Ninguna" />
       )}
