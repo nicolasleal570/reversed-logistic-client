@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
 import * as casesAPI from '@api/cases/methods';
 import { useCallback } from 'react';
+import { useNotify } from './useNotify';
 
 const {
   createCase: createCaseAPI,
@@ -12,6 +13,7 @@ const {
 export function useCases() {
   const router = useRouter();
   const [cookies] = useCookies();
+  const { asyncNotify } = useNotify();
 
   const createCase = async (data, token) => {
     try {
@@ -45,7 +47,14 @@ export function useCases() {
 
   const handleCaseStateAfterPickupDone = async (caseId, data, token) => {
     try {
-      return handleCaseStateAfterPickupDoneAPI(caseId, data, token);
+      return asyncNotify(
+        handleCaseStateAfterPickupDoneAPI(caseId, data, token),
+        {
+          pending: 'Verificando estatus...',
+          success: 'Se guardo el estatus correctamente.',
+          error: 'Tuvimos problemas verificando el estatus. Intenta de nuevo.',
+        }
+      );
     } catch (error) {
       console.log(error);
     }

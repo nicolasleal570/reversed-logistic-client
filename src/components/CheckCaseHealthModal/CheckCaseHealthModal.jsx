@@ -8,10 +8,13 @@ import { FormRow } from '@components/FormRow/FormRow';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
 import { fetchCaseInfoLastOutOfStock } from '@api/cases/methods';
 import { StatusRadioGroup } from './StatusRadioGroup';
-import { formatCustomerLocationName } from '@components/OrderForm/OrderForm';
 import { useCases } from '@hooks/useCases';
 
-export default function CheckCaseHealthModal({ isOpen, setIsOpen }) {
+export default function CheckCaseHealthModal({
+  isOpen,
+  setIsOpen,
+  setCaseInfo,
+}) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -32,13 +35,13 @@ export default function CheckCaseHealthModal({ isOpen, setIsOpen }) {
       ...data,
       outOfStockItemId: lastOutOfStock.id,
     };
-    await handleCaseStateAfterPickupDone(
+    const res = await handleCaseStateAfterPickupDone(
       router.query.id,
       payload,
       cookies.token
     );
+    setCaseInfo(res.data.case);
     closeModal();
-    router.push(`/cases/${router.query.id}`);
   }
 
   useEffect(() => {

@@ -1,8 +1,11 @@
+import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
 import { outOfStockOrderStatusColor } from '@components/OutOfStockOrdersTable/OutOfStockOrdersTable';
+import Link from 'next/link';
 
 export function OutOfStockOrderSummary({ outOfStockOrder }) {
+  const router = useRouter();
   const {
     customerLocation,
     items,
@@ -83,6 +86,16 @@ export function OutOfStockOrderSummary({ outOfStockOrder }) {
               value={item.caseContent.name}
             />
             <DataSection label="Orden de venta" value={`#OR${item.order.id}`} />
+
+            <div className="flex items-end">
+              {outOfStockOrder?.status?.value === 'PICKUP_DONE' && (
+                <Link href="/cases/[id]" as={`/cases/${item.case.id}`}>
+                  <a className="ml-auto inline-block border border-indigo-600 text-indigo-600 px-3 py-2 rounded-lg text-sm">
+                    Examinar
+                  </a>
+                </Link>
+              )}
+            </div>
           </div>
         );
       })}

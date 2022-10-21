@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link, useRouter } from 'next/router';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { fetchCase } from '@api/cases/methods';
@@ -7,14 +8,29 @@ import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
 import { CaseSummary } from '@components/CaseSummary/CaseSummary';
 import CaseForm from '@components/CaseForm/CaseForm';
+import CheckCaseHealthModal from '@components/CheckCaseHealthModal/CheckCaseHealthModal';
+import { useCases } from '@hooks/useCases';
 
 function EditCasePage({ case: data, token }) {
+  const { query } = useRouter();
+  const { updateCase } = useCases();
   const [caseInfo, setCaseInfo] = useState({ ...data });
   const [isEdit, setIsEdit] = useState(false);
+  const [showCheckModal, setShowCheckModal] = useState(false);
 
   useEffect(() => {
     setCaseInfo(data);
   }, [data]);
+
+  useEffect(() => {
+    if (
+      query.checkHealth === 'true' &&
+      caseInfo &&
+      caseInfo.state === 'PICKUP_DONE'
+    ) {
+      setShowCheckModal(true);
+    }
+  }, [query, caseInfo]);
 
   return (
     <Layout
@@ -50,6 +66,46 @@ function EditCasePage({ case: data, token }) {
         </Switch.Group>
       </div>
 
+      {caseInfo.state === 'OUT_OF_STOCK' &&
+        caseInfo.currentOutOfStockOrderId >= 0 && (
+          <Link
+            href={{
+              pathname: `/out-of-stock-orders/${caseInfo.currentOutOfStockOrderId}`,
+            }}
+          >
+            <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
+              Revisar orden
+            </a>
+          </Link>
+        )}
+      {caseInfo.state === 'PICKUP_DONE' && (
+        <div className="mb-8 border-b border-gray-200 pb-8">
+          <button
+            type="button"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            onClick={() => setShowCheckModal(true)}
+          >
+            Examinar
+          </button>
+        </div>
+      )}
+      {caseInfo.state === 'CLEAN_PROCESS_DONE' && (
+        <div className="mb-8 border-b border-gray-200 pb-8">
+          <button
+            type="button"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            onClick={async () => {
+              const { data: updatedData } = await updateCase(caseInfo.id, {
+                state: 'AVAILABLE',
+              });
+              setCaseInfo(updatedData);
+            }}
+          >
+            Habilitar
+          </button>
+        </div>
+      )}
+
       {isEdit ? (
         <CaseForm
           case={caseInfo}
@@ -63,6 +119,14 @@ function EditCasePage({ case: data, token }) {
         />
       ) : (
         <CaseSummary case={caseInfo} />
+      )}
+
+      {showCheckModal && (
+        <CheckCaseHealthModal
+          isOpen={showCheckModal}
+          setIsOpen={setShowCheckModal}
+          setCaseInfo={setCaseInfo}
+        />
       )}
     </Layout>
   );
