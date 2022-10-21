@@ -1,35 +1,46 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
 import { useCasesContent } from '@hooks/useCasesContent';
+import { useNotify } from '@hooks/useNotify';
 
 export function CaseContentForm({
   isEdit = false,
   onlyRead = false,
   caseContent,
   token,
+  onUpdate,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
   } = useForm();
+  const { asyncNotify } = useNotify();
 
   const { createCaseContent, updateCaseContent } = useCasesContent();
 
-  const handleOnFinishUpdate = () => router.push('/flavors');
-
   const onSubmit = async (data) => {
     if (!isEdit) {
-      createCaseContent(data, token);
+      await asyncNotify(createCaseContent(data, token), {
+        pending: 'Creando el sabpr...',
+        success: 'Se creó correctamente.',
+        error: 'Tuvimos problemas con la creación. Intenta de nuevo.',
+      });
     } else {
-      updateCaseContent(caseContent.id, data, token, handleOnFinishUpdate);
+      const { data: updatedData } = await asyncNotify(
+        updateCaseContent(caseContent.id, data, token),
+        {
+          pending: 'Actualizando el sabpr...',
+          success: 'Se actualizó correctamente.',
+          error: 'Tuvimos problemas con la actualización. Intenta de nuevo.',
+        }
+      );
+      onUpdate(updatedData);
     }
   };
 

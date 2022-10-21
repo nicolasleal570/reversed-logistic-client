@@ -23,16 +23,14 @@ export function useCasesContent() {
     }
   };
 
-  const updateCaseContent = async (caseId, data, token, onFinish) => {
+  const updateCaseContent = async (caseId, data, token) => {
     try {
       const { description, ...rest } = data;
-      const res = await updateCaseContentAPI(
+      return updateCaseContentAPI(
         caseId,
         { description: description || undefined, ...rest },
         token
       );
-
-      onFinish && onFinish();
     } catch (error) {
       console.log(error);
     }

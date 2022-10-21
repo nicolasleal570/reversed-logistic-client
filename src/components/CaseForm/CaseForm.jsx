@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
@@ -15,7 +14,6 @@ function CaseForm({
   onUpdate,
   token,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
