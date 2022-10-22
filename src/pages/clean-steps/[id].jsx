@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { parseCookies } from '@utils/parseCookies';
@@ -8,8 +8,13 @@ import { fetchProcessStep } from '@api/process-steps/methods';
 import { ProcessStepSummary } from '@components/ProcessStepSummary/ProcessStepSummary';
 import { ProcessStepForm } from '@components/ProcessStepForm/ProcessStepForm';
 
-function EditProcessStepPage({ processStep, token }) {
+function EditProcessStepPage({ processStep: data, token }) {
+  const [processStep, setProcessStep] = useState({ ...data });
   const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    setProcessStep(data);
+  }, [data]);
 
   return (
     <Layout
@@ -51,6 +56,10 @@ function EditProcessStepPage({ processStep, token }) {
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}
+          onUpdate={(updatedStep) => {
+            setProcessStep(updatedStep);
+            setIsEdit(false);
+          }}
         />
       ) : (
         <ProcessStepSummary processStep={processStep} />
