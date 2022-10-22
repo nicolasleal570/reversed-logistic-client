@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { fetchCase } from '@api/cases/methods';
@@ -68,16 +69,17 @@ function EditCasePage({ case: data, token }) {
 
       {caseInfo.state === 'OUT_OF_STOCK' &&
         caseInfo.currentOutOfStockOrderId >= 0 && (
-          <Link
-            href={{
-              pathname: `/out-of-stock-orders/${caseInfo.currentOutOfStockOrderId}`,
-            }}
-          >
-            <a className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2">
-              Revisar orden
-            </a>
-          </Link>
+          <div className="mb-8 border-b border-gray-200 pb-8">
+            <Link
+              href={`/out-of-stock-orders/${caseInfo.currentOutOfStockOrderId}`}
+            >
+              <a className="border border-indigo-600 text-indigo-600 inline-block px-3 py-2 rounded-lg text-sm mr-2">
+                <span>Revisar orden de agotamiento</span>
+              </a>
+            </Link>
+          </div>
         )}
+
       {caseInfo.state === 'PICKUP_DONE' && (
         <div className="mb-8 border-b border-gray-200 pb-8">
           <button

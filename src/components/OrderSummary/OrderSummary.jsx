@@ -20,6 +20,7 @@ export function OrderSummary({ order, setOrder }) {
       <DataSection
         label="Cliente"
         value={order.customerLocation.customer.companyName}
+        url={`/customers/${order.customerLocation.id}`}
       />
 
       <DataSection label="Sucursal" value={order.customerLocation.name} />
@@ -44,6 +45,11 @@ export function OrderSummary({ order, setOrder }) {
           title: order?.orderStatus?.name,
           color: orderStatusColor[order?.orderStatus?.value],
         }}
+      />
+
+      <DataSection
+        label="Responsable"
+        value={order?.assignedTo?.fullName || '-'}
       />
 
       <DataSection label="Total" value={formatPrice(order.total)} />

@@ -17,7 +17,7 @@ const header = [
     accessor: 'id',
   },
   {
-    Header: 'Fecha de orden',
+    Header: 'Fecha de creación',
     accessor: 'purchaseDate',
   },
   {
@@ -153,13 +153,15 @@ export function OrdersTable({
 
   return (
     <>
-      <FilterPillTable
-        tabs={filterTabs}
-        currentTab={currentTab}
-        onClick={(value) =>
-          value ? setCurrentTab(value) : setCurrentTab('ALL')
-        }
-      />
+      {filterTabs.length > 0 && (
+        <FilterPillTable
+          tabs={filterTabs}
+          currentTab={currentTab}
+          onClick={(value) =>
+            value ? setCurrentTab(value) : setCurrentTab('ALL')
+          }
+        />
+      )}
 
       <Card>
         <Table

@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import { useRouter } from 'next/router';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { withLocationProtection } from '@components/withLocationProtection';
 import { InputLabel } from '@components/InputLabel/InputLabel';
@@ -14,12 +13,12 @@ import { useAuth } from '@hooks/useAuth';
 const INITIAL_CASE_ID = { caseId: '' };
 
 function OutOfStockPage({ cases, customerLocationId, location: client }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    reset,
   } = useForm({
     defaultValues: {
       cases: [INITIAL_CASE_ID],
@@ -49,7 +48,7 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
 
     try {
       await createOutOfStockOrder({ items, customerLocationId });
-      router.push('/out-of-stock');
+      reset();
     } catch (error) {
       console.log({ error });
     }

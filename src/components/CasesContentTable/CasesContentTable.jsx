@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Table from '@components/Table/Table';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
-import { Badge } from '@components/Badge/Badge';
 
 const header = [
   {
