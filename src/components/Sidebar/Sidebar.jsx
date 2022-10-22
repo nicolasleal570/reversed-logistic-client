@@ -37,7 +37,9 @@ export function Sidebar() {
         </button>
 
         <section className="w-full p-4 md:py-8 border-b border-gray-200">
-          <Link href="/">LOGO</Link>
+          <Link href="/">
+            <a className="text-white">LOGO</a>
+          </Link>
         </section>
 
         <div className="overflow-y-scroll lg:overflow-y-auto">

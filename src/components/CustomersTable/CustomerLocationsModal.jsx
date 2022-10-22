@@ -15,13 +15,13 @@ function ModalBody({ data, closeModal }) {
       </Dialog.Title>
 
       <div className="w-full mt-4">
-        {data.locations.map((item, idx) => (
+        {data.locations.map((item) => (
           <div
             key={item.id}
             className="bg-white p-4 pb-0 border border-gray-200 rounded mb-6"
           >
             <h3 className="block w-full text-md leading-7 font-medium">
-              Sucursal {idx + 1}
+              {item.name}
             </h3>
 
             <DataSection
