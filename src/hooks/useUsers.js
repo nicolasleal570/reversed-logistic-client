@@ -1,14 +1,20 @@
 import { useRouter } from 'next/router';
 import * as usersApi from '@api/users/methods';
+import { useNotify } from './useNotify';
 
 const { createUser: createUserAPI, updateUser: updateUserAPI } = usersApi;
 
 export function useUsers() {
   const router = useRouter();
+  const { asyncNotify } = useNotify();
 
   const createUser = async (data, token) => {
     try {
-      const res = await createUserAPI(data, token);
+      const res = await asyncNotify(createUserAPI(data, token), {
+        pending: 'Creando un nuevo empleado...',
+        success: 'Se creó un nuevo empleado correctamente',
+        error: 'Tuvimos problemas al crear el empleado. Intenta de nuevo.',
+      });
 
       router.push(`/users/${res.data.id}`);
     } catch (error) {
@@ -16,11 +22,13 @@ export function useUsers() {
     }
   };
 
-  const updateUser = async (id, data, token, onFinish) => {
+  const updateUser = async (id, data, token) => {
     try {
-      await updateUserAPI(id, data, token);
-
-      onFinish && onFinish();
+      return asyncNotify(updateUserAPI(id, data, token), {
+        pending: 'Actualizando el empleado...',
+        success: 'Se actualizó el empleado correctamente',
+        error: 'Tuvimos problemas al actualizar el empleado. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }

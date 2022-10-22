@@ -7,14 +7,14 @@ export function ChangePasswordButton({ user }) {
   const { handleRecoveryPassword } = useAuth();
   const [isMailSend, setIsMailSend] = useState(false);
 
-  if (!authUser.isSudo) {
+  if (!authUser?.isSudo) {
     return null;
   }
 
   return (
     <div className="mb-8 border-b border-gray-200 pb-8">
-      {!isMailSend ? (
-        <p>{`Se envió un correo a "${user.email}"`}</p>
+      {isMailSend ? (
+        <p>{`Se envió un correo a "${user.email}" para reiniciar su contraseña`}</p>
       ) : (
         <button
           type="button"

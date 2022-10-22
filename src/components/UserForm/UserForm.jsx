@@ -4,7 +4,6 @@ import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
-import { useRouter } from 'next/router';
 import { SelectField } from '@components/SelectField/SelectField';
 import { useUsers } from '@hooks/useUsers';
 
@@ -14,8 +13,8 @@ export function UserForm({
   user,
   roles,
   token,
+  onUpdate,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -24,13 +23,9 @@ export function UserForm({
   } = useForm();
   const { createUser, updateUser } = useUsers();
 
-  const handleOnFinishUpdate = () => {
-    router.push('/users');
-  };
-
   const onSubmit = async (data) => {
     if (!isEdit) {
-      createUser(
+      await createUser(
         {
           ...data,
           password: 'password',
@@ -39,7 +34,8 @@ export function UserForm({
       );
     } else {
       const { email: _, ...rest } = data;
-      updateUser(user.id, rest, token, handleOnFinishUpdate);
+      const { data: updatedUser } = await updateUser(user.id, rest, token);
+      onUpdate(updatedUser);
     }
   };
 

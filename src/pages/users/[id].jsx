@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { parseCookies } from '@utils/parseCookies';
@@ -10,8 +10,13 @@ import { UserForm } from '@components/UserForm/UserForm';
 import { fetchRoles } from '@api/roles/methods';
 import { ChangePasswordButton } from '@components/UserSummary/ChangePasswordButton';
 
-function UserPage({ userInfo, roles, token }) {
+function UserPage({ userInfo: data, roles, token }) {
   const [isEdit, setIsEdit] = useState(false);
+  const [userInfo, setUserInfo] = useState({ ...data });
+
+  useEffect(() => {
+    setUserInfo(data);
+  }, [data]);
 
   return (
     <Layout
@@ -47,7 +52,7 @@ function UserPage({ userInfo, roles, token }) {
         </Switch.Group>
       </div>
 
-      <ChangePasswordButton user={userInfo} />
+      {!isEdit && <ChangePasswordButton user={userInfo} />}
 
       {isEdit ? (
         <UserForm
@@ -56,6 +61,10 @@ function UserPage({ userInfo, roles, token }) {
           roles={roles}
           isEdit={isEdit}
           onlyRead={!isEdit}
+          onUpdate={(updatedUser) => {
+            setUserInfo(updatedUser);
+            setIsEdit(false);
+          }}
         />
       ) : (
         <UserSummary user={userInfo} />
