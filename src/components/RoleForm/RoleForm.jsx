@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
@@ -15,8 +14,8 @@ export function RoleForm({
   role,
   permissions,
   token,
+  onUpdate,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -26,8 +25,6 @@ export function RoleForm({
   } = useForm();
 
   const { createRole, updateRole } = useRoles();
-
-  const handleOnFinishUpdate = () => router.push('/roles');
 
   const onSubmit = async (data) => {
     const { name, description, ...selectedPermissions } = data;
@@ -45,7 +42,8 @@ export function RoleForm({
     if (!isEdit) {
       createRole(payload, token);
     } else {
-      updateRole(role.id, payload, token, handleOnFinishUpdate);
+      const { data: updatedRole } = await updateRole(role.id, payload, token);
+      onUpdate(updatedRole);
     }
   };
 

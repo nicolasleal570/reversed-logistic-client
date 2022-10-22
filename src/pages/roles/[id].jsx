@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { parseCookies } from '@utils/parseCookies';
@@ -9,8 +9,13 @@ import { RoleForm } from '@components/RoleForm/RoleForm';
 import { RoleSummary } from '@components/RoleSummary/RoleSummary';
 import { fetchPermissions } from '@api/permissions/methods';
 
-function EditRolePage({ role, permissions, token }) {
+function EditRolePage({ role: data, permissions, token }) {
   const [isEdit, setIsEdit] = useState(false);
+  const [role, setRole] = useState({ ...data });
+
+  useEffect(() => {
+    setRole(data);
+  }, [data]);
 
   return (
     <Layout
@@ -55,6 +60,10 @@ function EditRolePage({ role, permissions, token }) {
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}
+          onUpdate={(updatedRole) => {
+            setRole(updatedRole);
+            setIsEdit(false);
+          }}
         />
       ) : (
         <RoleSummary role={role} />
