@@ -8,6 +8,7 @@ import { fetchUser } from '@api/users/methods';
 import { UserSummary } from '@components/UserSummary/UserSummary';
 import { UserForm } from '@components/UserForm/UserForm';
 import { fetchRoles } from '@api/roles/methods';
+import { ChangePasswordButton } from '@components/UserSummary/ChangePasswordButton';
 
 function UserPage({ userInfo, roles, token }) {
   const [isEdit, setIsEdit] = useState(false);
@@ -45,6 +46,8 @@ function UserPage({ userInfo, roles, token }) {
           </>
         </Switch.Group>
       </div>
+
+      <ChangePasswordButton user={userInfo} />
 
       {isEdit ? (
         <UserForm

@@ -13,12 +13,17 @@ export function withProtection(WrappedComponent) {
   const Component = ({ user: authUser, ...props }) => {
     const { setUser } = useUser();
 
+    const userWithFormat = {
+      ...authUser.user,
+      isSudo: authUser.user.roles?.map((item) => item.value)?.includes('SUDO'),
+    };
+
     useEffect(() => {
-      setUser(authUser?.user ?? null);
+      setUser(userWithFormat ?? null);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [authUser]);
 
-    return <WrappedComponent user={authUser.user} {...props} />;
+    return <WrappedComponent user={userWithFormat} {...props} />;
   };
 
   Component.getInitialProps = async ({ req, res, ...context }) => {

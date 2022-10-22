@@ -7,11 +7,16 @@ import {
 import { withProtection } from '@components/withProtection';
 import { Layout } from '@components/Layout/Layout';
 import { DashboardInfoCard } from '@components/DashboardInfoCard/DashboardInfoCard';
+import { useUser } from '@hooks/useUser';
 
 function HomePage() {
+  const { user } = useUser();
+
   return (
     <Layout
-      title="¡Bienvenidos!"
+      title={
+        user?.fullName ? `¡Bienvenido ${user?.fullName}!` : `¡Bienvenidos!`
+      }
       description="Esperamos que vayas progresando con tu proyecto. A continuación te
         brindamos algunos accesos rápidos hacia los diferentes módulos de nuestra
         plataforma para que puedas empezar a gestionar la logística inversa de

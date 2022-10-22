@@ -1,6 +1,10 @@
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
-import { logoutUser } from '@api/auth/methods';
+import {
+  changePassword,
+  logoutUser,
+  recoveryPassword,
+} from '@api/auth/methods';
 import { useNotify } from './useNotify';
 
 export function useAuth() {
@@ -24,7 +28,36 @@ export function useAuth() {
     }
   };
 
+  const handleRecoveryPassword = async (data) => {
+    const { token } = cookies;
+    try {
+      return asyncNotify(recoveryPassword(data, token), {
+        pending: 'Valindando información...',
+        success:
+          'Se envió un correo al usuario para que reinicie su contraseña.',
+        error: 'Tuvimos problemas validando la información. Intenta de nuevo.',
+      });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  const handleChangePassword = async (data) => {
+    const { token } = cookies;
+    try {
+      return asyncNotify(changePassword(data, token), {
+        pending: 'Valindando información...',
+        success: 'Se cambió la contraseña correctamente. Inicia sesión.',
+        error: 'Tuvimos problemas validando la información. Intenta de nuevo.',
+      });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   return {
     handleLogout,
+    handleRecoveryPassword,
+    handleChangePassword,
   };
 }
