@@ -42,7 +42,7 @@ export function CasesContentTable({ casesContent }) {
         id,
         name,
         price() {
-          return <>Bs. {price}</>;
+          return <>$ {price}</>;
         },
         description() {
           return <>{description ?? '-'}</>;

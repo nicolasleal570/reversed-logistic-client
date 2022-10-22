@@ -11,7 +11,7 @@ export function CaseContentSummary({ caseContent }) {
 
       <DataSection label="Descripción" value={caseContent.description ?? '-'} />
 
-      <DataSection label="Precio x litro" value={`Bs. ${caseContent.price}`} />
+      <DataSection label="Precio x litro" value={`$ ${caseContent.price}`} />
     </div>
   );
 }

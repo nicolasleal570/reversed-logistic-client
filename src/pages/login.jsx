@@ -28,7 +28,7 @@ export default function LoginPage() {
       setIsLoading(true);
       const { data: info } = await asyncNotify(fetchLogin(data), {
         pending: 'Valindando los datos...',
-        success: 'Bienvenido de vuelta!',
+        success: '¡Bienvenido de vuelta!',
         error: 'Revisa los datos ingresados.',
       });
 
@@ -63,10 +63,10 @@ export default function LoginPage() {
     <main className="w-full bg-red-400 flex justify-between">
       <section className="flex items-center flex-col flex-1 pt-20 px-8 md:px-24  lg:px-48 lg:max-w-[722px] lg:pt-40 h-screen bg-white">
         <h1 className="text-3xl leading-9 font-medium text-center text-gray-900">
-          Bienvenido!
+          ¡Bienvenido!
         </h1>
         <p className="text-sm md:text-base leading-6 font-normal text-center text-gray-500 lg:w-80 my-3">
-          Bienvenido de vuelta, rellena el formulario y entra en tu cuenta.
+          Rellena el formulario y entra en tu cuenta.
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -99,22 +99,11 @@ export default function LoginPage() {
             />
           </FormRow>
 
-          <Link href="/forgot-password">
-            <a className="block w-full text-sm leading-5 font-medium text-right text-indigo-700 mb-5">
-              Olvidaste tu contraseña?
-            </a>
-          </Link>
-
-          <Button type="submit" disabled={isLoading}>
-            Iniciar sesión
-          </Button>
-
-          <p className="mt-5 text-sm leading-5 font-normal text-center text-gray-500">
-            Aún no eres miembro?{' '}
-            <Link href="register">
-              <a className="text-indigo-600 font-medium">Regístrate!</a>
-            </Link>
-          </p>
+          <div className="mt-8">
+            <Button type="submit" disabled={isLoading}>
+              Iniciar sesión
+            </Button>
+          </div>
         </form>
       </section>
 

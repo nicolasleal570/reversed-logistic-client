@@ -11,9 +11,9 @@ import { DashboardInfoCard } from '@components/DashboardInfoCard/DashboardInfoCa
 function HomePage() {
   return (
     <Layout
-      title="Bienvenidos!"
+      title="¡Bienvenidos!"
       description="Esperamos que vayas progresando con tu proyecto. A continuación te
-        brindamos algunos accesos rápidos hacia los diferentes módulo de nuestra
+        brindamos algunos accesos rápidos hacia los diferentes módulos de nuestra
         plataforma para que puedas empezar a gestionar la logística inversa de
         tu empresa."
     >
@@ -28,7 +28,7 @@ function HomePage() {
 
       <DashboardInfoCard
         title="Órdenes"
-        description="Gestiona los productos de tu empresa y su procesamiento al ser utilizados y devueltos.Para poder gestionar la logística inversa de tu empresa, debes registrar los pedidos que tengas"
+        description="Gestiona los productos de tu empresa y su procesamiento al ser utilizados y devueltos. Para poder gestionar la logística inversa de tu empresa, debes registrar los pedidos que tengas"
         icon={<TruckIcon className="w-5 h-5" />}
         route="/orders"
         firstColor="bg-blue-100"
