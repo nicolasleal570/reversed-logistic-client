@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { SelectField } from '@components/SelectField/SelectField';
@@ -14,8 +13,8 @@ export function TruckForm({
   truck,
   token,
   employees,
+  onUpdate,
 }) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -25,13 +24,12 @@ export function TruckForm({
 
   const { createTruck, updateTruck } = useTrucks();
 
-  const handleOnFinishUpdate = () => router.push('/trucks');
-
   const onSubmit = async (data) => {
     if (!isEdit) {
       createTruck(data, token);
     } else {
-      updateTruck(truck.id, data, token, handleOnFinishUpdate);
+      const { data: updatedTruck } = await updateTruck(truck.id, data, token);
+      onUpdate(updatedTruck);
     }
   };
 
@@ -40,7 +38,7 @@ export function TruckForm({
       setValue('brand', truck.brand);
       setValue('model', truck.model);
       setValue('type', truck.type);
-      setValue('userId', truck.driver.id);
+      setValue('userId', truck?.driver?.id);
       setValue('licensePlate', truck.licensePlate);
     }
   }, [truck, setValue]);

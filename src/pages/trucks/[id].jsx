@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { parseCookies } from '@utils/parseCookies';
@@ -9,8 +9,14 @@ import { TruckSummary } from '@components/TruckSummary/TruckSummary';
 import { fetchTruck } from '@api/trucks/methods';
 import { fetchUsers } from '@api/users/methods';
 
-function EditTruckPage({ truck, employees, token }) {
+function EditTruckPage({ truck: data, employees, token }) {
+  const [truck, setTruck] = useState({ ...data });
   const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    setTruck(data);
+  }, [data]);
+
   return (
     <Layout
       title={`Transporte: ${truck.brand} - ${truck.model}`}
@@ -52,6 +58,10 @@ function EditTruckPage({ truck, employees, token }) {
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}
+          onUpdate={(updatedTruck) => {
+            setTruck(updatedTruck);
+            setIsEdit(false);
+          }}
         />
       ) : (
         <TruckSummary truck={truck} />

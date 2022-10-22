@@ -1,14 +1,21 @@
 import { useRouter } from 'next/router';
 import * as trucksApi from '@api/trucks/methods';
+import { useNotify } from './useNotify';
 
 const { createTruck: createTruckAPI, updateTruck: updateTruckAPI } = trucksApi;
 
 export function useTrucks() {
   const router = useRouter();
+  const { asyncNotify } = useNotify();
 
   const createTruck = async (data, token) => {
     try {
-      const res = await createTruckAPI(data, token);
+      const res = await asyncNotify(createTruckAPI(data, token), {
+        pending: 'Creando el transporte...',
+        success: 'Se creó correctamente',
+        error:
+          'Tuvimos problemas con la creación del transporte. Intenta de nuevo.',
+      });
 
       router.push(`/trucks/${res.data.id}`);
     } catch (error) {
@@ -16,11 +23,14 @@ export function useTrucks() {
     }
   };
 
-  const updateTruck = async (truckId, data, token, onFinish) => {
+  const updateTruck = async (truckId, data, token) => {
     try {
-      const res = await updateTruckAPI(truckId, data, token);
-
-      onFinish && onFinish();
+      return asyncNotify(updateTruckAPI(truckId, data, token), {
+        pending: 'Actualizando el transporte...',
+        success: 'Se actualizó correctamente',
+        error:
+          'Tuvimos problemas actualizando el transporte. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }
