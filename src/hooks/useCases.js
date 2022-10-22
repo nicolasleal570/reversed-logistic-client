@@ -18,9 +18,17 @@ export function useCases() {
   const createCase = async (data, token) => {
     try {
       const { description, ...rest } = data;
-      const res = await createCaseAPI(
-        { description: description || undefined, ...rest },
-        token
+      const res = await asyncNotify(
+        createCaseAPI(
+          { description: description || undefined, ...rest },
+          token
+        ),
+        {
+          pending: 'Creando un case...',
+          success: 'Se creó correctamente.',
+          error:
+            'Tuvimos problemas con la creación del case. Intenta de nuevo.',
+        }
       );
 
       router.push(`/cases/${res.data.id}`);
@@ -33,16 +41,24 @@ export function useCases() {
     async (caseId, data, token) => {
       try {
         const { description, ...rest } = data;
-        return updateCaseAPI(
-          caseId,
-          { description: description || undefined, ...rest },
-          token ?? cookies.token
+
+        return asyncNotify(
+          updateCaseAPI(
+            caseId,
+            { description: description || undefined, ...rest },
+            token ?? cookies.token
+          ),
+          {
+            pending: 'Verificando información...',
+            success: 'Se actualizó el case correctamente.',
+            error: 'Tuvimos problemas al actualizar el case. Intenta de nuevo.',
+          }
         );
       } catch (error) {
         console.log(error);
       }
     },
-    [cookies]
+    [cookies, asyncNotify]
   );
 
   const handleCaseStateAfterPickupDone = async (caseId, data, token) => {

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 
 export function useNotify() {
@@ -19,9 +19,12 @@ export function useNotify() {
     }
   };
 
-  const asyncNotify = async (promise, { pending, success, error }) => {
-    return toast.promise(promise, { pending, success, error });
-  };
+  const asyncNotify = useCallback(
+    async (promise, { pending, success, error }) => {
+      return toast.promise(promise, { pending, success, error });
+    },
+    []
+  );
 
   return {
     notify,

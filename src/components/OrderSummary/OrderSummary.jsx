@@ -54,6 +54,45 @@ export function OrderSummary({ order, setOrder }) {
       />
 
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
+        Información del envío
+      </h2>
+
+      <DataSection
+        label="Número de tracking"
+        value={order?.shipment?.trackNumber?.toUpperCase() || '-'}
+      />
+
+      <DataSection
+        label="Fecha y hora del envío"
+        value={
+          order?.shipment?.shipmentAt
+            ? dayjs(order.shipment.shipmentAt).format(
+                'hh:mm A - dddd DD MMMM YYYY'
+              )
+            : '-'
+        }
+      />
+
+      <DataSection
+        label="Fecha y hora de entrega"
+        value={
+          order?.shipment?.deliveredAt
+            ? dayjs(order.shipment.deliveredAt).format(
+                'hh:mm A - dddd DD MMMM YYYY'
+              )
+            : '-'
+        }
+      />
+
+      {order?.shipment?.id && (
+        <DataSection
+          label="Revisar envío"
+          value="Revisar"
+          url={`/shipments/${order.shipment.id}`}
+        />
+      )}
+
+      <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Lista de productos
       </h2>
 

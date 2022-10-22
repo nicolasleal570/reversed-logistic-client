@@ -1,7 +1,15 @@
-import { Badge } from '@components/Badge/Badge';
+import Link from 'next/link';
 import classNames from 'classnames';
+import { Badge } from '@components/Badge/Badge';
 
-export function DataSection({ label, value, badge, tags, withoutMargins }) {
+export function DataSection({
+  label,
+  value,
+  badge,
+  tags,
+  withoutMargins,
+  url,
+}) {
   return (
     <div
       className={classNames({
@@ -15,7 +23,7 @@ export function DataSection({ label, value, badge, tags, withoutMargins }) {
       >
         {label}
       </p>
-      {value && !badge && (
+      {value && !badge && !url && (
         <p
           className={classNames(
             'text-base leading-6 font-normal text-gray-900',
@@ -26,6 +34,21 @@ export function DataSection({ label, value, badge, tags, withoutMargins }) {
         >
           {value}
         </p>
+      )}
+
+      {url && (
+        <Link href={url}>
+          <a
+            className={classNames(
+              'text-base text-blue-500 underline leading-6 font-normal text-gray-900',
+              {
+                'mb-6': !withoutMargins,
+              }
+            )}
+          >
+            {value}
+          </a>
+        </Link>
       )}
 
       {badge && <Badge title={badge.title} color={badge.color} />}
