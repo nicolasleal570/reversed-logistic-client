@@ -18,7 +18,13 @@ const INITIAL_LOCATION = {
   country: 'Venezuela',
 };
 
-function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
+function CustomerForm({
+  isEdit = false,
+  onlyRead = false,
+  customer,
+  token,
+  onUpdate,
+}) {
   const router = useRouter();
   const {
     register,
@@ -45,15 +51,16 @@ function CustomerForm({ isEdit = false, onlyRead = false, customer, token }) {
     }
   };
 
-  const handleOnFinishUpdate = () => {
-    router.push('/customers');
-  };
-
   const onSubmit = async (data) => {
     if (!isEdit) {
-      createCustomer(data, token);
+      await createCustomer(data, token);
     } else {
-      updateCustomer(customer.id, data, token, handleOnFinishUpdate);
+      const { data: updatedCustomer } = await updateCustomer(
+        customer.id,
+        data,
+        token
+      );
+      onUpdate(updatedCustomer);
     }
   };
 

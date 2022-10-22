@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { parseCookies } from '@utils/parseCookies';
@@ -8,8 +8,13 @@ import { fetchCustomer } from '@api/customers/methods';
 import { CustomerSummary } from '@components/CustomerSummary/CustomerSummary';
 import CustomerForm from '@components/CustomerForm/CustomerForm';
 
-function EditCustomerPage({ customer, token }) {
+function EditCustomerPage({ customer: data, token }) {
   const [isEdit, setIsEdit] = useState(false);
+  const [customer, setCustomer] = useState({ ...data });
+
+  useEffect(() => {
+    setCustomer(data);
+  }, [data]);
 
   return (
     <Layout
@@ -51,6 +56,10 @@ function EditCustomerPage({ customer, token }) {
           token={token ?? ''}
           isEdit={isEdit}
           onlyRead={!isEdit}
+          onUpdate={(updatedCustomer) => {
+            setCustomer(updatedCustomer);
+            setIsEdit(false);
+          }}
         />
       ) : (
         <CustomerSummary customer={customer} />
