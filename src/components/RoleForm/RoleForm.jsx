@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { InputLabel } from '@components/InputLabel/InputLabel';
+import { TextareaField } from '@components/TextareaField/TextareaField';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
@@ -83,9 +84,8 @@ export function RoleForm({
 
         <FormRow>
           <InputLabel title="Descripción" inputId="description" />
-          <InputField
-            type="text"
-            placeholder="Este rol sirve para..."
+          <TextareaField
+            placeholder="Este rol de encarga de XYZ"
             id="description"
             name="description"
             inputProps={{
