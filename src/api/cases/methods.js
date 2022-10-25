@@ -21,8 +21,13 @@ export const createCase = (data, token) =>
 export const updateCase = (caseId, data, token) =>
   axios.patch(CASE_URL(caseId), data, { headers: bearerToken(token) });
 
-export const fetchCase = (caseId, token) =>
-  axios.get(CASE_URL(caseId), { headers: bearerToken(token) });
+export const fetchCase = (caseId, token, params = {}) =>
+  axios.get(
+    `${CASE_URL(caseId)}?${new URLSearchParams(params ?? {}).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
 
 export const fetchCaseInfoLastOutOfStock = (caseId, token) =>
   axios.get(`${CASE_URL(caseId)}/out-of-stock`, {
@@ -47,3 +52,17 @@ export const handleCaseStateAfterPickupDone = (caseId, data, token) =>
   axios.post(`${CASE_URL(caseId)}/after-out-of-stock`, data, {
     headers: bearerToken(token),
   });
+
+export const deleteCase = (caseId, token) =>
+  axios.delete(`${CASE_URL(caseId)}`, {
+    headers: bearerToken(token),
+  });
+
+export const recoveryCase = (caseId, token) =>
+  axios.post(
+    `${CASE_URL(caseId)}/recover`,
+    {},
+    {
+      headers: bearerToken(token),
+    }
+  );

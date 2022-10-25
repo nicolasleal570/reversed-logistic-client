@@ -14,13 +14,23 @@ export function CaseSummary({ case: caseInfo }) {
 
         <DataSection label="Descripción" value={caseInfo.description ?? '-'} />
 
-        <DataSection
-          label="Estatus"
-          badge={{
-            title: availableCasesState[caseInfo.state]?.title ?? '-',
-            color: availableCasesState[caseInfo.state]?.color,
-          }}
-        />
+        {caseInfo.deletedAt ? (
+          <DataSection
+            label="Estatus"
+            badge={{
+              title: 'Inhabilitado',
+              color: 'red',
+            }}
+          />
+        ) : (
+          <DataSection
+            label="Estatus"
+            badge={{
+              title: availableCasesState[caseInfo.state]?.title ?? '-',
+              color: availableCasesState[caseInfo.state]?.color,
+            }}
+          />
+        )}
 
         <DataSection label="Volumen" value={caseInfo.volume ?? '-'} />
 

@@ -36,9 +36,9 @@ export function Sidebar() {
           <XIcon className="w-5 h-5" />
         </button>
 
-        <section className="w-full p-4 md:py-8 border-b border-gray-200">
+        <section className="w-full p-4 md:py-6 border-b border-gray-200">
           <Link href="/">
-            <a className="text-white">LOGO</a>
+            <a className="text-white text-xl">LOGO</a>
           </Link>
         </section>
 

@@ -14,7 +14,7 @@ import { useCases } from '@hooks/useCases';
 
 function EditCasePage({ case: data, token }) {
   const { query } = useRouter();
-  const { updateCase } = useCases();
+  const { updateCase, deleteCase, recoveryCase } = useCases();
   const [caseInfo, setCaseInfo] = useState({ ...data });
   const [isEdit, setIsEdit] = useState(false);
   const [showCheckModal, setShowCheckModal] = useState(false);
@@ -38,8 +38,8 @@ function EditCasePage({ case: data, token }) {
       title={`${caseInfo.name}`}
       description="Información detallada de un case"
     >
-      <div className="mb-8 border-b border-gray-200 pb-8">
-        <Switch.Group>
+      <div className="mb-8 border-b border-gray-200 pb-8 flex justify-between items-center">
+        <Switch.Group as="div">
           <>
             <Switch.Label className="mr-4">Habilitar edición</Switch.Label>
             <Switch
@@ -65,6 +65,32 @@ function EditCasePage({ case: data, token }) {
             </Switch>
           </>
         </Switch.Group>
+
+        {!caseInfo.deletedAt && caseInfo.state === 'AVAILABLE' && (
+          <button
+            type="button"
+            className="border border-red-600 text-red-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 outline-none"
+            onClick={async () => {
+              const { data: updatedCase } = await deleteCase(caseInfo.id);
+              setCaseInfo(updatedCase);
+            }}
+          >
+            Eliminar
+          </button>
+        )}
+
+        {caseInfo.deletedAt && (
+          <button
+            type="button"
+            className="border border-blue-600 text-blue-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 outline-none"
+            onClick={async () => {
+              const { data: updatedCase } = await recoveryCase(caseInfo.id);
+              setCaseInfo(updatedCase);
+            }}
+          >
+            Recuperar
+          </button>
+        )}
       </div>
 
       {caseInfo.state === 'OUT_OF_STOCK' &&
@@ -140,7 +166,7 @@ EditCasePage.getInitialProps = async ({ req, query }) => {
   let caseItem = {};
   if (data.token) {
     try {
-      const res = await fetchCase(query.id, data.token);
+      const res = await fetchCase(query.id, data.token, { paranoid: false });
 
       caseItem = res.data;
     } catch (error) {
