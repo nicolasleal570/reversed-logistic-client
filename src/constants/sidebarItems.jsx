@@ -56,7 +56,7 @@ export const items = [
     ],
   },
   {
-    header: 'Órdenes de venta',
+    header: 'Órdenes',
     headerAction: () => Router.push('/orders/create'),
     headerActionIcon: <PlusSmIcon className="w-5 h-5" />,
     slots: [
