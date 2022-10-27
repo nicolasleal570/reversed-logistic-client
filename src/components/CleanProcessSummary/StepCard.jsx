@@ -2,7 +2,6 @@ import { Fragment, useState } from 'react';
 import classNames from 'classnames';
 import { Dialog, Transition } from '@headlessui/react';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
-import { BadgeCheckIcon } from '@heroicons/react/outline';
 import { useCleanProcess } from '@hooks/useCleanProcess';
 import { Badge } from '@components/Badge/Badge';
 
@@ -21,16 +20,16 @@ export function StepCard({ step, cleanProcessOrder, setCleanProcessOrder }) {
         )}
       >
         <h3 className="flex items-center w-full text-md leading-7 font-medium">
-          {isDone && (
-            <span className="mr-1 text-green-500">
-              <BadgeCheckIcon className="w-6 h-6" />
-            </span>
-          )}
           <span>Paso {step.order}</span>
+          {isDone && (
+            <div className="flex-1 flex items-center justify-end">
+              <Badge title="Listo" color="green" size="small" />
+            </div>
+          )}
 
           {isCurrent && (
             <div className="flex-1 flex items-center justify-end">
-              <Badge title="Actual" color="green" size="small" />
+              <Badge title="Actual" color="blue" size="small" />
             </div>
           )}
         </h3>

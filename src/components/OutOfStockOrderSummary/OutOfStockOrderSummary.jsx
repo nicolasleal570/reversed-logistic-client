@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
 import { outOfStockOrderStatusColor } from '@components/OutOfStockOrdersTable/OutOfStockOrdersTable';
 import Link from 'next/link';
 
 export function OutOfStockOrderSummary({ outOfStockOrder }) {
-  const router = useRouter();
   const {
     customerLocation,
     items,
@@ -17,7 +15,7 @@ export function OutOfStockOrderSummary({ outOfStockOrder }) {
   } = outOfStockOrder;
 
   return (
-    <div className="w-full lg:w-96">
+    <div className="w-full">
       <h2 className="block w-full text-lg leading-7 font-semibold mb-8">
         Información de la órden de recogida
       </h2>
@@ -63,6 +61,7 @@ export function OutOfStockOrderSummary({ outOfStockOrder }) {
       <DataSection
         label="Cliente"
         value={customerLocation.customer.companyName}
+        url={`/customers/${customerLocation.customer.id}`}
       />
 
       <DataSection label="Sucursal" value={customerLocation.name} />
@@ -71,34 +70,39 @@ export function OutOfStockOrderSummary({ outOfStockOrder }) {
         Cases reportados
       </h2>
 
-      {items.map((item, idx) => {
-        return (
-          <div
-            key={item.id}
-            className="bg-white p-4 border border-gray-200 rounded mb-6"
-          >
-            <h3 className="flex items-center w-full text-md leading-7 font-medium">
-              <span>Case {idx + 1}</span>
-            </h3>
-            <DataSection label="Case" value={item.case.name} />
-            <DataSection
-              label="Contenido que tenía"
-              value={item.caseContent.name}
-            />
-            <DataSection label="Orden de venta" value={`#OR${item.order.id}`} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((item, idx) => {
+          return (
+            <div
+              key={item.id}
+              className="bg-white p-4 border border-gray-200 rounded mb-6"
+            >
+              <h3 className="flex items-center w-full text-md leading-7 font-medium">
+                <span>Case {idx + 1}</span>
+              </h3>
+              <DataSection label="Case" value={item.case.name} />
+              <DataSection
+                label="Contenido que tenía"
+                value={item.caseContent.name}
+              />
+              <DataSection
+                label="Orden de venta"
+                value={`#OR${item.order.id}`}
+              />
 
-            <div className="flex items-end">
-              {outOfStockOrder?.status?.value === 'PICKUP_DONE' && (
-                <Link href="/cases/[id]" as={`/cases/${item.case.id}`}>
-                  <a className="ml-auto inline-block border border-indigo-600 text-indigo-600 px-3 py-2 rounded-lg text-sm">
-                    Examinar
-                  </a>
-                </Link>
-              )}
+              <div className="flex items-end">
+                {outOfStockOrder?.status?.value === 'PICKUP_DONE' && (
+                  <Link href="/cases/[id]" as={`/cases/${item.case.id}`}>
+                    <a className="ml-auto inline-block border border-indigo-600 text-indigo-600 px-3 py-2 rounded-lg text-sm">
+                      Examinar
+                    </a>
+                  </Link>
+                )}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

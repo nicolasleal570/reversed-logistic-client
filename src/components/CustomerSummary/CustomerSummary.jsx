@@ -5,7 +5,7 @@ import { OrdersTable } from '@components/OrdersTable/OrdersTable';
 export function CustomerSummary({ customer }) {
   const orders = useMemo(() => {
     const items = [];
-    customer.locations.forEach((item) => items.push(...item.orders));
+    customer?.locations?.forEach((item) => items.push(...item.orders));
 
     return items;
   }, [customer]);
@@ -34,7 +34,7 @@ export function CustomerSummary({ customer }) {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        {customer.locations.map((item) => (
+        {customer?.locations?.map((item) => (
           <div
             key={item.id}
             className="bg-white p-4 pb-0 border border-gray-200 rounded mb-6"

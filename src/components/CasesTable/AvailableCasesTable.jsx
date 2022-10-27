@@ -106,7 +106,7 @@ const handleMap =
                 router.push(`/cases/${id}`);
               }}
             >
-              Habilitar
+              Actualizar
             </button>
           )}
 

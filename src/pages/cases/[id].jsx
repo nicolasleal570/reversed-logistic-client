@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
 import { fetchCase } from '@api/cases/methods';
@@ -75,21 +76,27 @@ function EditCasePage({ case: data, token }) {
               setCaseInfo(updatedCase);
             }}
           >
-            Eliminar
+            Deshabilitar
           </button>
         )}
 
         {caseInfo.deletedAt && (
-          <button
-            type="button"
-            className="border border-blue-600 text-blue-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 outline-none"
-            onClick={async () => {
-              const { data: updatedCase } = await recoveryCase(caseInfo.id);
-              setCaseInfo(updatedCase);
-            }}
-          >
-            Recuperar
-          </button>
+          <div className="flex flex-col items-end">
+            <button
+              type="button"
+              className="border border-blue-600 text-blue-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 outline-none"
+              onClick={async () => {
+                const { data: updatedCase } = await recoveryCase(caseInfo.id);
+                setCaseInfo(updatedCase);
+              }}
+            >
+              Recuperar
+            </button>
+            <p className="text-sm mt-3 text-gray-800 text-right">
+              Inhabilitado el: <br />{' '}
+              {dayjs(caseInfo.deletedAt).format('hh:mm A - dddd DD MMMM YYYY')}
+            </p>
+          </div>
         )}
       </div>
 
@@ -117,6 +124,7 @@ function EditCasePage({ case: data, token }) {
           </button>
         </div>
       )}
+
       {caseInfo.state === 'CLEAN_PROCESS_DONE' && (
         <div className="mb-8 border-b border-gray-200 pb-8">
           <button
@@ -129,7 +137,7 @@ function EditCasePage({ case: data, token }) {
               setCaseInfo(updatedData);
             }}
           >
-            Habilitar
+            Marcar como disponible
           </button>
         </div>
       )}

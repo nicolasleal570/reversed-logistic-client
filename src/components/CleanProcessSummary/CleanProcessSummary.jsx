@@ -4,6 +4,7 @@ import { cleanProcessOrderStatusColor } from '@components/CleanProcessTable/Clea
 import { formatDuration } from '@utils/formatDuration';
 import { StepCard } from './StepCard';
 import { useCleanProcess } from '@hooks/useCleanProcess';
+import classNames from 'classnames';
 
 export function CleanProcessSummary({
   cleanProcessOrder,
@@ -33,7 +34,7 @@ export function CleanProcessSummary({
   }
 
   return (
-    <div className="w-full lg:w-96">
+    <div className="w-full">
       <h2 className="block w-full text-lg leading-7 font-semibold mb-8">
         Información de la orden
       </h2>
@@ -97,36 +98,44 @@ export function CleanProcessSummary({
         Lista de pasos de limpieza
       </h2>
 
-      {steps.map((step) => {
-        return (
-          <StepCard
-            key={`${step.id}-${step.processStep.name}`}
-            step={step}
-            cleanProcessOrder={cleanProcessOrder}
-            setCleanProcessOrder={setCleanProcessOrder}
-          />
-        );
-      })}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {steps.map((step) => {
+          return (
+            <StepCard
+              key={`${step.id}-${step.processStep.name}`}
+              step={step}
+              cleanProcessOrder={cleanProcessOrder}
+              setCleanProcessOrder={setCleanProcessOrder}
+            />
+          );
+        })}
+      </div>
 
-      {status.value === 'IN_CLEAN_PROCESS' && allStepsDone && (
-        <button
-          type="button"
-          className={
-            'w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8'
-          }
-          onClick={async () => {
-            const { data: updatedData } = await doneCleanProcess(
-              cleanProcessOrder.id
-            );
-            setCleanProcessOrder({
-              ...updatedData,
-              steps: updatedData.steps.sort((a, b) => a.order - b.order),
-            });
-          }}
-        >
-          Finalizar limpieza
-        </button>
-      )}
+      <div className="w-full lg:w-96">
+        {status.value === 'IN_CLEAN_PROCESS' && (
+          <button
+            type="button"
+            className={classNames(
+              'w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-white bg-indigo-600 mt-8',
+              {
+                'text-gray-400 bg-gray-200': !allStepsDone,
+              }
+            )}
+            onClick={async () => {
+              const { data: updatedData } = await doneCleanProcess(
+                cleanProcessOrder.id
+              );
+              setCleanProcessOrder({
+                ...updatedData,
+                steps: updatedData.steps.sort((a, b) => a.order - b.order),
+              });
+            }}
+            disabled={!allStepsDone}
+          >
+            Finalizar limpieza
+          </button>
+        )}
+      </div>
     </div>
   );
 }

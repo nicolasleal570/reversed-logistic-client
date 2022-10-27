@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { withLocationProtection } from '@components/withLocationProtection';
 import { InputLabel } from '@components/InputLabel/InputLabel';
@@ -12,7 +12,11 @@ import { useAuth } from '@hooks/useAuth';
 
 const INITIAL_CASE_ID = { caseId: '' };
 
-function OutOfStockPage({ cases, customerLocationId, location: client }) {
+function OutOfStockPage({
+  cases: casesData,
+  customerLocationId,
+  location: client,
+}) {
   const {
     register,
     handleSubmit,
@@ -31,6 +35,7 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
   const selectedCases = useWatch({ control, name: 'cases' });
   const { createOutOfStockOrder } = useOutOfStockOrders();
   const { handleLogout } = useAuth();
+  const [cases, setCases] = useState([]);
 
   const onSubmit = async (data) => {
     const items = data.cases.map((field) => {
@@ -48,11 +53,20 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
 
     try {
       await createOutOfStockOrder({ items, customerLocationId });
+      setCases((oldValues) => {
+        const casesIds = items.map((item) => item.caseId);
+
+        return oldValues.filter((item) => !casesIds.includes(item.id));
+      });
       reset();
     } catch (error) {
       console.log({ error });
     }
   };
+
+  useEffect(() => {
+    setCases(casesData);
+  }, [casesData]);
 
   return (
     <>
@@ -103,13 +117,15 @@ function OutOfStockPage({ cases, customerLocationId, location: client }) {
               </Fragment>
             ))}
 
-            <button
-              type="button"
-              className="block w-full text-sm leading-5 font-medium text-right text-indigo-700 mb-12"
-              onClick={() => append(INITIAL_CASE_ID)}
-            >
-              Agregar otro
-            </button>
+            {cases.length > 1 && (
+              <button
+                type="button"
+                className="block w-full text-sm leading-5 font-medium text-right text-indigo-700 mb-12"
+                onClick={() => append(INITIAL_CASE_ID)}
+              >
+                Agregar otro
+              </button>
+            )}
 
             <Button type="submit">Finalizar reporte</Button>
           </form>
