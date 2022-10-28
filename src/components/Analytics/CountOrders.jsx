@@ -61,7 +61,7 @@ const months = [
   'Diciembre',
 ];
 
-export function CountOrdersGraph({ count }) {
+export function CountOrdersGraph() {
   const currentMonth = dayjs().month();
   const {
     register,
@@ -94,7 +94,7 @@ export function CountOrdersGraph({ count }) {
         <Tooltip />
       </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full mb-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <FormRow>
           <InputLabel title="Selecciona un mes" inputId="month" />
 
@@ -130,7 +130,7 @@ export function CountOrdersGraph({ count }) {
       {isLoading ? (
         <p className="text-center text-xl">Cargando...</p>
       ) : (
-        <div className="flex items-center justify-center mx-auto w-16 h-16 rounded-full border-indigo-500 border-t-2 border-l-2">
+        <div className="flex items-center justify-center mx-auto w-16 h-16 rounded-full ring-indigo-500 ring-1">
           <p className="text-center text-3xl">{graphInfo.count || 0}</p>
         </div>
       )}

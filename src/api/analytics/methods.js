@@ -35,3 +35,8 @@ export const fetchShipmentsCount = (month, token) =>
       headers: bearerToken(token),
     }
   );
+
+export const fetchLateDeliveries = (token) =>
+  axios.get(`${ANALYTICS_URL}/late-deliveries`, {
+    headers: bearerToken(token),
+  });

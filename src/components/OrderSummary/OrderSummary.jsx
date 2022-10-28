@@ -8,6 +8,7 @@ import { useOrders } from '@hooks/useOrders';
 import { orderStatusColor } from '@components/OrdersTable/OrdersTable';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
+import { KPITooltip } from './KPITooltip';
 
 export function OrderSummary({ order, setOrder }) {
   const { markOrderAsReady } = useOrders();
@@ -16,6 +17,26 @@ export function OrderSummary({ order, setOrder }) {
   return (
     <div className="w-full">
       <h2 className="block w-full text-lg leading-7 font-semibold mb-8">
+        KPIs y Analíticas
+      </h2>
+
+      <div className="flex items-center justify-between w-full lg:w-96">
+        <DataSection
+          label="Tiempo de espera de la orden"
+          value={
+            order?.shipment && order?.shipment?.deliveredAt
+              ? `${dayjs(order?.shipment?.deliveredAt).diff(
+                  dayjs(order.purchaseDate),
+                  'hour'
+                )} hora/s`
+              : '-'
+          }
+          withoutMargins
+        />
+        <KPITooltip />
+      </div>
+
+      <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Información de la orden
       </h2>
 

@@ -8,16 +8,19 @@ import {
   fetchBestCaseContents,
   fetchBestCases,
   fetchBestCustomers,
+  fetchLateDeliveries,
 } from '@api/analytics/methods';
 import { BestCaseContentsGraph } from '@components/Analytics/BestCaseContents';
 import { BestCasesGraph } from '@components/Analytics/BestCases';
 import { CountOrdersGraph } from '@components/Analytics/CountOrders';
+import { LateDeliveriesGraph } from '@components/Analytics/LateDeliveries';
 
 function AnalyticsPage({
   customers,
   bestCustomers,
   bestCaseContents,
   bestCases,
+  lateDeliveries,
 }) {
   return (
     <Layout
@@ -26,9 +29,8 @@ function AnalyticsPage({
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="col-span-2 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <CountOrdersGraph count={10} />
-          <CountOrdersGraph count={10} />
-          <CountOrdersGraph count={10} />
+          <CountOrdersGraph />
+          <LateDeliveriesGraph count={lateDeliveries?.graph?.count} />
         </div>
 
         <div className="col-span-2">
@@ -53,6 +55,7 @@ AnalyticsPage.getInitialProps = async ({ req }) => {
   let bestCustomers = [];
   let bestCaseContents = [];
   let bestCases = [];
+  let lateDeliveries = [];
   if (data.token) {
     try {
       const { data: customersData } = await fetchCustomers(data.token);
@@ -61,11 +64,15 @@ AnalyticsPage.getInitialProps = async ({ req }) => {
         data.token
       );
       const { data: bestCasesData } = await fetchBestCases(data.token);
+      const { data: lateDeliveriesData } = await fetchLateDeliveries(
+        data.token
+      );
 
       customers = customersData;
       bestCustomers = bestCustomersData;
       bestCaseContents = bestCaseContentsData;
       bestCases = bestCasesData;
+      lateDeliveries = lateDeliveriesData;
     } catch (error) {
       console.log({ error });
     }
@@ -76,6 +83,7 @@ AnalyticsPage.getInitialProps = async ({ req }) => {
     bestCustomers: bestCustomers ?? [],
     bestCaseContents: bestCaseContents ?? [],
     bestCases: bestCases ?? [],
+    lateDeliveries: lateDeliveries ?? [],
   };
 };
 
