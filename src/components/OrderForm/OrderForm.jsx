@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import dayjs from 'dayjs';
 import { PlusSmIcon, TrashIcon } from '@heroicons/react/outline';
 import { SelectField } from '@components/SelectField/SelectField';
 import { InputLabel } from '@components/InputLabel/InputLabel';
@@ -64,9 +65,22 @@ function OrderForm({
 
   const onSubmit = async (data) => {
     if (!isEdit) {
-      await createOrder(data, token);
+      await createOrder(
+        {
+          ...data,
+          expectedDeliveryDate: data.expectedDeliveryDate ?? null,
+        },
+        token
+      );
     } else {
-      const { data: updatedOrder } = await updateOrder(order.id, data, token);
+      const { data: updatedOrder } = await updateOrder(
+        order.id,
+        {
+          ...data,
+          expectedDeliveryDate: data.expectedDeliveryDate ?? null,
+        },
+        token
+      );
       onUpdate(updatedOrder);
     }
   };
@@ -139,6 +153,32 @@ function OrderForm({
             label: location.name,
             value: location.id,
           }))}
+        />
+      </FormRow>
+
+      <div className="w-full h-[1px] my-8 bg-gray-200" />
+
+      <h2 className="w-full text-lg leading-7 font-medium mb-8">Orden</h2>
+
+      <FormRow>
+        <InputLabel
+          title="Fecha estimada de entrega"
+          inputId="expectedDeliveryDate"
+        />
+        <InputField
+          type="datetime-local"
+          id="expectedDeliveryDate"
+          name="expectedDeliveryDate"
+          errors={errors}
+          placeholder="Selecciona una sucursal"
+          disabled={onlyRead}
+          inputProps={{
+            min: !isEdit ? dayjs().format('YYYY-MM-DDTHH:mm') : null,
+            ...register('expectedDeliveryDate', {
+              required: 'Debes ingresar una fecha estimada de entrega.',
+            }),
+          }}
+          highlight="Este fecha se utiliza para calcular analíticas y KPIs."
         />
       </FormRow>
 

@@ -17,13 +17,14 @@ export function useOrders() {
   const { asyncNotify } = useNotify();
 
   const createOrder = async (data, token) => {
-    const { items, customerLocationId } = data;
+    const { items, customerLocationId, expectedDeliveryDate } = data;
 
     try {
       const res = await asyncNotify(
         createOrderAPI(
           {
             customerLocationId,
+            expectedDeliveryDate,
             items: items.map((info) => ({
               caseId: Number.parseInt(info.caseId, 10),
               caseContentId: Number.parseInt(info.caseContentId, 10),
@@ -46,7 +47,7 @@ export function useOrders() {
   };
 
   const updateOrder = async (orderId, data, token) => {
-    const { items, customerLocationId } = data;
+    const { items, customerLocationId, expectedDeliveryDate } = data;
 
     try {
       return asyncNotify(
@@ -54,6 +55,7 @@ export function useOrders() {
           orderId,
           {
             customerLocationId,
+            expectedDeliveryDate,
             items: items.map((info) => ({
               id: info.id,
               caseId: Number.parseInt(info.caseId, 10),

@@ -20,3 +20,8 @@ export const fetchBestCases = (token) =>
   axios.get(`${ANALYTICS_URL}/best-cases`, {
     headers: bearerToken(token),
   });
+
+export const fetchDeliveryAtTime = (driverId, token) =>
+  axios.get(`${ANALYTICS_URL}/delivery-at-time/${driverId}`, {
+    headers: bearerToken(token),
+  });

@@ -29,7 +29,7 @@ export const items = [
     ],
   },
   {
-    header: 'Analíticas',
+    header: 'KPIs',
     slots: [
       {
         title: 'Analíticas',

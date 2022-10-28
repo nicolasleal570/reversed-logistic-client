@@ -40,6 +40,17 @@ export function OrderSummary({ order, setOrder }) {
         value={dayjs(order.purchaseDate).format('hh:mm A - dddd DD MMMM YYYY')}
       />
 
+      <DataSection
+        label="Fecha y hora estimada de entrega"
+        value={
+          order.expectedDeliveryDate
+            ? dayjs(order.expectedDeliveryDate).format(
+                'hh:mm A - dddd DD MMMM YYYY'
+              )
+            : '-'
+        }
+      />
+
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Información del Cliente
       </h2>

@@ -8,8 +8,9 @@ import { TruckForm } from '@components/TruckForm/TruckForm';
 import { TruckSummary } from '@components/TruckSummary/TruckSummary';
 import { fetchTruck } from '@api/trucks/methods';
 import { fetchUsers } from '@api/users/methods';
+import { fetchDeliveryAtTime } from '@api/analytics/methods';
 
-function EditTruckPage({ truck: data, employees, token }) {
+function EditTruckPage({ truck: data, employees, token, deliveryAtTime }) {
   const [truck, setTruck] = useState({ ...data });
   const [isEdit, setIsEdit] = useState(false);
 
@@ -64,7 +65,7 @@ function EditTruckPage({ truck: data, employees, token }) {
           }}
         />
       ) : (
-        <TruckSummary truck={truck} />
+        <TruckSummary truck={truck} deliveryAtTime={deliveryAtTime} />
       )}
     </Layout>
   );
@@ -75,15 +76,26 @@ EditTruckPage.getInitialProps = async ({ req, query }) => {
 
   let truck = {};
   let employees = [];
+  let deliveryAtTime = {};
   if (data.token) {
     try {
-      const res = await fetchTruck(query.id, data.token);
+      const { data: truckData } = await fetchTruck(query.id, data.token);
       const { data: employeesData } = await fetchUsers(data.token);
-
-      truck = res.data;
+      truck = truckData;
       employees = employeesData;
     } catch (error) {
       console.log({ error });
+    }
+
+    try {
+      const { data: deliveryAtTimeData } = await fetchDeliveryAtTime(
+        truck.userId,
+        data.token
+      );
+
+      deliveryAtTime = deliveryAtTimeData;
+    } catch (error) {
+      console.log({ error: error.response.data.message });
     }
   }
 
@@ -91,6 +103,7 @@ EditTruckPage.getInitialProps = async ({ req, query }) => {
     token: data?.token ?? '',
     truck: truck ?? {},
     employees: employees ?? [],
+    deliveryAtTime: deliveryAtTime ?? {},
   };
 };
 

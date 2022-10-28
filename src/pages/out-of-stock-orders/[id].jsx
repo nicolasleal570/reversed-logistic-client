@@ -16,7 +16,7 @@ function EditOrderPage({ outOfStockOrder: data }) {
 
   return (
     <Layout
-      title={`Orden #OR${outOfStockOrder.id}`}
+      title={`Orden de agotamiento #AG${outOfStockOrder.id}`}
       description="Información detallada de la orden"
     >
       {outOfStockOrder?.status?.value === 'PICKUP_IN_PROGRESS' && (

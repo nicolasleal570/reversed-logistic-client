@@ -3,7 +3,7 @@ import * as outOfStockOrdersAPI from '@api/out-of-stock/methods';
 import { useNotify } from './useNotify';
 
 const {
-  createOutOfStockOrder: createcreateOutOfStockOrderAPI,
+  createOutOfStockOrder: createOutOfStockOrderAPI,
   updateOutOfStockOrder: updateOutOfStockOrderAPI,
   takeOutOfStockOrder: takeOutOfStockOrderAPI,
   finishOutOfStockOrder: finishOutOfStockOrderAPI,
@@ -15,7 +15,7 @@ export function useOutOfStockOrders() {
 
   const createOutOfStockOrder = async (data) => {
     try {
-      return asyncNotify(createcreateOutOfStockOrderAPI(data, cookies.token), {
+      return asyncNotify(createOutOfStockOrderAPI(data, cookies.token), {
         pending: 'Creando reporte de agotamiento...',
         success: 'Se creó el reporte correctamente.',
         error: 'Tuvimos problemas creando el reporte. Intenta de nuevo.',
