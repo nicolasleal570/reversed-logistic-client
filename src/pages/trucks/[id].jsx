@@ -87,15 +87,17 @@ EditTruckPage.getInitialProps = async ({ req, query }) => {
       console.log({ error });
     }
 
-    try {
-      const { data: deliveryAtTimeData } = await fetchDeliveryAtTime(
-        truck.userId,
-        data.token
-      );
+    if (truck.userId) {
+      try {
+        const { data: deliveryAtTimeData } = await fetchDeliveryAtTime(
+          truck.userId,
+          data.token
+        );
 
-      deliveryAtTime = deliveryAtTimeData;
-    } catch (error) {
-      console.log({ error: error.response.data.message });
+        deliveryAtTime = deliveryAtTimeData;
+      } catch (error) {
+        console.log({ error: error.response.data.message });
+      }
     }
   }
 

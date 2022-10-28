@@ -66,6 +66,7 @@ export function ShipmentSummary({ shipment }) {
         <DataSection
           label="Transporte"
           value={`${truck.licensePlate} - ${truck.model}, ${truck.brand}`}
+          url={`/trucks/${truck.id}`}
         />
 
         <DataSection label="Conductor" value={truck?.driver?.fullName || '-'} />

@@ -11,6 +11,7 @@ import {
 } from '@api/analytics/methods';
 import { BestCaseContentsGraph } from '@components/Analytics/BestCaseContents';
 import { BestCasesGraph } from '@components/Analytics/BestCases';
+import { CountOrdersGraph } from '@components/Analytics/CountOrders';
 
 function AnalyticsPage({
   customers,
@@ -24,6 +25,12 @@ function AnalyticsPage({
       description="Aquí podrás examinar las métricas en tu línea de producción y así optimizar los puntos donde encuentres fallas."
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="col-span-2 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <CountOrdersGraph count={10} />
+          <CountOrdersGraph count={10} />
+          <CountOrdersGraph count={10} />
+        </div>
+
         <div className="col-span-2">
           <BestCasesGraph cases={bestCases} />
         </div>

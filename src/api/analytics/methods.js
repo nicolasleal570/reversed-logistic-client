@@ -25,3 +25,13 @@ export const fetchDeliveryAtTime = (driverId, token) =>
   axios.get(`${ANALYTICS_URL}/delivery-at-time/${driverId}`, {
     headers: bearerToken(token),
   });
+
+export const fetchShipmentsCount = (month, token) =>
+  axios.get(
+    `${ANALYTICS_URL}/shipments-count?${new URLSearchParams({
+      month,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
