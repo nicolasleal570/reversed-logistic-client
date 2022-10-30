@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
 
-export function KPITooltip() {
+export function KPITooltip({ title, description }) {
   return (
     <Popover className="ml-9">
       <Popover.Button
@@ -24,11 +24,8 @@ export function KPITooltip() {
         <Popover.Panel className="absolute mt-1 px-4 sm:px-0">
           <div className="overflow-hidden rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="relative bg-white p-3 max-w-xs">
-              <h3 className="font-medium">Tiempo de espera de la orden</h3>
-              <p className="text-xs text-gray-600 mt-1.5">
-                Este KPI determina el tiempo que le toma a los clientes recibir
-                el producto una vez creada la orden.
-              </p>
+              <h3 className="font-medium">{title}</h3>
+              <p className="text-xs text-gray-600 mt-1.5">{description}</p>
             </div>
           </div>
         </Popover.Panel>

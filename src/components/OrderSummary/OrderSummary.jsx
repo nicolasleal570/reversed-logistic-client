@@ -20,7 +20,7 @@ export function OrderSummary({ order, setOrder }) {
         KPIs y Analíticas
       </h2>
 
-      <div className="flex items-center justify-between w-full lg:w-96">
+      <div className="flex items-center justify-between w-full lg:w-96 mb-8">
         <DataSection
           label="Tiempo de espera de la orden"
           value={
@@ -33,7 +33,29 @@ export function OrderSummary({ order, setOrder }) {
           }
           withoutMargins
         />
-        <KPITooltip />
+        <KPITooltip
+          title="Tiempo de espera de la orden"
+          description="Este KPI determina el tiempo que le toma a los clientes recibir el producto una vez creada la orden."
+        />
+      </div>
+
+      <div className="flex items-center justify-between w-full lg:w-96">
+        <DataSection
+          label="Tiempo de envío"
+          value={
+            order?.shipment && order?.shipment?.shipmentAt
+              ? `${dayjs(order?.shipment?.shipmentAt).diff(
+                  dayjs(order.purchaseDate),
+                  'hour'
+                )} hora/s`
+              : '-'
+          }
+          withoutMargins
+        />
+        <KPITooltip
+          title="Tiempo de envío"
+          description="Este KPI cuantifica el tiempo que se tarda en enviar un pedido en la fecha solicitada."
+        />
       </div>
 
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
