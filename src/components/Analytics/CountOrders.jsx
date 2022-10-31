@@ -61,7 +61,7 @@ const months = [
   'Diciembre',
 ];
 
-export function CountOrdersGraph() {
+export function CountOrdersGraph({ graph }) {
   const currentMonth = dayjs().month();
   const {
     register,
@@ -74,7 +74,7 @@ export function CountOrdersGraph() {
   });
   const [cookies] = useCookies(['token']);
   const [isLoading, setIsLoading] = useState(false);
-  const [graphInfo, setGraphInfo] = useState({});
+  const [graphInfo, setGraphInfo] = useState({ ...graph });
 
   const onSubmit = async (values) => {
     try {

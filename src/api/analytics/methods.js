@@ -40,3 +40,13 @@ export const fetchLateDeliveries = (token) =>
   axios.get(`${ANALYTICS_URL}/late-deliveries`, {
     headers: bearerToken(token),
   });
+
+export const fetchInventoryTurnover = (token) =>
+  axios.get(`${ANALYTICS_URL}/inventory-turnover`, {
+    headers: bearerToken(token),
+  });
+
+export const fetchStockRotation = (token) =>
+  axios.get(`${ANALYTICS_URL}/stock-rotation`, {
+    headers: bearerToken(token),
+  });
