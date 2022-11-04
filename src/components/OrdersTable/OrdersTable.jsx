@@ -10,6 +10,8 @@ import { fetchOrders } from '@api/orders/methods';
 import { FilterPillTable } from '@components/FilterPillTable/FilterPillTable';
 import AssignShipmentModal from './AssignShipmentModal';
 import { TakeOrderButton } from './TakeOrderButton';
+import { useUser } from '@hooks/useUser';
+import { useNotify } from '@hooks/useNotify';
 
 const header = [
   {
@@ -61,6 +63,8 @@ export function OrdersTable({
   onlyTable,
   filterTabs = [],
 }) {
+  const { asyncNotify } = useNotify();
+  const { user } = useUser();
   const [data, setData] = useState([]);
   const [orders, setOrders] = useState([]);
   const [isShipmentModalOpen, setIsShipmentModalOpen] = useState(false);
@@ -91,6 +95,8 @@ export function OrdersTable({
       );
     },
     action() {
+      const isResponsable = assignedTo?.id === user?.id;
+
       return (
         <div className="flex items-center justify-end">
           <TakeOrderButton
@@ -104,7 +110,7 @@ export function OrdersTable({
             }}
           />
 
-          {orderStatus?.id === 3 && (
+          {orderStatus?.id === 3 && isResponsable && (
             <>
               <button
                 type="button"
@@ -185,7 +191,15 @@ export function OrdersTable({
                     disabled={isLoading}
                     onClick={async () => {
                       setIsLoading(true);
-                      const { data: updatedOrders } = await fetchOrders();
+                      const { data: updatedOrders } = await asyncNotify(
+                        fetchOrders(),
+                        {
+                          pending: 'Cargando datos...',
+                          success: 'Se actualizó la lista correctamente.',
+                          error:
+                            'Tuvimos problemas para actuallizar la lista. Intenta de nuevo.',
+                        }
+                      );
                       setData(updatedOrders.map(renderRow));
                       setCurrentTab('ALL');
                       setIsLoading(false);

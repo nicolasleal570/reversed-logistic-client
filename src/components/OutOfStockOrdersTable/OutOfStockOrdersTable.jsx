@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { fetchOutOfStockOrders } from '@api/out-of-stock/methods';
 import { useOutOfStockOrders } from '@hooks/useOutOfStockOrders';
 import { FilterPillTable } from '@components/FilterPillTable/FilterPillTable';
+import { useNotify } from '@hooks/useNotify';
 
 const header = [
   {
@@ -53,6 +54,7 @@ export function OutOfStockOrdersTable({
   filterTabs,
 }) {
   const router = useRouter();
+  const { asyncNotify } = useNotify();
   const { takeOutOfStockOrder, finishOutOfStockOrder } = useOutOfStockOrders();
   const [data, setData] = React.useState([]);
   const [outOfStockOrders, setOutOfStockOrders] = React.useState([]);
@@ -174,6 +176,7 @@ export function OutOfStockOrdersTable({
           href="/out-of-stock-orders/create"
           as="/out-of-stock-orders/create"
           text="Órdenes"
+          deactivateSearchBar
           tableHeader={
             <>
               <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
@@ -187,8 +190,15 @@ export function OutOfStockOrdersTable({
                   disabled={isLoading}
                   onClick={async () => {
                     setIsLoading(true);
-                    const { data: updatedOrders } =
-                      await fetchOutOfStockOrders();
+                    const { data: updatedOrders } = await asyncNotify(
+                      fetchOutOfStockOrders(),
+                      {
+                        pending: 'Cargando datos...',
+                        success: 'Se actualizó la lista correctamente.',
+                        error:
+                          'Tuvimos problemas para actuallizar la lista. Intenta de nuevo.',
+                      }
+                    );
                     setData(updatedOrders.map(renderRow));
                     setIsLoading(false);
                   }}

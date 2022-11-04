@@ -11,11 +11,15 @@ import OrderForm from '@components/OrderForm/OrderForm';
 import { OrderSummary } from '@components/OrderSummary/OrderSummary';
 import { TakeOrderButton } from '@components/OrdersTable/TakeOrderButton';
 import AssignShipmentModal from '@components/OrdersTable/AssignShipmentModal';
+import { useUser } from '@hooks/useUser';
 
 function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
+  const { user } = useUser();
   const [order, setOrder] = useState(data);
   const [isEdit, setIsEdit] = useState(false);
   const [isShipmentModalOpen, setIsShipmentModalOpen] = useState(false);
+
+  const isResponsable = order?.assignedTo?.id === user?.id;
 
   useEffect(() => {
     setOrder(data);
@@ -63,7 +67,7 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
         </div>
       )}
 
-      {order?.orderStatus?.value === 'FINISHED' && (
+      {order?.orderStatus?.value === 'FINISHED' && isResponsable && (
         <div className="mb-8 border-b border-gray-200 pb-8">
           <button
             type="button"
@@ -92,7 +96,11 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
           onlyRead={!isEdit}
         />
       ) : (
-        <OrderSummary order={order} setOrder={setOrder} />
+        <OrderSummary
+          order={order}
+          setOrder={setOrder}
+          isResponsable={isResponsable}
+        />
       )}
 
       {isShipmentModalOpen && (

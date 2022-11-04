@@ -6,9 +6,11 @@ import {
   ChevronDoubleUpIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/outline';
+import { ShipmentsTable } from '@components/ShipmentsTable/ShipmentsTable';
 
 function Tooltip({ count }) {
-  const text = count && count?.avg ? `${count?.avg} ${count?.format}` : '-';
+  const text =
+    count && count?.avg ? `${Math.round(count?.avg)} ${count?.format}` : '-';
 
   return (
     <div className="inline-block -mt-12">
@@ -62,23 +64,44 @@ function Tooltip({ count }) {
 
 export function TruckSummary({ truck, deliveryAtTime }) {
   return (
-    <div className="w-full">
-      <h2 className="block w-full text-lg leading-7 font-semibold mb-8">
-        Información sobre el vehículo
-      </h2>
-      <DataSection label="Marca" value={truck.brand} />
-      <DataSection label="Modelo" value={truck.model} />
-      <DataSection label="Tipo" value={truck.type} />
-      <DataSection label="Placa" value={truck.licensePlate} />
-      <DataSection label="Conductor" value={truck.driver?.fullName || '-'} />
-      <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
-        KPIs y analíticas
-      </h2>
-      <DataSection
-        label="Rendimiento para entregas final a tiempo"
-        value={!deliveryAtTime?.count ? '-' : undefined}
-      />
-      {deliveryAtTime?.count && <Tooltip count={deliveryAtTime?.count || {}} />}
-    </div>
+    <>
+      <div className="w-full">
+        <h2 className="block w-full text-lg leading-7 font-semibold mb-8">
+          Información sobre el vehículo
+        </h2>
+        <DataSection label="Marca" value={truck.brand} />
+        <DataSection label="Modelo" value={truck.model} />
+        <DataSection label="Tipo" value={truck.type} />
+        <DataSection label="Placa" value={truck.licensePlate} />
+        <DataSection
+          label="Conductor"
+          value={truck.driver?.fullName || '-'}
+          url={truck?.driver ? `/users/${truck?.driver?.id}` : undefined}
+        />
+        <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
+          KPIs y analíticas
+        </h2>
+        <DataSection
+          label="Rendimiento para entregas final a tiempo"
+          value={!deliveryAtTime?.count ? '-' : undefined}
+        />
+        {deliveryAtTime?.count && (
+          <Tooltip count={deliveryAtTime?.count || {}} />
+        )}
+      </div>
+      {truck?.shipments?.length > 0 ? (
+        <>
+          <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
+            Histórico de envíos
+          </h2>
+
+          <ShipmentsTable
+            shipments={truck?.shipments || []}
+            onlyTable
+            deactivateSearchBar
+          />
+        </>
+      ) : null}
+    </>
   );
 }

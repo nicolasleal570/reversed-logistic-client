@@ -51,7 +51,11 @@ export const shipentStatusColor = {
   SHIPMENT_DONE: 'green',
 };
 
-export function ShipmentsTable({ shipments: rawShipments, filterTabs }) {
+export function ShipmentsTable({
+  shipments: rawShipments,
+  onlyTable,
+  filterTabs = [],
+}) {
   const router = useRouter();
   const { startShipment, updateShipment } = useShipments();
   const [data, setData] = React.useState([]);
@@ -150,13 +154,15 @@ export function ShipmentsTable({ shipments: rawShipments, filterTabs }) {
 
   return (
     <>
-      <FilterPillTable
-        tabs={filterTabs}
-        currentTab={currentTab}
-        onClick={(value) =>
-          value ? setCurrentTab(value) : setCurrentTab('ALL')
-        }
-      />
+      {filterTabs.length > 0 && (
+        <FilterPillTable
+          tabs={filterTabs}
+          currentTab={currentTab}
+          onClick={(value) =>
+            value ? setCurrentTab(value) : setCurrentTab('ALL')
+          }
+        />
+      )}
 
       <Card>
         <Table
@@ -165,23 +171,26 @@ export function ShipmentsTable({ shipments: rawShipments, filterTabs }) {
           href="/shipments/create"
           as="/shipments/create"
           text="Cases"
+          deactivateSearchBar
           tableHeader={
             <>
-              <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
-                <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
-                  Todos los envíos
-                </h2>
+              {!onlyTable && (
+                <div className="flex flex-col lg:flex-row flex-wrap w-full p-6">
+                  <h2 className="text-lg leading-7 font-medium text-gray-900 my-auto flex-1 mb-4 g:mb-0">
+                    Todos los envíos
+                  </h2>
 
-                <Link href="/shipments/create">
-                  <a
-                    type="button"
-                    className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
-                  >
-                    <PlusIcon className="w-5 mr-1" />
-                    <span>Nuevo envío</span>
-                  </a>
-                </Link>
-              </div>
+                  <Link href="/shipments/create">
+                    <a
+                      type="button"
+                      className="bg-indigo-600 flex items-center px-4 py-2.5 rounded-lg text-white"
+                    >
+                      <PlusIcon className="w-5 mr-1" />
+                      <span>Nuevo envío</span>
+                    </a>
+                  </Link>
+                </div>
+              )}
             </>
           }
         />

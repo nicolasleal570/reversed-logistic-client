@@ -10,7 +10,7 @@ import { ExternalLinkIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { KPITooltip } from './KPITooltip';
 
-export function OrderSummary({ order, setOrder }) {
+export function OrderSummary({ order, setOrder, isResponsable }) {
   const { markOrderAsReady } = useOrders();
   const [doneItems, setDoneItems] = useState([]);
 
@@ -189,7 +189,7 @@ export function OrderSummary({ order, setOrder }) {
                 value={`${item.quantity} L`}
               />
 
-              {order.orderStatus.value === 'IN_TRANSIT' && (
+              {order.orderStatus.value === 'IN_TRANSIT' && isResponsable && (
                 <button
                   type="button"
                   className={classNames(
@@ -220,7 +220,7 @@ export function OrderSummary({ order, setOrder }) {
       </div>
 
       <div className="w-full lg:w-96">
-        {order.orderStatusId < 4 && (
+        {order.orderStatusId < 4 && isResponsable && (
           <button
             type="button"
             className={classNames(

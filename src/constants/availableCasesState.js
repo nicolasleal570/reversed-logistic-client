@@ -20,7 +20,7 @@ export const availableCasesState = {
     color: 'yellow',
   },
   IN_SHIPMENT: {
-    title: 'Ya fue enviado',
+    title: 'En camino',
     color: 'cyan',
   },
   SHIPMENT_DONE: {

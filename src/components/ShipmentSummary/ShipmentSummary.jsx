@@ -69,7 +69,11 @@ export function ShipmentSummary({ shipment }) {
           url={`/trucks/${truck.id}`}
         />
 
-        <DataSection label="Conductor" value={truck?.driver?.fullName || '-'} />
+        <DataSection
+          label="Conductor"
+          value={truck?.driver?.fullName || '-'}
+          url={truck?.driver ? `/users/${truck?.driver?.id}` : undefined}
+        />
       </div>
 
       <DataSection
