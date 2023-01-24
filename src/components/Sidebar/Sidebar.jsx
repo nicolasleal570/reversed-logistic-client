@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import classNames from 'classnames';
 import { XIcon } from '@heroicons/react/outline';
 import { SidebarSection } from '@components/SidebarSection/SidebarSection';
 import { items } from '@constants/sidebarItems';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useLayout } from '@hooks/useLayout';
-import Link from 'next/link';
 import { useAuth } from '@hooks/useAuth';
 
 export function Sidebar() {
@@ -36,9 +37,15 @@ export function Sidebar() {
           <XIcon className="w-5 h-5" />
         </button>
 
-        <section className="w-full p-4 md:py-6 border-b border-gray-200">
-          <Link href="/">
-            <a className="text-white text-xl">LOGO</a>
+        <section className="w-full p-4 md:py-6 border-b border-gray-200 cursor-pointer">
+          <Link href="/home">
+            <Image
+              src="/reversed-full-logo.png"
+              alt="Reversed logistic app"
+              width={200}
+              height={50}
+              objectFit="contain"
+            />
           </Link>
         </section>
 
