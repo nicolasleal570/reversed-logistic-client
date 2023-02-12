@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { PlusIcon, PencilIcon } from '@heroicons/react/outline';
 import { Card } from '@components/Card/Card';
 import { Badge } from '@components/Badge/Badge';
-import { availableCasesState } from '@constants/availableCasesState';
 import { useCases } from '@hooks/useCases';
 import Table from '@components/Table/Table';
 
@@ -14,7 +13,7 @@ const header = [
     accessor: 'id',
   },
   {
-    Header: 'Name',
+    Header: 'Nombre',
     accessor: 'name',
   },
   {

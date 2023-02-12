@@ -17,8 +17,8 @@ const header = [
     disableSortBy: true,
   },
   {
-    Header: 'Name',
-    accessor: 'Nombre',
+    Header: 'Nombre',
+    accessor: 'name',
     disableFilters: true,
     disableSortBy: true,
   },

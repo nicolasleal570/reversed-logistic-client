@@ -15,7 +15,7 @@ const header = [
     accessor: 'id',
   },
   {
-    Header: 'Name',
+    Header: 'Nombre',
     accessor: 'name',
   },
   {

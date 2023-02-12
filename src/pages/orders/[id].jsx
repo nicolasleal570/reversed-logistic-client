@@ -30,7 +30,7 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
       title={`Orden #OR${order.id}`}
       description="Información detallada de la orden"
     >
-      {order.orderStatusId < 3 && (
+      {order.orderStatusId < 3 && isResponsable && (
         <div className="mb-8 border-b border-gray-200 pb-8">
           <Switch.Group>
             <>
@@ -67,17 +67,23 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
         </div>
       )}
 
-      {order?.orderStatus?.value === 'FINISHED' && isResponsable && (
-        <div className="mb-8 border-b border-gray-200 pb-8">
+      {order?.orderStatus?.value === 'FINISHED' && (
+        <div className="mb-8 border-b border-gray-200 pb-8 flex items-center">
           <button
             type="button"
-            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 disabled:bg-gray-100 disabled:border-gray-300 disabled:text-gray-500"
             onClick={async () => {
-              setIsShipmentModalOpen(true);
+              if (isResponsable) {
+                setIsShipmentModalOpen(true);
+              }
             }}
+            disabled={!isResponsable}
           >
             <span>Asignar envío</span>
           </button>
+          <p className="text-gray-900 text-sm">
+            Esta orden está siendo preparada por otro compañero!
+          </p>
         </div>
       )}
 
