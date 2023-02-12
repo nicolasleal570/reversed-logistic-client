@@ -1,7 +1,11 @@
+import dynamic from 'next/dynamic';
 import { MenuIcon } from '@heroicons/react/outline';
-import { Sidebar } from '@components/Sidebar/Sidebar';
 import LayoutContextProvider from '@contexts/LayoutContext/LayoutContext';
 import { useLayout } from '@hooks/useLayout';
+const Sidebar = dynamic(
+  () => import('@components/Sidebar/Sidebar').then((mod) => mod.Sidebar),
+  { ssr: false }
+);
 
 function LayoutContainer({
   children,

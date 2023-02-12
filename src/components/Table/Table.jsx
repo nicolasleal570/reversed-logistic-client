@@ -21,6 +21,7 @@ function Table({
   onClickRow,
   tableHeader,
   deactivateSearchBar,
+  deactivatePagination,
   filterTabs,
 }) {
   const columns = React.useMemo(() => [...headers], [headers]);
@@ -201,7 +202,7 @@ function Table({
           </table>
         )}
       </div>
-      {content.length > 0 && (
+      {!deactivatePagination && content.length > 0 && (
         <Pagination
           canPreviousPage={canPreviousPage}
           canNextPage={canNextPage}

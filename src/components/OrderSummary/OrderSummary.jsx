@@ -28,7 +28,7 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
               ? `${dayjs(order?.shipment?.deliveredAt).diff(
                   dayjs(order.purchaseDate),
                   'hour'
-                )} hora/s`
+                )} horas`
               : '-'
           }
           withoutMargins
@@ -47,7 +47,7 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
               ? `${dayjs(order?.shipment?.shipmentAt).diff(
                   dayjs(order.purchaseDate),
                   'hour'
-                )} hora/s`
+                )} horas`
               : '-'
           }
           withoutMargins

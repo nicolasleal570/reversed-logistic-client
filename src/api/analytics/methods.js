@@ -11,6 +11,9 @@ export const fetchOrdersByCustomerLocations = (customerId, token) =>
 export const fetchBestCustomers = (token) =>
   axios.get(`${ANALYTICS_URL}/best-customers`, { headers: bearerToken(token) });
 
+export const fetchBestCustomersLocation = (token) =>
+  axios.get(`${ANALYTICS_URL}/best-customers-location`, { headers: bearerToken(token) });
+
 export const fetchBestCaseContents = (token) =>
   axios.get(`${ANALYTICS_URL}/best-case-contents`, {
     headers: bearerToken(token),

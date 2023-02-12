@@ -1,5 +1,4 @@
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
-import Link from 'next/link';
 
 export function UserSummary({ user }) {
   return (
@@ -13,33 +12,6 @@ export function UserSummary({ user }) {
       <DataSection label="Email" value={user.email} />
 
       <DataSection label="Teléfono" value={user.phone} />
-
-      {user.roles.length > 0 && (
-        <>
-          <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
-            Roles
-          </h2>
-
-          {user.roles.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white p-4 pb-0 border border-gray-200 rounded mb-6"
-            >
-              <h3 className="block w-full text-md leading-7 font-medium">
-                {item.name}
-              </h3>
-
-              <DataSection label="Descripción" value={item.description} />
-
-              <Link href="/roles/[id]" as={`/roles/${item.id}`}>
-                <a className="block text-blue-500 underline text-sm my-6">
-                  Revisar permisos
-                </a>
-              </Link>
-            </div>
-          ))}
-        </>
-      )}
     </div>
   );
 }

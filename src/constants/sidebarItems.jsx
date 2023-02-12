@@ -114,11 +114,13 @@ export const items = [
         icon: <UsersIcon className={iconStyles} />,
         url: '/users',
       },
+      /*
       {
         title: 'Roles y permisos',
         icon: <LockClosedIcon className={iconStyles} />,
         url: '/roles',
       },
+*/
     ],
   },
 ];

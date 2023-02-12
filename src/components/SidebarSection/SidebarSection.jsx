@@ -32,7 +32,13 @@ export function SidebarSection({
             <a
               className={classNames('block w-full py-2 px-3 flex items-center')}
             >
-              {slot.icon}
+              {slot.icon ? (
+                slot.icon
+              ) : (
+                <div className="w-5 h-5 mr-3 flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full" />
+                </div>
+              )}
               <span
                 className={classNames(
                   'text-gray-700 text-base leading-6 font-medium',
