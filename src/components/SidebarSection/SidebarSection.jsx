@@ -25,7 +25,7 @@ export function SidebarSection({
       )}
 
       {slots.map((slot) => {
-        const isActive = router.pathname.includes(slot.url);
+        const isActive = router.pathname === slot.url;
 
         return (
           <Link key={slot.url} href={slot.url}>

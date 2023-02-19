@@ -110,20 +110,23 @@ export function ShipmentsTable({
               </>
             )}
 
-            {shipmentStatus?.value === 'IN_SHIPMENT' && shipmentAt && (
-              <>
-                <button
-                  type="button"
-                  className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
-                  onClick={async () => {
-                    await updateShipment(id, { deliveredAt: new Date() });
-                    router.push(`/shipments/${id}`);
-                  }}
-                >
-                  <span>Entregar</span>
-                </button>
-              </>
-            )}
+            {orders.filter((order) => order.deliveredAt === null).length ===
+              0 &&
+              shipmentStatus?.value === 'IN_SHIPMENT' &&
+              shipmentAt && (
+                <>
+                  <button
+                    type="button"
+                    className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+                    onClick={async () => {
+                      await updateShipment(id, { deliveredAt: new Date() });
+                      router.push(`/shipments/${id}`);
+                    }}
+                  >
+                    <span>Entregar</span>
+                  </button>
+                </>
+              )}
 
             <Link href="/shipments/[id]" as={`/shipments/${id}`}>
               <a className="text-gray-900 p-1">

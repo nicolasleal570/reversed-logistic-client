@@ -24,8 +24,8 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
         <DataSection
           label="Tiempo de espera de la orden"
           value={
-            order?.shipment && order?.shipment?.deliveredAt
-              ? `${dayjs(order?.shipment?.deliveredAt).diff(
+            order?.deliveredAt
+              ? `${dayjs(order.deliveredAt).diff(
                   dayjs(order.purchaseDate),
                   'hour'
                 )} horas`
@@ -95,28 +95,6 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
       />
 
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
-        Información del Cliente
-      </h2>
-
-      <DataSection
-        label="Cliente"
-        value={order.customerLocation.customer.companyName}
-        url={`/customers/${order.customerLocation.customer.id}`}
-      />
-
-      <DataSection label="Sucursal" value={order.customerLocation.name} />
-
-      <DataSection
-        label="Contacto de la sucursal"
-        value={order.customerLocation.contact}
-      />
-
-      <DataSection
-        label="Email asignado para reportar cases"
-        value={order.customerLocation.email}
-      />
-
-      <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Información del envío
       </h2>
 
@@ -156,6 +134,28 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
       )}
 
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
+        Información del Cliente
+      </h2>
+
+      <DataSection
+        label="Cliente"
+        value={order.customerLocation.customer.companyName}
+        url={`/customers/${order.customerLocation.customer.id}`}
+      />
+
+      <DataSection label="Sucursal" value={order.customerLocation.name} />
+
+      <DataSection
+        label="Contacto de la sucursal"
+        value={order.customerLocation.contact}
+      />
+
+      <DataSection
+        label="Email asignado para reportar cases"
+        value={order.customerLocation.email}
+      />
+
+      <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Lista de productos
       </h2>
 
@@ -176,7 +176,7 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
                 )}
                 <span>Case {idx + 1}</span>
 
-                <Link href={`/cases/${item.id}`}>
+                <Link href={`/cases/${item.case.id}`}>
                   <a>
                     <ExternalLinkIcon className="w-5 text-blue-500" />
                   </a>

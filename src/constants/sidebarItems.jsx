@@ -34,7 +34,7 @@ export const items = [
       {
         title: 'Analíticas',
         icon: <ChartBarIcon className={iconStyles} />,
-        url: '/analytics',
+        url: '/analytics/cases',
       },
     ],
   },

@@ -15,6 +15,9 @@ function EditShipmentPage({ shipment: data, trucks, token }) {
   const [isEdit, setIsEdit] = useState(false);
   const { startShipment, deliverShipment } = useShipments();
 
+  const allIsDelivered =
+    shipment?.orders.filter((order) => order.deliveredAt === null).length === 0;
+
   useEffect(() => {
     setShipment(data);
   }, [data]);
@@ -77,11 +80,16 @@ function EditShipmentPage({ shipment: data, trucks, token }) {
         <div className="mb-8 border-b border-gray-200 pb-8">
           <button
             type="button"
-            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2"
+            className="border border-indigo-600 text-indigo-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
             onClick={async () => {
-              const { data: updatedData } = await deliverShipment(shipment.id);
-              setShipment(updatedData);
+              if (allIsDelivered) {
+                const { data: updatedData } = await deliverShipment(
+                  shipment.id
+                );
+                setShipment(updatedData);
+              }
             }}
+            disabled={!allIsDelivered}
           >
             <span>Entregar</span>
           </button>
@@ -101,7 +109,7 @@ function EditShipmentPage({ shipment: data, trucks, token }) {
           }}
         />
       ) : (
-        <ShipmentSummary shipment={shipment} />
+        <ShipmentSummary shipment={shipment} setShipment={setShipment} />
       )}
     </Layout>
   );

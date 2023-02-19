@@ -39,13 +39,15 @@ export function Sidebar() {
 
         <section className="w-full p-4 md:py-6 border-b border-gray-200 cursor-pointer">
           <Link href="/home">
-            <Image
-              src="/reversed-full-logo.png"
-              alt="Reversed logistic app"
-              width={200}
-              height={50}
-              objectFit="contain"
-            />
+            <a>
+              <Image
+                src="/reversed-full-logo.png"
+                alt="Reversed logistic app"
+                width={200}
+                height={50}
+                objectFit="contain"
+              />
+            </a>
           </Link>
         </section>
 

@@ -47,30 +47,33 @@ export function useOrders() {
   };
 
   const updateOrder = async (orderId, data, token) => {
-    const { items, customerLocationId, expectedDeliveryDate } = data;
+    const { items, customerLocationId, expectedDeliveryDate, deliveredAt } =
+      data;
+
+    let payload = {
+      customerLocationId,
+      expectedDeliveryDate,
+      deliveredAt,
+    };
+
+    if (items) {
+      payload = {
+        ...payload,
+        items: items?.map((info) => ({
+          id: info.id,
+          caseId: Number.parseInt(info.caseId, 10),
+          caseContentId: Number.parseInt(info.caseContentId, 10),
+          quantity: Number.parseInt(info.contentQuantity, 10) ?? 1,
+        })),
+      };
+    }
 
     try {
-      return asyncNotify(
-        updateOrderAPI(
-          orderId,
-          {
-            customerLocationId,
-            expectedDeliveryDate,
-            items: items.map((info) => ({
-              id: info.id,
-              caseId: Number.parseInt(info.caseId, 10),
-              caseContentId: Number.parseInt(info.caseContentId, 10),
-              quantity: Number.parseInt(info.contentQuantity, 10) ?? 1,
-            })),
-          },
-          token
-        ),
-        {
-          pending: 'Actualizando la órden...',
-          success: 'Se actualizó correctamente.',
-          error: 'Tuvimos problemas actualizando la órden. Intenta de nuevo.',
-        }
-      );
+      return asyncNotify(updateOrderAPI(orderId, payload, token), {
+        pending: 'Actualizando la órden...',
+        success: 'Se actualizó correctamente.',
+        error: 'Tuvimos problemas actualizando la órden. Intenta de nuevo.',
+      });
     } catch (error) {
       console.log(error);
     }

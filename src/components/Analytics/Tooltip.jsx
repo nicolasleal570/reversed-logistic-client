@@ -1,11 +1,10 @@
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/outline';
-import { Card } from '@components/Card/Card';
 
-function Tooltip() {
+export function Tooltip({ title, description }) {
   return (
-    <Popover className="relative ml-9">
+    <Popover className="relative">
       <Popover.Button
         className={`
                 group inline-flex items-center pl-2 py-1 text-base font-medium focus:outline-none`}
@@ -22,35 +21,15 @@ function Tooltip() {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute right-0 mt-1 px-4 sm:px-0 w-80">
+        <Popover.Panel className="absolute right-0 mt-1 px-4 sm:px-0 w-80 z-50">
           <div className="overflow-hidden rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="relative bg-white p-3 max-w-xs">
-              <h3 className="font-medium">Entregas a destiempo</h3>
-              <p className="text-xs text-gray-600 mt-1.5">
-                Este KPI mide el número total de entregas que no fueron
-                realizadas a tiempo.
-              </p>
+              <h3 className="font-medium">{title}</h3>
+              <p className="text-xs text-gray-600 mt-1.5">{description}</p>
             </div>
           </div>
         </Popover.Panel>
       </Transition>
     </Popover>
-  );
-}
-
-export function LateDeliveriesGraph({ count }) {
-  return (
-    <Card className="p-4 flex flex-col">
-      <h2 className="flex items-center justify-between w-full text-lg leading-7 font-semibold mb-2">
-        Entregas a destiempo
-        <Tooltip />
-      </h2>
-
-      <div className="flex flex-grow items-center">
-        <div className=" flex items-center justify-center mx-auto w-16 h-16 rounded-full ring-indigo-500 ring-1">
-          <p className="text-center text-3xl">{count || 0}</p>
-        </div>
-      </div>
-    </Card>
   );
 }

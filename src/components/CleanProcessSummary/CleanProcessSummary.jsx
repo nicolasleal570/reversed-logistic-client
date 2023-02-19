@@ -78,6 +78,11 @@ export function CleanProcessSummary({
 
       <DataSection label="Contenido que tenía" value={caseContent.name} />
 
+      <DataSection
+        label="Comentarios de almacén"
+        value={caseContent.details || '-'}
+      />
+
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Información del Cliente
       </h2>

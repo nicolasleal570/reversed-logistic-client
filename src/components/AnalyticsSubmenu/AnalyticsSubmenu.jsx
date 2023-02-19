@@ -4,10 +4,9 @@ import classNames from 'classnames';
 
 const list = [
   { label: 'Cases', url: '/analytics/cases' },
-  { label: 'Sabores', url: '/analytics/flavors' },
   { label: 'Clientes', url: '/analytics/customers' },
-  /*{ label: 'Ventas', url: '/analytics/orders' },
-  { label: 'Envíos', url: '/analytics/shipments' },
+  { label: 'Ventas', url: '/analytics/orders' },
+  /*
   { label: 'Agotamiento', url: '/analytics/out-of-stock-orders' },
   { label: 'Transporte', url: '/analytics/trucks' },
   { label: 'Órdenes de Limpieza', url: '/analytics/clean-process' },

@@ -12,7 +12,9 @@ export const fetchBestCustomers = (token) =>
   axios.get(`${ANALYTICS_URL}/best-customers`, { headers: bearerToken(token) });
 
 export const fetchBestCustomersLocation = (token) =>
-  axios.get(`${ANALYTICS_URL}/best-customers-location`, { headers: bearerToken(token) });
+  axios.get(`${ANALYTICS_URL}/best-customers-location`, {
+    headers: bearerToken(token),
+  });
 
 export const fetchBestCaseContents = (token) =>
   axios.get(`${ANALYTICS_URL}/best-case-contents`, {
@@ -24,8 +26,8 @@ export const fetchBestCases = (token) =>
     headers: bearerToken(token),
   });
 
-export const fetchDeliveryAtTime = (driverId, token) =>
-  axios.get(`${ANALYTICS_URL}/delivery-at-time/${driverId}`, {
+export const fetchDeliveryAtTime = (token) =>
+  axios.get(`${ANALYTICS_URL}/delivery-at-time`, {
     headers: bearerToken(token),
   });
 

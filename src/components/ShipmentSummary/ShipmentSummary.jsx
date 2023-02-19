@@ -2,9 +2,9 @@ import dayjs from 'dayjs';
 import { DataSection } from '@components/CreateUser/CreateUserSummary/DataSection';
 import { formatDuration } from '@utils/formatDuration';
 import { shipentStatusColor } from '@components/ShipmentsTable/ShipmentsTable';
-import { OrdersTable } from '@components/OrdersTable/OrdersTable';
+import { OrderCard } from './OrderCard';
 
-export function ShipmentSummary({ shipment }) {
+export function ShipmentSummary({ shipment, setShipment }) {
   const {
     trackNumber,
     shipmentAt,
@@ -76,19 +76,22 @@ export function ShipmentSummary({ shipment }) {
         />
       </div>
 
-      <DataSection
-        label="Ordenes asignadas"
-        value={shipment?.orders?.length === 0 ? 'Ninguna' : ''}
-      />
       <h2 className="block w-full text-lg leading-7 font-semibold pt-8 mb-8 border-t border-gray-200 mt-8">
         Órdenes asignadas
       </h2>
 
-      {orders?.length > 0 ? (
-        <OrdersTable orders={orders || []} onlyTable />
-      ) : (
-        <DataSection label="" value="Ninguna" />
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {orders.map((item) => {
+          return (
+            <OrderCard
+              shipment={shipment}
+              setShipment={setShipment}
+              order={item}
+              key={item.id}
+            />
+          );
+        })}
+      </div>
     </>
   );
 }

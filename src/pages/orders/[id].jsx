@@ -81,9 +81,11 @@ function EditOrderPage({ order: data, customers, cases, casesContent, token }) {
           >
             <span>Asignar envío</span>
           </button>
-          <p className="text-gray-900 text-sm">
-            Esta orden está siendo preparada por otro compañero!
-          </p>
+          {!isResponsable && (
+            <p className="text-gray-900 text-sm">
+              Esta orden está siendo preparada por otro compañero!
+            </p>
+          )}
         </div>
       )}
 
