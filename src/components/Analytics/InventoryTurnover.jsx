@@ -9,8 +9,8 @@ export function InventoryTurnoverGraph({ inventoryTurnover }) {
       <h2 className="p-4 flex items-center w-full text-lg leading-7 font-semibold border-b border-gray-200">
         Rotación de inventario
         <Tooltip
-          title="Envíos del mes"
-          description="Este KPI mide el número total de envíos realizados en el mes actual."
+          title="Rotación de inventario"
+          description="Este KPI mide la frecuencia con la que se vende un inventario de cases."
         />
       </h2>
 
@@ -18,7 +18,7 @@ export function InventoryTurnoverGraph({ inventoryTurnover }) {
         <div className="w-[150px] h-[150px] rounded-full flex items-center justify-center flex-col border-4 border-indigo-400">
           <p className="text-5xl font-medium text-gray-700">{count}</p>
           <p className="text-xs font-medium text-center text-gray-600">
-            Total de rotaciones <br /> este mes
+            Total de rotaciones <br /> del mes
           </p>
         </div>
 
