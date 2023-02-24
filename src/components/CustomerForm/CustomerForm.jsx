@@ -15,6 +15,8 @@ const INITIAL_LOCATION = {
   city: '',
   state: '',
   contact: '',
+  email: '',
+  password: '',
   country: 'Venezuela',
 };
 
@@ -245,6 +247,27 @@ function CustomerForm({
                 ...register(`locations.${idx}.email`, {
                   required:
                     'Debes ingresar un email para que la sucursal reporte los cases que se agotan',
+                }),
+              }}
+              errors={errors?.locations?.[idx]}
+            />
+          </FormRow>
+
+          <FormRow>
+            <InputLabel
+              title="Contraseña para reportar cases"
+              inputId="email"
+            />
+            <InputField
+              type="password"
+              placeholder="********"
+              id="password"
+              name="password"
+              disabled={onlyRead}
+              inputProps={{
+                ...register(`locations.${idx}.password`, {
+                  required:
+                    'Debes ingresar una contraseña para que la sucursal reporte los cases que se agotan',
                 }),
               }}
               errors={errors?.locations?.[idx]}

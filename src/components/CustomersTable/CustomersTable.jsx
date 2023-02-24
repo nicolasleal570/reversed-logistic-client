@@ -64,7 +64,7 @@ export function CustomersTable({ customers }) {
                   href={website}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-blue-500 underline"
+                  className="block max-w-[150px] text-blue-500 underline truncate"
                 >
                   {website}
                 </a>

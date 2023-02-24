@@ -48,7 +48,10 @@ export function BestCustomersLocationGraph({ locations: data }) {
               ...item,
               customerName() {
                 return (
-                  <Link href="/customers/[id]" as={`/customers/${item.customer.id}`}>
+                  <Link
+                    href="/customers/[id]"
+                    as={`/customers/${item.customer.id}`}
+                  >
                     <a className="text-blue-500 hover:underline">
                       <span>{item.customer.companyName}</span>
                     </a>

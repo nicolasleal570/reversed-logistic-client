@@ -4,14 +4,12 @@ import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
 import { Button, SM_SIZE } from '@components/Button/Button';
-import { SelectField } from '@components/SelectField/SelectField';
 import { useUsers } from '@hooks/useUsers';
 
 export function UserForm({
   isEdit = false,
   onlyRead = false,
   user,
-  roles,
   token,
   onUpdate,
 }) {
@@ -28,7 +26,6 @@ export function UserForm({
       await createUser(
         {
           ...data,
-          password: 'password',
         },
         token
       );
@@ -44,7 +41,6 @@ export function UserForm({
       setValue('fullName', user.fullName);
       setValue('email', user.email);
       setValue('phone', user.phone);
-      setValue('roleId', String(user.roles[0]?.id));
     }
   }, [user, setValue]);
 
@@ -73,6 +69,7 @@ export function UserForm({
       <FormRow>
         <InputLabel title="Correo electrónico" inputId="email" />
         <InputField
+          type="email"
           id="email"
           name="email"
           placeholder="john@email.com"
@@ -81,6 +78,23 @@ export function UserForm({
           inputProps={{
             ...register('email', {
               required: 'Debes ingresar un correo electrónico válido',
+            }),
+          }}
+        />
+      </FormRow>
+
+      <FormRow>
+        <InputLabel title="Contraseña" inputId="password" />
+        <InputField
+          type="password"
+          id="password"
+          name="password"
+          placeholder="********"
+          errors={errors}
+          disabled={isEdit}
+          inputProps={{
+            ...register('password', {
+              required: 'Debes ingresar una contraseña válida',
             }),
           }}
         />
@@ -99,27 +113,6 @@ export function UserForm({
               required: 'Debes ingresar un teléfono válido',
             }),
           }}
-        />
-      </FormRow>
-
-      <FormRow>
-        <InputLabel title="Rol" inputId="roleId" />
-        <SelectField
-          id="roleId"
-          name="roleId"
-          errors={errors}
-          placeholder="Selecciona un rol"
-          highlight="Seleccionando un rol, los permisos se agregan automáticamente"
-          disabled={onlyRead}
-          inputProps={{
-            ...register('roleId', {
-              required: 'Debes seleccionar un rol',
-            }),
-          }}
-          options={roles.map((role) => ({
-            label: role.name,
-            value: role.id,
-          }))}
         />
       </FormRow>
 

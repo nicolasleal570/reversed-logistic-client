@@ -40,32 +40,34 @@ function EditCasePage({ case: data, token }) {
       description="Información detallada de un case"
     >
       <div className="mb-8 border-b border-gray-200 pb-8 flex justify-between items-center">
-        <Switch.Group as="div">
-          <>
-            <Switch.Label className="mr-4">Habilitar edición</Switch.Label>
-            <Switch
-              checked={isEdit}
-              onChange={setIsEdit}
-              className={classNames(
-                'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
-                {
-                  'bg-indigo-600': isEdit,
-                  'bg-gray-200': !isEdit,
-                }
-              )}
-            >
-              <span
+        {!caseInfo.deletedAt && (
+          <Switch.Group as="div">
+            <>
+              <Switch.Label className="mr-4">Habilitar edición</Switch.Label>
+              <Switch
+                checked={isEdit}
+                onChange={setIsEdit}
                 className={classNames(
-                  'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                  'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
                   {
-                    'translate-x-6': isEdit,
-                    'translate-x-1': !isEdit,
+                    'bg-indigo-600': isEdit,
+                    'bg-gray-200': !isEdit,
                   }
                 )}
-              />
-            </Switch>
-          </>
-        </Switch.Group>
+              >
+                <span
+                  className={classNames(
+                    'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                    {
+                      'translate-x-6': isEdit,
+                      'translate-x-1': !isEdit,
+                    }
+                  )}
+                />
+              </Switch>
+            </>
+          </Switch.Group>
+        )}
 
         {!caseInfo.deletedAt && caseInfo.state === 'AVAILABLE' && (
           <button
@@ -81,10 +83,10 @@ function EditCasePage({ case: data, token }) {
         )}
 
         {caseInfo.deletedAt && (
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col">
             <button
               type="button"
-              className="border border-blue-600 text-blue-600 flex items-center px-3 py-2 rounded-lg text-sm mr-2 outline-none"
+              className="border border-blue-600 text-blue-600 flex justify-center items-center px-3 py-3 rounded-lg text-sm mr-2 outline-none "
               onClick={async () => {
                 const { data: updatedCase } = await recoveryCase(caseInfo.id);
                 setCaseInfo(updatedCase);
@@ -92,8 +94,8 @@ function EditCasePage({ case: data, token }) {
             >
               Recuperar
             </button>
-            <p className="text-sm mt-3 text-gray-800 text-right">
-              Inhabilitado el: <br />{' '}
+            <p className="text-sm mt-3 text-gray-800">
+              <span className="font-bold">Inhabilitado el:</span> <br />{' '}
               {dayjs(caseInfo.deletedAt).format('hh:mm A - dddd DD MMMM YYYY')}
             </p>
           </div>

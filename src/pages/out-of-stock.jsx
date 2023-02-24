@@ -70,7 +70,7 @@ function OutOfStockPage({
 
   return (
     <>
-      <nav className="flex items-center justify-between py-8 px-4 border-b border-gray-200">
+      <nav className="flex items-center justify-between py-8 border-b border-gray-200 px-[120px]">
         <p className="text-base lg:text-xl leading-9 tracking-tight text-left text-gray-900">
           Hola <span className="font-medium">{client.location.name}</span>!
         </p>

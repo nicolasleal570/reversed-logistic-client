@@ -18,7 +18,7 @@ function CasesAnalytics({ bestCases, bestCaseContents, inventoryTurnover }) {
       description="Aquí podrás examinar todas las métricas correspondientes al módulo de cases."
     >
       <AnalyticsSubmenu />
-      <div className="grid grid-cols-3 gap-8 mt-8 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 w-full">
         <InventoryTurnoverGraph inventoryTurnover={inventoryTurnover} />
       </div>
 

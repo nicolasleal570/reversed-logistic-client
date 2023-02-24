@@ -14,8 +14,8 @@ export function InventoryTurnoverGraph({ inventoryTurnover }) {
         />
       </h2>
 
-      <div className="flex items-center justify-evenly py-6 ">
-        <div className="w-[150px] h-[150px] rounded-full flex items-center justify-center flex-col border-4 border-indigo-400">
+      <div className="flex flex-col md:flex-row items-center justify-evenly py-6 ">
+        <div className="w-[150px] h-[150px] mb-6 md:mb-0 rounded-full flex items-center justify-center flex-col border-4 border-indigo-400">
           <p className="text-5xl font-medium text-gray-700">{count}</p>
           <p className="text-xs font-medium text-center text-gray-600">
             Total de rotaciones <br /> del mes

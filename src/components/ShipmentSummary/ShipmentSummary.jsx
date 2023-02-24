@@ -23,7 +23,11 @@ export function ShipmentSummary({ shipment, setShipment }) {
           Información del envío
         </h2>
 
-        <DataSection label="Creado por" value={createdBy?.fullName} />
+        <DataSection
+          label="Creado por"
+          value={createdBy?.fullName}
+          url={!!createdBy ? `/users/${createdBy?.id}` : undefined}
+        />
 
         <DataSection label="Identificador" value={trackNumber.toUpperCase()} />
 
@@ -50,7 +54,7 @@ export function ShipmentSummary({ shipment, setShipment }) {
         />
 
         <DataSection
-          label="Fecha y hora cuando fue entregado"
+          label="Fecha y hora cuando fue finalizado"
           value={
             deliveredAt
               ? dayjs(deliveredAt).format('hh:mm A - dddd DD MMMM YYYY')

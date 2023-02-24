@@ -91,7 +91,7 @@ function EditShipmentPage({ shipment: data, trucks, token }) {
             }}
             disabled={!allIsDelivered}
           >
-            <span>Entregar</span>
+            <span>Finalizar</span>
           </button>
         </div>
       )}

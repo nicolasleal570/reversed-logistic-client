@@ -44,7 +44,11 @@ export function CaseSummary({ case: caseInfo }) {
           </h2>
 
           <OrdersTable
-            orders={caseInfo?.orders || []}
+            orders={
+              caseInfo?.orders.sort(
+                (a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate)
+              ) || []
+            }
             onlyTable
             deactivateSearchBar
           />
