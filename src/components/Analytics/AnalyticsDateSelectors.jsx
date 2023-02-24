@@ -25,6 +25,7 @@ const months = [
 ];
 
 const currentMonth = dayjs().month();
+const currentYear = dayjs().year();
 
 function FilterModal({ showModal, setShowModal, onSubmit }) {
   const {
@@ -166,7 +167,7 @@ export function AnalyticsDateSelectors({ onSubmit }) {
               : ''}
           </p>
           <p className="block text-sm text-gray-600">
-            {currentValues?.year
+            {currentValues?.year && String(currentYear) !== currentValues?.year
               ? `Año seleccionado: ${currentValues?.year}`
               : ''}
           </p>

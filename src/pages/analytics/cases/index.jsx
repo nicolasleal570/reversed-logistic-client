@@ -12,6 +12,7 @@ import {
 import { parseCookies } from '@utils/parseCookies';
 import { InventoryTurnoverGraph } from '@components/Analytics/InventoryTurnover';
 import { AnalyticsDateSelectors } from '@components/Analytics/AnalyticsDateSelectors';
+import { useNotify } from '@hooks/useNotify';
 
 function CasesAnalytics({
   bestCases: bestCasesData,
@@ -19,6 +20,7 @@ function CasesAnalytics({
   inventoryTurnover: inventoryTurnoverData,
   token,
 }) {
+  const { asyncNotify } = useNotify();
   const [isLoading, setIsLoading] = useState(false);
   const [bestCases, setBestCases] = useState([...bestCasesData]);
   const [bestCaseContents, setBestCaseContents] = useState([
@@ -35,11 +37,18 @@ function CasesAnalytics({
         { data: bestCasesResData },
         { data: bestCaseContentsResData },
         { data: inventoryTurnoverResData },
-      ] = await Promise.all([
-        fetchBestCases(token, values),
-        fetchBestCaseContents(token, values),
-        fetchInventoryTurnover(token, values),
-      ]);
+      ] = await asyncNotify(
+        Promise.all([
+          fetchBestCases(token, values),
+          fetchBestCaseContents(token, values),
+          fetchInventoryTurnover(token, values),
+        ]),
+        {
+          pending: 'Filtrando la data correspondiente...',
+          success: 'La data se filtró correctamente.',
+          error: 'Tuvimos problemas al filtrar los datos. Intenta de nuevo.',
+        }
+      );
 
       setBestCases(bestCasesResData);
       setBestCaseContents(bestCaseContentsResData);
@@ -55,29 +64,29 @@ function CasesAnalytics({
       title="Analíticas y métricas sobre cases"
       description="Aquí podrás examinar todas las métricas correspondientes al módulo de cases."
     >
-        <div className="flex items-center justify-between">
-          <div className="mr-auto">
-            <AnalyticsDateSelectors onSubmit={onSubmit} />
+      <div className="flex items-center justify-between">
+        <div className="mr-auto">
+          <AnalyticsDateSelectors onSubmit={onSubmit} />
+        </div>
+
+        <AnalyticsSubmenu />
+      </div>
+      {isLoading ? (
+        <h1 className="text-4xl py-10 text-center font-bold text-gray-700">
+          CARGANDO...
+        </h1>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 w-full">
+            <InventoryTurnoverGraph inventoryTurnover={inventoryTurnover} />
           </div>
 
-          <AnalyticsSubmenu />
-        </div>
-        {isLoading ? (
-          <h1 className="text-4xl py-10 text-center font-bold text-gray-700">
-            CARGANDO...
-          </h1>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 w-full">
-              <InventoryTurnoverGraph inventoryTurnover={inventoryTurnover} />
-            </div>
-
-            <div className="grid grid-cols-1 gap-8 mt-8 w-full">
-              <BestCasesGraph cases={bestCases} />
-              <BestCaseContentsGraph caseContents={bestCaseContents} />
-            </div>
-          </>
-        )}
+          <div className="grid grid-cols-1 gap-8 mt-8 w-full">
+            <BestCasesGraph cases={bestCases} />
+            <BestCaseContentsGraph caseContents={bestCaseContents} />
+          </div>
+        </>
+      )}
     </Layout>
   );
 }
