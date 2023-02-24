@@ -1,57 +1,92 @@
 import { axios, bearerToken } from '../config';
 import { ANALYTICS_URL } from './endpoints';
 
-export const fetchOrdersByCustomerLocations = (customerId, token) =>
-  axios.post(
-    `${ANALYTICS_URL}/orders-by-customer-locations`,
-    { customerId },
-    { headers: bearerToken(token) }
-  );
-
-export const fetchBestCustomers = (token) =>
-  axios.get(`${ANALYTICS_URL}/best-customers`, { headers: bearerToken(token) });
-
-export const fetchBestCustomersLocation = (token) =>
-  axios.get(`${ANALYTICS_URL}/best-customers-location`, {
-    headers: bearerToken(token),
-  });
-
-export const fetchBestCaseContents = (token) =>
-  axios.get(`${ANALYTICS_URL}/best-case-contents`, {
-    headers: bearerToken(token),
-  });
-
-export const fetchBestCases = (token) =>
-  axios.get(`${ANALYTICS_URL}/best-cases`, {
-    headers: bearerToken(token),
-  });
-
-export const fetchDeliveryAtTime = (token) =>
-  axios.get(`${ANALYTICS_URL}/delivery-at-time`, {
-    headers: bearerToken(token),
-  });
-
-export const fetchShipmentsCount = (month, token) =>
+export const fetchBestCustomers = (token, params = {}) =>
   axios.get(
-    `${ANALYTICS_URL}/shipments-count?${new URLSearchParams({
-      month,
+    `${ANALYTICS_URL}/best-customers?${new URLSearchParams({
+      ...params,
     }).toString()}`,
     {
       headers: bearerToken(token),
     }
   );
 
-export const fetchLateDeliveries = (token) =>
-  axios.get(`${ANALYTICS_URL}/late-deliveries`, {
-    headers: bearerToken(token),
-  });
+export const fetchBestCustomersLocation = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/best-customers-location?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
 
-export const fetchInventoryTurnover = (token) =>
-  axios.get(`${ANALYTICS_URL}/inventory-turnover`, {
-    headers: bearerToken(token),
-  });
+export const fetchBestCaseContents = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/best-case-contents?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
 
-export const fetchStockRotation = (token) =>
-  axios.get(`${ANALYTICS_URL}/stock-rotation`, {
-    headers: bearerToken(token),
-  });
+export const fetchBestCases = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/best-cases?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
+
+export const fetchDeliveryAtTime = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/delivery-at-time?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
+
+export const fetchShipmentsCount = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/shipments-count?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
+
+export const fetchLateDeliveries = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/late-deliveries?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
+
+export const fetchInventoryTurnover = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/inventory-turnover?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );
+
+export const fetchStockRotation = (token, params = {}) =>
+  axios.get(
+    `${ANALYTICS_URL}/stock-rotation?${new URLSearchParams({
+      ...params,
+    }).toString()}`,
+    {
+      headers: bearerToken(token),
+    }
+  );

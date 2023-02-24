@@ -36,16 +36,24 @@ const header = [
 ];
 
 export function LateDeliveriesGraph({ lateDeliveries }) {
-  const { orders: data, graph } = lateDeliveries;
+  const { lateDeliveries: data, orders, graph } = lateDeliveries;
+
   return (
-    <Card className="p-4 flex flex-col">
-      <h2 className="p-4 flex items-center w-full text-lg leading-7 font-semibold border-b border-gray-200">
-        Entregas a destiempo
-        <Tooltip
-          title="Entregas a destiempo"
-          description="Este KPI mide el número total de entregas que no fueron realizadas a tiempo."
-        />
-      </h2>
+    <Card className="p-0">
+      <div className="p-4 flex items-center flex-col w-full border-b border-gray-200">
+        <h2 className="flex items-center w-full text-lg leading-7 font-semibold">
+          Entregas a destiempo
+          <Tooltip
+            title="Entregas a destiempo"
+            description="Este KPI mide el número total de órdenes que no fueron entregadas a tiempo en el mes seleccionado."
+          />
+        </h2>
+
+        <p className="block w-full text-sm py-1">
+          <span>Órdenes totales: {orders.length}</span> |{' '}
+          <span>Órdenes con retraso: {data.length}</span>
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 divide-x">
         <div className="col-span-2">
@@ -78,7 +86,7 @@ export function LateDeliveriesGraph({ lateDeliveries }) {
           <div className="w-[150px] h-[150px] m-6 rounded-full flex items-center justify-center flex-col border-8 border-indigo-400">
             <p className="text-6xl font-medium text-gray-700">{graph.count}</p>
             <p className="text-xs font-medium text-center text-gray-600">
-              Total de retrasos <br /> este mes
+              de retrasos en <br /> el mes
             </p>
           </div>
         </div>

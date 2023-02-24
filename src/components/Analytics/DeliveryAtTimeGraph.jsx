@@ -53,7 +53,7 @@ export function DeliveryAtTimeGraph({ deliveryAtTime: data }) {
         Entregas final a tiempo
         <Tooltip
           title="Entregas final a tiempo"
-          description="Este KPI mide que tanto tarda un pedido en llegar al cliente final."
+          description="Este KPI mide que tanto tarda un pedido en llegar al cliente final en el mes seleccionado."
         />
       </h2>
 

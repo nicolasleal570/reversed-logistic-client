@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { withProtection } from '@components/withProtection';
 import { Layout } from '@components/Layout/Layout';
 import { AnalyticsSubmenu } from '@components/AnalyticsSubmenu/AnalyticsSubmenu';
@@ -10,22 +11,73 @@ import {
 } from '@api/analytics/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { InventoryTurnoverGraph } from '@components/Analytics/InventoryTurnover';
+import { AnalyticsDateSelectors } from '@components/Analytics/AnalyticsDateSelectors';
 
-function CasesAnalytics({ bestCases, bestCaseContents, inventoryTurnover }) {
+function CasesAnalytics({
+  bestCases: bestCasesData,
+  bestCaseContents: bestCaseContentsData,
+  inventoryTurnover: inventoryTurnoverData,
+  token,
+}) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [bestCases, setBestCases] = useState([...bestCasesData]);
+  const [bestCaseContents, setBestCaseContents] = useState([
+    ...bestCaseContentsData,
+  ]);
+  const [inventoryTurnover, setInventoryTurnover] = useState({
+    ...inventoryTurnoverData,
+  });
+
+  const onSubmit = async (values) => {
+    try {
+      setIsLoading(true);
+      const [
+        { data: bestCasesResData },
+        { data: bestCaseContentsResData },
+        { data: inventoryTurnoverResData },
+      ] = await Promise.all([
+        fetchBestCases(token, values),
+        fetchBestCaseContents(token, values),
+        fetchInventoryTurnover(token, values),
+      ]);
+
+      setBestCases(bestCasesResData);
+      setBestCaseContents(bestCaseContentsResData);
+      setInventoryTurnover(inventoryTurnoverResData);
+      setIsLoading(false);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   return (
     <Layout
       title="Analíticas y métricas sobre cases"
       description="Aquí podrás examinar todas las métricas correspondientes al módulo de cases."
     >
-      <AnalyticsSubmenu />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 w-full">
-        <InventoryTurnoverGraph inventoryTurnover={inventoryTurnover} />
-      </div>
+        <div className="flex items-center justify-between">
+          <div className="mr-auto">
+            <AnalyticsDateSelectors onSubmit={onSubmit} />
+          </div>
 
-      <div className="grid grid-cols-1 gap-8 mt-8 w-full">
-        <BestCasesGraph cases={bestCases} />
-        <BestCaseContentsGraph caseContents={bestCaseContents} />
-      </div>
+          <AnalyticsSubmenu />
+        </div>
+        {isLoading ? (
+          <h1 className="text-4xl py-10 text-center font-bold text-gray-700">
+            CARGANDO...
+          </h1>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 w-full">
+              <InventoryTurnoverGraph inventoryTurnover={inventoryTurnover} />
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 mt-8 w-full">
+              <BestCasesGraph cases={bestCases} />
+              <BestCaseContentsGraph caseContents={bestCaseContents} />
+            </div>
+          </>
+        )}
     </Layout>
   );
 }
@@ -59,6 +111,7 @@ CasesAnalytics.getInitialProps = async ({ req }) => {
     bestCases: bestCases ?? [],
     bestCaseContents: bestCaseContents ?? [],
     inventoryTurnover: inventoryTurnover ?? {},
+    token: data?.token || '',
   };
 };
 

@@ -31,7 +31,7 @@ export function Button({
           'w-full': fullWidth,
           'text-sm leading-5 font-medium rounded-lg':
             validKind === DEFAULT_KIND,
-          'bg-indigo-600 text-white': !outline && validKind === DEFAULT_KIND,
+          'bg-indigo-500 text-white': !outline && validKind === DEFAULT_KIND,
           'py-4 px-8': validSize === NORMAL_SIZE,
           'py-2 px-4 text-xs': validSize === SM_SIZE,
           'py-2.5 px-5 text-md': validSize === SM_SIZE,

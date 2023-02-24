@@ -11,19 +11,27 @@ import { parseCookies } from '@utils/parseCookies';
 import { DeliveryAtTimeGraph } from '@components/Analytics/DeliveryAtTimeGraph';
 import { ShipmentsCountGraph } from '@components/Analytics/ShipmentsCountGraph';
 import { LateDeliveriesGraph } from '@components/Analytics/LateDeliveriesGraph';
+import { AnalyticsDateSelectors } from '@components/Analytics/AnalyticsDateSelectors';
 
 function OrdersAnalytics({ deliveryAtTime, shipmentsCount, lateDeliveries }) {
+  const onSubmit = () => {};
   return (
     <Layout
       title="Analíticas y métricas sobre sabores"
       description="Aquí podrás examinar todas las métricas correspondientes al módulo de sabores."
     >
-      <AnalyticsSubmenu />
-      <div className="mt-8 w-full grid grid-cols-1 gap-8">
-        <DeliveryAtTimeGraph deliveryAtTime={deliveryAtTime} />
-        <ShipmentsCountGraph shipmentsCount={shipmentsCount} />
-        <LateDeliveriesGraph lateDeliveries={lateDeliveries} />
-      </div>
+        <div className="flex items-center justify-between">
+          <div className="mr-auto">
+            <AnalyticsDateSelectors onSubmit={onSubmit} />
+          </div>
+
+          <AnalyticsSubmenu />
+        </div>
+        <div className="mt-8 w-full grid grid-cols-1 gap-8">
+          <DeliveryAtTimeGraph deliveryAtTime={deliveryAtTime} />
+          <ShipmentsCountGraph shipmentsCount={shipmentsCount} />
+          <LateDeliveriesGraph lateDeliveries={lateDeliveries} />
+        </div>
     </Layout>
   );
 }
@@ -43,8 +51,8 @@ OrdersAnalytics.getInitialProps = async ({ req }) => {
         data.token
       );
       const { data: shipmentsCountData } = await fetchShipmentsCount(
-        currentMonth,
-        data.token
+        data.token,
+        { month: currentMonth }
       );
 
       const { data: lateDeliveriesData } = await fetchLateDeliveries(

@@ -8,14 +8,23 @@ import {
 import { parseCookies } from '@utils/parseCookies';
 import { BestCustomersGraph } from '@components/Analytics/BestCustomers';
 import { BestCustomersLocationGraph } from '@components/Analytics/BestCustomersLocation';
+import { AnalyticsDateSelectors } from '@components/Analytics/AnalyticsDateSelectors';
 
 function CustomersAnalytics({ bestCustomers, bestCustomersLocation }) {
+  const onSubmit = () => {};
+
   return (
     <Layout
       title="Analíticas y métricas sobre clientes"
       description="Aquí podrás examinar todas las métricas correspondientes al módulo de clientes y sucursales."
     >
-      <AnalyticsSubmenu />
+      <div className="flex items-center justify-between">
+        <div className="mr-auto">
+          <AnalyticsDateSelectors onSubmit={onSubmit} />
+        </div>
+
+        <AnalyticsSubmenu />
+      </div>
       <div className="grid grid-cols-1 gap-8 mt-8 w-full">
         <BestCustomersGraph customers={bestCustomers} />
         <BestCustomersLocationGraph locations={bestCustomersLocation} />

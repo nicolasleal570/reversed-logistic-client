@@ -41,7 +41,7 @@ export function ShipmentsCountGraph({ shipmentsCount }) {
         Envíos del mes
         <Tooltip
           title="Envíos del mes"
-          description="Este KPI mide el número total de envíos realizados en el mes actual."
+          description="Este KPI mide el número total de envíos realizados en el mes seleccionado."
         />
       </h2>
 
