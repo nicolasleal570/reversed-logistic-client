@@ -35,7 +35,7 @@ function FilterModal({ showModal, setShowModal, onSubmit }) {
   } = useForm({
     defaultValues: {
       month: currentMonth,
-      year: '',
+      year: currentYear,
     },
   });
 
