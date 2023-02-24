@@ -40,7 +40,7 @@ export function BestCaseContentsGraph({ caseContents: data }) {
         Top sabores más vendidos
       </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 divide-x">
+      <div className="grid grid-cols-1 lg:grid-cols-2 divide-x min-h-[300px]">
         <Table
           headers={header}
           content={data.map((item) => ({

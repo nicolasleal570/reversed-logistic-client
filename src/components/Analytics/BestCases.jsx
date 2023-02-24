@@ -1,10 +1,4 @@
-import {
-  PieChart,
-  Pie,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts';
+import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import Link from 'next/link';
 import { Card } from '@components/Card/Card';
 import Table from '@components/Table/Table';
@@ -46,7 +40,7 @@ export function BestCasesGraph({ cases }) {
         Top cases con más usos
       </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 divide-x">
+      <div className="grid grid-cols-1 lg:grid-cols-2 divide-x min-h-[300px]">
         <Table
           headers={header}
           content={cases.map((item) => ({

@@ -40,7 +40,7 @@ export function BestCustomersLocationGraph({ locations: data }) {
         Top sucursales con más compras
       </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 divide-x">
+      <div className="grid grid-cols-1 lg:grid-cols-3 divide-x min-h-[300px]">
         <div className="col-span-2">
           <Table
             headers={header}
