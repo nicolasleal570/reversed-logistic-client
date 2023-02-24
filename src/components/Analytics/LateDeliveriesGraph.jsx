@@ -49,10 +49,12 @@ export function LateDeliveriesGraph({ lateDeliveries }) {
           />
         </h2>
 
-        <p className="block w-full text-sm py-1">
-          <span>Órdenes totales: {orders.length}</span> |{' '}
-          <span>Órdenes con retraso: {data.length}</span>
-        </p>
+        {data.length > 0 && (
+          <p className="block w-full text-sm py-1">
+            <span>Órdenes totales en el mes: {orders.length}</span> |{' '}
+            <span>Órdenes con retraso en el mes: {data.length}</span>
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 divide-x">
