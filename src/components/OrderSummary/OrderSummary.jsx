@@ -35,7 +35,7 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
         />
         <KPITooltip
           title="Tiempo de espera de la orden"
-          description="Este KPI determina el tiempo que le toma a los clientes recibir el producto una vez creada la orden."
+          description="Este KPI determina el tiempo que le toma a los clientes recibir el producto una vez creada la orden. Es la diferencia que hay entre la fecha de entrega y la fecha de compra."
         />
       </div>
 
@@ -54,7 +54,7 @@ export function OrderSummary({ order, setOrder, isResponsable }) {
         />
         <KPITooltip
           title="Tiempo de envío"
-          description="Este KPI cuantifica el tiempo que se tarda en enviar un pedido en la fecha solicitada."
+          description="Este KPI cuantifica el tiempo que se tarda en enviar un pedido en la fecha solicitada. Es la diferencia que hay entre la fecha de envío y la fecha de compra."
         />
       </div>
 
