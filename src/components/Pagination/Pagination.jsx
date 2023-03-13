@@ -10,8 +10,8 @@ export function Pagination({
   pageOptions,
 }) {
   return (
-    <div className="bg-transparent px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-      <div className="flex-1 flex justify-between sm:hidden">
+    <div className="hidden md:flex bg-transparent px-4 py-3 items-center justify-between border-t border-gray-200 sm:px-6">
+      <div className="flex flex-1 justify-between sm:hidden">
         <button
           type="button"
           onClick={(e) => {
