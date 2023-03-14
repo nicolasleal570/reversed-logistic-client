@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useCallback, useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { InputLabel } from '@components/InputLabel/InputLabel';
 import { InputField } from '@components/InputField/InputField';
 import { FormRow } from '@components/FormRow/FormRow';
@@ -10,24 +10,70 @@ function CaseForm({
   isEdit = false,
   onlyRead = false,
   case: caseInfo,
+  cases = [],
   onUpdate,
   token,
 }) {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+    setError,
+    clearErrors,
+  } = useForm({
+    criteriaMode: 'all',
+    resetOptions: {
+      keepDirtyValues: true,
+      keepErrors: true,
+    },
+  });
+
+  const caseName = useWatch({
+    control,
+    name: 'name',
+  });
 
   const { createCase, updateCase } = useCases();
 
-  const onSubmit = async (data) => {
-    if (!isEdit) {
-      await createCase(data, token);
+  console.log(errors);
+
+  const alreadyCaseExists = useCallback(() => {
+    const alreadyExists = cases.findIndex((item) => {
+      if (!isEdit) {
+        return item.name === caseName;
+      }
+
+      return item.name === caseName && item.name !== caseInfo?.name;
+    });
+
+    if (alreadyExists > -1) {
+      setError('name', {
+        type: 'custom',
+        message: 'Este identificador ya existe',
+      });
     } else {
-      const { data: updatedCase } = await updateCase(caseInfo.id, data, token);
-      onUpdate(updatedCase);
+      clearErrors(['name']);
+    }
+
+    return alreadyExists > -1;
+  }, [caseName, cases, isEdit, caseInfo, setError, clearErrors]);
+
+  const onSubmit = async (data) => {
+    const alreadyExists = alreadyCaseExists();
+
+    if (!alreadyExists) {
+      if (!isEdit) {
+        await createCase(data, token);
+      } else {
+        const { data: updatedCase } = await updateCase(
+          caseInfo.id,
+          data,
+          token
+        );
+        onUpdate(updatedCase);
+      }
     }
   };
 
@@ -39,6 +85,12 @@ function CaseForm({
       setValue('weight', Number.parseInt(caseInfo.weight));
     }
   }, [caseInfo, setValue]);
+
+  useEffect(() => {
+    if (caseName) {
+      alreadyCaseExists();
+    }
+  }, [caseName, alreadyCaseExists]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm md:w-96">

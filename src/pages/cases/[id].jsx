@@ -4,7 +4,7 @@ import Link from 'next/link';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { Switch } from '@headlessui/react';
-import { fetchCase } from '@api/cases/methods';
+import { fetchCase, fetchCases } from '@api/cases/methods';
 import { parseCookies } from '@utils/parseCookies';
 import { Layout } from '@components/Layout/Layout';
 import { withProtection } from '@components/withProtection';
@@ -13,7 +13,7 @@ import CaseForm from '@components/CaseForm/CaseForm';
 import CheckCaseHealthModal from '@components/CheckCaseHealthModal/CheckCaseHealthModal';
 import { useCases } from '@hooks/useCases';
 
-function EditCasePage({ case: data, token }) {
+function EditCasePage({ case: data, cases, token }) {
   const { query } = useRouter();
   const { updateCase, deleteCase, recoveryCase } = useCases();
   const [caseInfo, setCaseInfo] = useState({ ...data });
@@ -147,6 +147,7 @@ function EditCasePage({ case: data, token }) {
       {isEdit ? (
         <CaseForm
           case={caseInfo}
+          cases={cases}
           onUpdate={(updatedCase) => {
             setCaseInfo(updatedCase);
             setIsEdit(false);
@@ -174,11 +175,14 @@ EditCasePage.getInitialProps = async ({ req, query }) => {
   const data = parseCookies(req);
 
   let caseItem = {};
+  let cases = [];
   if (data.token) {
     try {
       const res = await fetchCase(query.id, data.token, { paranoid: false });
+      const { data: casesData } = await fetchCases(data.token);
 
       caseItem = res.data;
+      cases = casesData;
     } catch (error) {
       console.log({ error });
     }
@@ -187,6 +191,7 @@ EditCasePage.getInitialProps = async ({ req, query }) => {
   return {
     token: data?.token ?? '',
     case: caseItem ?? {},
+    cases: cases ?? [],
   };
 };
 
