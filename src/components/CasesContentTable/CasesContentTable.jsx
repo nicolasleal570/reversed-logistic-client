@@ -44,7 +44,7 @@ export function CasesContentTable({ casesContent }) {
           return <>$ {price}</>;
         },
         description() {
-          return <>{description ?? '-'}</>;
+          return <p className="max-w-[250px] truncate">{description ?? '-'}</p>;
         },
         action() {
           return (

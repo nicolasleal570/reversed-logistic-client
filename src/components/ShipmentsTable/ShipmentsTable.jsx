@@ -16,20 +16,22 @@ const header = [
     accessor: 'id',
   },
   {
+    Header: 'ID de rastreo',
+    accessor: 'trackNumber',
+  },
+  {
     Header: 'Fecha de envío',
     accessor: 'shipmentAt',
+    Cell: ({ row: { index }, data: _data }) => _data[index].shipmentAt(),
   },
   {
     Header: 'Fecha de entrega',
     accessor: 'deliveredAt',
+    Cell: ({ row: { index }, data: _data }) => _data[index].deliveredAt(),
   },
   {
     Header: 'Órdenes asignadas',
     accessor: 'numOrders',
-  },
-  {
-    Header: 'Creado por',
-    accessor: 'createdByName',
   },
   {
     Header: 'Estado',
@@ -64,24 +66,35 @@ export function ShipmentsTable({
 
   const renderRow = ({
     id,
+    trackNumber,
     shipmentAt,
     deliveredAt,
     status: shipmentStatus,
-    createdBy,
     orders,
   }) => {
     return {
       id,
+      trackNumber: trackNumber.toUpperCase(),
       numOrders: orders?.length ?? '-',
-      createdByName: createdBy?.fullName ?? '-',
-      shipmentAt:
-        shipmentAt !== null
-          ? dayjs(shipmentAt).format('hh:mm A - dddd DD MMMM YYYY')
-          : '-',
-      deliveredAt:
-        deliveredAt !== null
-          ? dayjs(deliveredAt).format('hh:mm A - dddd DD MMMM YYYY')
-          : '-',
+      shipmentAt() {
+        return (
+          <p className="max-w-[200px] truncate">
+            {shipmentAt !== null
+              ? dayjs(shipmentAt).format('hh:mm A - dddd DD MMMM YYYY')
+              : '-'}
+          </p>
+        );
+      },
+
+      deliveredAt() {
+        return (
+          <p className="max-w-[250px] truncate">
+            {deliveredAt !== null
+              ? dayjs(deliveredAt).format('hh:mm A - dddd DD MMMM YYYY')
+              : '-'}
+          </p>
+        );
+      },
       status() {
         const { name, value } = shipmentStatus ?? {};
         return (
